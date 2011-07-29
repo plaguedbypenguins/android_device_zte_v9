@@ -43,7 +43,6 @@ PRODUCT_PACKAGES += \
     SpareParts \
     Development \
     Term \
-    TSCalibration \
     gralloc.v9 \
     copybit.v9 \
     gps.v9 \
