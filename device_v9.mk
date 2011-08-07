@@ -49,6 +49,7 @@ PRODUCT_PACKAGES += \
     libOmxCore \
     libOmxVidEnc \
     FM \
+    V9Parts \
     dexpreopt
 
 # proprietary side of the device
