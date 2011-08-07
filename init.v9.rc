@@ -7,6 +7,11 @@ on boot
     write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
     write /sys/devices/system/cpu/cpufreq/ondemand/down_threshold 30
 
+# Setup touchscreen calibration
+    chown system system /sys/module/msm_ts/parameters/tscal_xoffset
+    chown system system /sys/module/msm_ts/parameters/tscal_yoffset
+    chown system system /sys/module/msm_ts/parameters/tscal_xscale
+    chown system system /sys/module/msm_ts/parameters/tscal_yscale
 
 # Setup bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
