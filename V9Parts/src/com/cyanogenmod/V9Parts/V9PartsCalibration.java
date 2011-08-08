@@ -74,11 +74,13 @@ public class V9PartsCalibration extends Activity {
 	    if(step==1) {
                rawx1 = ((int)ev.getRawX()*65536-xoffset+32768)/xscale;
                rawy1 = ((int)ev.getRawY()*65536-yoffset+32768)/yscale;
-               step = 2;
+               if(rawx1<426 && rawy1<226)
+                  step = 2;
             } else if(step==2) {
                rawx2 = ((int)ev.getRawX()*65536-xoffset+32768)/xscale;
                rawy2 = ((int)ev.getRawY()*65536-yoffset+32768)/yscale;
-               step = 3;
+               if(rawx2>576 && rawy2>677)
+                  step = 3;
             } else {
                int distx = rawx2 - rawx1;
                int new_xscale = (380*65536 + distx/2)/distx;
@@ -125,6 +127,13 @@ public class V9PartsCalibration extends Activity {
             c.drawCircle(x, y, 9, blue);
             c.drawCircle(x, y, 5, white);
             c.drawCircle(x, y, 1, blue);
+            if(step==3) {
+               white.setTextAlign(Paint.Align.CENTER);
+               white.setTextSize(24);
+               c.drawText("Calibration done!",x,y-50,white);
+               c.drawText("Touch screen to set.",x,y+70,white);
+               c.drawText("Press BACK to cancel.",x,y+120,white);
+            }
          }
 
       };

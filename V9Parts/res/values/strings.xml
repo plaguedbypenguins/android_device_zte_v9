@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="app_name">ZTE V9/Light Settings</string>
+        <string name="screen_calibration_title_head">Screen calibration</string>
+        <string name="screen_calibration_summary_head">Calibrate touchscreen</string>
 </resources>
