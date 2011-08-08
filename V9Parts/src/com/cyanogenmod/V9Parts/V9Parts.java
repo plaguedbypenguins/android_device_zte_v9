@@ -16,7 +16,7 @@ public class V9Parts extends PreferenceActivity {
 
    private void writeValue(String parameter, int value) {
       try {
-          FileOutputStream fos = new FileOutputStream(new File("/sys/module/msm_ts/parameters/tscal_" + parameter));
+          FileOutputStream fos = new FileOutputStream(new File(parameter));
           fos.write(String.valueOf(value).getBytes());
           fos.flush();
           fos.getFD().sync();
@@ -38,8 +38,14 @@ public class V9Parts extends PreferenceActivity {
    public void onPause() {
       super.onPause();
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-      writeValue("gesture_pressure", Integer.parseInt(prefs.getString("gesture_pressure", "1200")));
-      writeValue("gesture_blindspot", Integer.parseInt(prefs.getString("gesture_blindspot", "100")));
+      // Gestures
+      writeValue("/sys/module/msm_ts/parameters/tscal_gesture_pressure", Integer.parseInt(prefs.getString("gesture_pressure", "1200")));
+      writeValue("/sys/module/msm_ts/parameters/tscal_gesture_blindspot", Integer.parseInt(prefs.getString("gesture_blindspot", "100")));
+      // USB charging
+      if(prefs.getBoolean("usb_charging", true))
+         writeValue("/sys/module/msm_battery/parameters/usb_chg_enable", 1);
+      else
+         writeValue("/sys/module/msm_battery/parameters/usb_chg_enable", 0);
    }
 
 }

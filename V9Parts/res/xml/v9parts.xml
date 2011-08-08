@@ -27,4 +27,11 @@
 	android:entries="@array/gesture_blindspot_array"
 	android:entryValues="@array/gesture_blindspot_values" />
 
+    <!-- USB Charging -->
+    <CheckBoxPreference
+	android:key="usb_charging"
+        android:title="@string/usb_charging_title_head"
+	android:summary="@string/usb_charging_summary_head"
+	android:defaultValue="true" />
+
 </PreferenceScreen>
