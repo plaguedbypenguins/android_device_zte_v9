@@ -12,6 +12,8 @@ on boot
     chown system system /sys/module/msm_ts/parameters/tscal_yoffset
     chown system system /sys/module/msm_ts/parameters/tscal_xscale
     chown system system /sys/module/msm_ts/parameters/tscal_yscale
+    chown system system /sys/module/msm_ts/parameters/tscal_gesture_pressure
+    chown system system /sys/module/msm_ts/parameters/tscal_gesture_blindspot
 
 # Setup bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
