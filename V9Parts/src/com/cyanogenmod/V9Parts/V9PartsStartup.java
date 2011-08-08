@@ -3,6 +3,8 @@ package com.cyanogenmod.V9Parts;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,6 +66,7 @@ public class V9PartsStartup extends BroadcastReceiver
 
    @Override
    public void onReceive(final Context context, final Intent bootintent) {
+      // Touchscreen calibration
       loadCalData();
       if(hasdata) {
          writeValue("xoffset",xoffset);
@@ -71,5 +74,9 @@ public class V9PartsStartup extends BroadcastReceiver
          writeValue("xscale",xscale);
          writeValue("yscale",yscale);
       }
+      // Gesture emulation
+      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+      writeValue("gesture_pressure", Integer.parseInt(prefs.getString("gesture_pressure", "1200")));
+      writeValue("gesture_blindspot", Integer.parseInt(prefs.getString("gesture_blindspot", "100")));
    }
 }
