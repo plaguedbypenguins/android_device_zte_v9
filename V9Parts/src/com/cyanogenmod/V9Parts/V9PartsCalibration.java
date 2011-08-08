@@ -94,10 +94,38 @@ public class V9PartsCalibration extends Activity {
                new_yoffset += 50*65536-rawy1*new_yscale;
                new_yoffset += 750*65536-rawy2*new_yscale;
                new_yoffset /= 2;
+               // Pass new calibration to kernel
                writeValue("xoffset", new_xoffset);
                writeValue("yoffset", new_yoffset);
                writeValue("xscale", new_xscale);
                writeValue("yscale", new_yscale);
+               // Save calibraiton data to /data/system/pointercal
+               StringBuilder sb = new StringBuilder();
+               sb.append(new_xscale);
+               sb.append(" ");
+	       sb.append(0);
+               sb.append(" ");
+	       sb.append(new_xoffset);
+               sb.append(" ");
+	       sb.append(0);
+               sb.append(" ");
+	       sb.append(new_yscale);
+               sb.append(" ");
+	       sb.append(new_yoffset);
+               sb.append(" ");
+	       sb.append(65536);
+
+               try {
+                  FileOutputStream fos = new FileOutputStream(new File("/data/system/pointercal"));
+                  fos.write(sb.toString().getBytes());
+                  fos.flush();
+                  fos.getFD().sync();
+                  fos.close();
+               } catch (FileNotFoundException e) {
+                  e.printStackTrace();
+               } catch (IOException e) {
+                  e.printStackTrace();
+               }
                finish();
             }
             invalidate();
