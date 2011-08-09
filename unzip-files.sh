@@ -19,6 +19,8 @@ DEVICE=v9
 mkdir -p ../../../vendor/zte/$DEVICE/proprietary
 unzip -j -o ../../../${DEVICE}_update.zip system/bin/qmuxd -d ../../../vendor/zte/$DEVICE/proprietary/
 chmod 755 ../../../vendor/zte/$DEVICE/proprietary/qmuxd
+unzip -j -o ../../../${DEVICE}_update.zip system/bin/abtfilt -d ../../../vendor/zte/$DEVICE/proprietary/
+chmod 755 ../../../vendor/zte/$DEVICE/proprietary/abtfilt
 unzip -j -o ../../../${DEVICE}_update.zip system/bin/akmd2 -d ../../../vendor/zte/$DEVICE/proprietary/
 chmod 755 ../../../vendor/zte/$DEVICE/proprietary/akmd2
 unzip -j -o ../../../${DEVICE}_update.zip system/bin/hci_qcomm_init -d ../../../vendor/zte/$DEVICE/proprietary/
@@ -27,7 +29,6 @@ chmod 755 ../../../vendor/zte/$DEVICE/proprietary/hci_qcomm_init
 # bluetooth
 unzip -j -o ../../../${DEVICE}_update.zip system/etc/init.qcom.bt.sh -d ../../../vendor/zte/$DEVICE/proprietary/
 unzip -j -o ../../../${DEVICE}_update.zip system/etc/bluetooth/main.conf -d ../../../vendor/zte/$DEVICE/proprietary/
-
 # ti_gauge
 unzip -j -o ../../../${DEVICE}_update.zip system/etc/ti_gauge.bqfs -d ../../../vendor/zte/$DEVICE/proprietary/
 unzip -j -o ../../../${DEVICE}_update.zip system/etc/ti_gauge.dffs -d ../../../vendor/zte/$DEVICE/proprietary/
@@ -132,6 +133,7 @@ PRODUCT_COPY_FILES += \\
     vendor/zte/__DEVICE__/proprietary/yamato_pfp.fw:system/etc/firmware/yamato_pfp.fw \\
     vendor/zte/__DEVICE__/proprietary/yamato_pm4.fw:system/etc/firmware/yamato_pm4.fw \\
     vendor/zte/__DEVICE__/proprietary/qmuxd:system/bin/qmuxd \\
+    vendor/zte/__DEVICE__/proprietary/abtfilt:system/bin/abtfilt \\
     vendor/zte/__DEVICE__/proprietary/akmd2:system/bin/akmd2 \\
     vendor/zte/__DEVICE__/proprietary/libril-qc-1.so:system/lib/libril-qc-1.so \\
     vendor/zte/__DEVICE__/proprietary/libril-qcril-hook-oem.so:system/lib/libril-qcril-hook-oem.so \\
