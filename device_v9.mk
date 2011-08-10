@@ -50,6 +50,7 @@ PRODUCT_PACKAGES += \
     libOmxVidEnc \
     FM \
     V9Parts \
+    abtfilt \
     dexpreopt
 
 # proprietary side of the device
