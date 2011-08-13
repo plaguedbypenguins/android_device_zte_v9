@@ -14,4 +14,4 @@ include $(BUILD_PACKAGE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
-#endif
+endif # TARGET_BOOTLOADER_BOARD_NAME
