@@ -1,0 +1,6 @@
+#
+# system.prop for v9
+#
+
+ro.additionalmounts=/mnt/usbdisk
+

@@ -1,3 +1,9 @@
+on init
+
+    # create mountpoint for usb storage
+    mkdir /mnt/usbdisk 0000 system system
+    symlink /mnt/usbdisk /usbdisk
+
 on boot
 
 # cpufreq configurations
