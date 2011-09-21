@@ -12,5 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-include $(call all-named-subdir-makefiles, recovery libaudio libril libcamera libgralloc libcopybit V9Parts)
+ifeq ($(TARGET_DEVICE),v9)
+    include $(call all-named-subdir-makefiles, recovery libaudio libril libcamera libgralloc libcopybit libsensors V9Parts)
+endif

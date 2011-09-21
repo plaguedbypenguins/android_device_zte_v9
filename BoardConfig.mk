@@ -24,15 +24,11 @@ LOCAL_PATH:= $(call my-dir)
 # against the traditional rules of inheritance).
 USE_CAMERA_STUB := false
 
-TARGET_USES_OLD_LIBSENSORS_HAL := true
-
-BOARD_NO_RGBX_8888 := true
-
 TARGET_NO_BOOTLOADER := true
 
 TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery_kernel
 
-BOARD_KERNEL_CMDLINE := androidboot.hardware=v9 console=null g_android.product_id=0x1354 g_android.serial_number=V9-CM7
+BOARD_KERNEL_CMDLINE := androidboot.hardware=v9 console=null
 
 TARGET_BOARD_PLATFORM := msm7k
 TARGET_ARCH_VARIANT := armv6-vfp
@@ -58,6 +54,7 @@ WITH_JIT := true
 ENABLE_JSC_JIT := true
 
 TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
+TARGET_USES_16BPPSURFACE_FOR_OPAQUE := true
 
 JS_ENGINE := v8
 
@@ -86,8 +83,6 @@ TARGET_PROVIDES_LIBRIL := true
 TARGET_PROVIDES_LIBAUDIO := true
 
 BOARD_CUSTOM_USB_CONTROLLER := ../../device/zte/v9/UsbController.cpp
-BOARD_USE_USB_MASS_STORAGE_SWITCH := true
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun
 
 BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
 
@@ -110,3 +105,4 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0d020000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/zte/v9/recovery/recovery_ui.c
+TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc

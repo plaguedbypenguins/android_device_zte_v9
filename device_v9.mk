@@ -46,6 +46,7 @@ PRODUCT_PACKAGES += \
     gralloc.v9 \
     copybit.v9 \
     gps.v9 \
+    sensors.v9 \
     libOmxCore \
     libOmxVidEnc \
     FM \
