@@ -69,10 +69,10 @@ public class V9PartsStartup extends BroadcastReceiver
       // Touchscreen calibration
       loadCalData();
       if(hasdata) {
-         writeValue("xoffset",xoffset);
-         writeValue("yoffset",yoffset);
-         writeValue("xscale",xscale);
-         writeValue("yscale",yscale);
+         writeValue("/sys/module/msm_ts/parameters/tscal_xoffset",xoffset);
+         writeValue("/sys/module/msm_ts/parameters/tscal_yoffset",yoffset);
+         writeValue("/sys/module/msm_ts/parameters/tscal_xscale",xscale);
+         writeValue("/sys/module/msm_ts/parameters/tscal_yscale",yscale);
       }
       // Gesture emulation
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
