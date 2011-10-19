@@ -314,8 +314,8 @@ static const str_map effects[] = {
     { CameraParameters::EFFECT_SOLARIZE,   CAMERA_EFFECT_SOLARIZE },
     { CameraParameters::EFFECT_SEPIA,      CAMERA_EFFECT_SEPIA },
 //    { CameraParameters::EFFECT_POSTERIZE,  CAMERA_EFFECT_POSTERIZE },
-    { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
-    { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
+//    { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
+//    { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
 //    { CameraParameters::EFFECT_AQUA,       CAMERA_EFFECT_AQUA }
 };
 
@@ -4023,12 +4023,9 @@ status_t QualcommCameraHardware::setBrightness(const CameraParameters& params) {
 status_t QualcommCameraHardware::setExposureCompensation(const CameraParameters& params) {
         int expcomp = params.getInt("exposure-compensation");
 
-	mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
+        mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
 
-	if(!strcmp(sensorType->name, "3mp"))
-	  expcomp+=4;
-	else
-	  expcomp+=2;
+        expcomp+=2;
 
         bool ret = native_set_parm(CAMERA_SET_PARM_EXPOSURE_COMPENSATION, sizeof(expcomp),
                                        (void *)&expcomp);
