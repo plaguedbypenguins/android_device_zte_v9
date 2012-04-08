@@ -99,14 +99,17 @@ PRODUCT_COPY_FILES += \
 #Kernel Modules
 PRODUCT_COPY_FILES += \
     device/zte/v9/prebuilt/ar6000.ko:system/wifi/ar6000.ko \
-    device/zte/v9/prebuilt/tun.ko:system/lib/modules/2.6.32.9-perf/tun.ko
+    device/zte/v9/prebuilt/tun.ko:system/lib/modules/tun.ko
 
 #WiFi firmware
 PRODUCT_COPY_FILES += \
     device/zte/v9/firmware/regcode:system/wifi/regcode \
     device/zte/v9/firmware/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
     device/zte/v9/firmware/athwlan.bin.z77:system/wifi/athwlan.bin.z77 \
-    device/zte/v9/firmware/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin
+    device/zte/v9/firmware/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin \
+    device/zte/v9/firmware/device.bin:system/wifi/device.bin \
+    device/zte/v9/firmware/eeprom.bin:system/wifi/eeprom.bin \
+    device/zte/v9/firmware/eeprom.data:system/wifi/eeprom.data
 
 #Media profile
 PRODUCT_COPY_FILES += \
