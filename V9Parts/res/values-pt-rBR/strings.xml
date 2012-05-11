@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Configurações ZTE V9</string>
-  <string name="screen_calibration_title_head">Calibrar de Tela</string>
+  <string name="screen_calibration_title_head">Calibrar Tela</string>
   <string name="screen_calibration_summary_head">Calibrar toque de tela</string>
   <string name="gesture_pressure_title_head">Pressão do gesto</string>
   <string name="gesture_pressure_summary_head">Pressão necessária para ativar a emulação de gesto</string>
