@@ -62,7 +62,7 @@ WITH_JIT := true
 HTTP := chrome
 
 # Webkit
-ENABLE_WEBGL := true
+#ENABLE_WEBGL := false
 TARGET_FORCE_CPU_UPLOAD := true
 
 # QCOM
