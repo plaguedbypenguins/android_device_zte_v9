@@ -120,6 +120,11 @@ PRODUCT_COPY_FILES += \
         device/zte/blade/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
         device/zte/blade/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
 
+# WiFi AP
+PRODUCT_COPY_FILES += \
+        device/zte/blade/prebuilt/system/bin/hostapd:system/bin/hostapd \
+        device/zte/blade/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf
+
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
         frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
