@@ -111,6 +111,7 @@ PRODUCT_COPY_FILES += \
 # WiFi
 PRODUCT_COPY_FILES += \
         device/zte/blade/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+        device/zte/blade/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf \
         device/zte/blade/prebuilt/system/wifi/ar6000.ko:system/wifi/ar6000.ko \
         device/zte/blade/prebuilt/system/wifi/regcode:system/wifi/regcode \
         device/zte/blade/prebuilt/system/wifi/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
@@ -119,11 +120,6 @@ PRODUCT_COPY_FILES += \
         device/zte/blade/prebuilt/system/wifi/device.bin:system/wifi/device.bin \
         device/zte/blade/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
         device/zte/blade/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
-
-# WiFi AP
-PRODUCT_COPY_FILES += \
-        device/zte/blade/prebuilt/system/bin/hostapd:system/bin/hostapd \
-        device/zte/blade/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
