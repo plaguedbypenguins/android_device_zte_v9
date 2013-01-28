@@ -84,6 +84,7 @@ SMALLER_FONT_FOOTPRINT := true
 # Camera
 TARGET_DISABLE_ARM_PIE := true
 BOARD_NEEDS_MEMORYHEAPPMEM := true
+BOARD_USES_LEGACY_CAMERA := true
 
 # dev:    size   erasesize  name
 # mtd0: 00500000 00020000 "recovery"
