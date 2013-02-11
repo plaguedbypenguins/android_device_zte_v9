@@ -35,6 +35,10 @@
 #define CHAN_SPACING_100_kHz   1        /* Europe, Japan */
 #define CHAN_SPACING_50_kHz    2
 
+/* de-emphasis */
+#define FM_DE_TC_50    1
+#define FM_DE_TC_75    0
+
 /* seeking */
 #define      SEEKUP             1
 #define      SEEKDOWN           0
@@ -56,7 +60,7 @@
 #define Si4708_IOC_VOLUME_SET                       _IOW(Si4708_IOC_MAGIC, 8, int)
 #define Si4708_IOC_RDS_ENABLE                       _IO(Si4708_IOC_MAGIC, 23)
 #define Si4708_IOC_RDS_DISABLE                      _IO(Si4708_IOC_MAGIC, 24)
-#define Si4708_IOC_DE_SET                           _IOW(Si4708_IOC_MAGIC,32,uint8_t)  /* Setting DE-emphasis Time Constant. For DE=0,TC=50us(Europe,Japan,Australia) and DE=1,TC=75us(USA) */
+#define Si4708_IOC_DE_SET                           _IOW(Si4708_IOC_MAGIC,32,int)
 #define Si4708_IOC_SET_AUDIOTRACK _IOW(Si4708_IOC_MAGIC, 16, int)
 
 /* state */
@@ -191,6 +195,22 @@ static int setMute(struct si4708_session *priv, int mute)
     return FMRADIO_OK;
 }
 
+static int setDeemphasis(struct si4708_session *priv, int de)
+{
+    int ret;
+
+    ALOGI("%s: setting TC %d", __func__, de);
+
+    ret = ioctl(priv->fd, Si4708_IOC_DE_SET, &de);
+
+    if (ret != 0) {
+        ALOGE("%s: IOCTL Si4708_IOC_DE_SET failed %d", __func__, ret);
+        return FMRADIO_IO_ERROR;
+    }
+
+    return FMRADIO_OK;
+}
+
 static int setBand(struct si4708_session *priv, int low, int high)
 {
     int ret;
@@ -209,6 +229,9 @@ static int setBand(struct si4708_session *priv, int low, int high)
     ALOGI("%s: Setting band %d", __func__, band);
 
     ret = ioctl(priv->fd, Si4708_IOC_BAND_SET, &band);
+
+    /* Everyone except the US uses 50us de-emphasis */
+    setDeemphasis(priv, (low == 87900) ? FM_DE_TC_75 : FM_DE_TC_50);
 
     if (ret != 0) {
         ALOGE("%s: IOCTL Si4708_IOC_BAND_SET failed %d", __func__, ret);
