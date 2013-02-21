@@ -1,13 +1,13 @@
-From 0d281d3322b57075b83550dee1f760345605fad2 Mon Sep 17 00:00:00 2001
+From ceee66581111eae4bca4a3146abf54fe243079dc Mon Sep 17 00:00:00 2001
 From: burstlam <burstlam@gmail.com>
 Date: Fri, 27 Jul 2012 16:55:52 +0800
-Subject: [PATCH 02/16] Add HotReboot to Menu
+Subject: [PATCH 02/13] Add HotReboot to Menu
 
 Change-Id: I6eea6286df3afc08bb364a8f7bfa69b7e4e4c2f9
 ---
- core/res/res/values/arrays.xml                     |    2 +
- core/res/res/values/strings.xml                    |    2 +
- .../java/com/android/server/pm/ShutdownThread.java |   41 +++++++++++++++-----
+ core/res/res/values/arrays.xml                     |  2 ++
+ core/res/res/values/strings.xml                    |  2 ++
+ .../java/com/android/server/pm/ShutdownThread.java | 41 ++++++++++++++++------
  3 files changed, 35 insertions(+), 10 deletions(-)
 
 diff --git a/core/res/res/values/arrays.xml b/core/res/res/values/arrays.xml
@@ -31,10 +31,10 @@ index a55297d..6657a00 100644
          <item>bootloader</item>
      </string-array>
 diff --git a/core/res/res/values/strings.xml b/core/res/res/values/strings.xml
-index bb02081..ff921d3 100755
+index b81b4ca..6e94e96 100755
 --- a/core/res/res/values/strings.xml
 +++ b/core/res/res/values/strings.xml
-@@ -320,6 +320,8 @@
+@@ -327,6 +327,8 @@
  
      <!-- Button to reboot the phone, within the Reboot Options dialog -->
      <string name="reboot_reboot">Reboot</string>
@@ -131,5 +131,5 @@ index 2c8a2f9..5ba20e8 100644
                  PowerManagerService.lowLevelReboot(reason);
              } catch (Exception e) {
 -- 
-1.7.9.5
+1.8.1.1
 

@@ -1,7 +1,7 @@
-From bc34d11aa4b93c9555d49d4de1cd7a92d987dd6b Mon Sep 17 00:00:00 2001
+From 87622757211dd4793dcc5aa124e381254e672116 Mon Sep 17 00:00:00 2001
 From: Romain Guy <romainguy@google.com>
 Date: Wed, 18 Jul 2012 20:26:02 -0700
-Subject: [PATCH 1/4] Optimize gradient textures
+Subject: [PATCH 07/13] Optimize gradient textures
 
 Compute the size of the backing textures based on the maximum possible
 number of shades in the gradient.
@@ -25,5 +25,5 @@ index 3678788..0016b81 100644
      bitmap.eraseColor(0);
  
 -- 
-1.8.0.3
+1.8.1.1
 

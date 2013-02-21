@@ -1,7 +1,7 @@
-From f5db7800e9883616388c992055763d052d12dd7e Mon Sep 17 00:00:00 2001
+From e1a1c521de405d3ff63cf5fa95ee4fd0dd952a1a Mon Sep 17 00:00:00 2001
 From: Chet Haase <chet@google.com>
 Date: Sun, 30 Sep 2012 12:14:13 -0700
-Subject: [PATCH 4/4] Fix texture corruption
+Subject: [PATCH 10/13] Fix texture corruption
 
 When memory gets low on a device, activities flush everything they can.
 Hardware-accelerated activites, such as Launcher, flush GL resources and destroy
@@ -269,5 +269,5 @@ index 2887357..e0fa983 100644
      void clearResources();
  
 -- 
-1.8.0.3
+1.8.1.1
 

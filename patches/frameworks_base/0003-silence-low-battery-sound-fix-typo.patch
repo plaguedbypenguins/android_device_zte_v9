@@ -1,11 +1,11 @@
-From 80369ea43a222cf50e9f14782f1f5dfc39bd42ad Mon Sep 17 00:00:00 2001
+From bb95e25bb116fef88727c7fd48441d801a853f9c Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Tue, 7 Aug 2012 00:14:45 +0300
-Subject: [PATCH 03/16] silence low battery sound, fix typo
+Subject: [PATCH 03/13] silence low battery sound, fix typo
 
 Change-Id: I59c3b419e9a5e0e00960626f33c1cd5dbe075a06
 ---
- data/sounds/OldAudio.mk |    4 ++--
+ data/sounds/OldAudio.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/data/sounds/OldAudio.mk b/data/sounds/OldAudio.mk
@@ -31,5 +31,5 @@ index adced91..44b7697 100644
  	$(LOCAL_PATH)/notifications/old/IM_Me.ogg:system/media/audio/notifications/IM_Me.ogg \
  	$(LOCAL_PATH)/notifications/old/Moonbeam.ogg:system/media/audio/notifications/Moonbeam.ogg \
 -- 
-1.7.9.5
+1.8.1.1
 

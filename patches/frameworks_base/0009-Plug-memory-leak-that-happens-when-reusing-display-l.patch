@@ -1,8 +1,8 @@
-From f8b046c329bcd2cc68da451ec0c036c934654346 Mon Sep 17 00:00:00 2001
+From 4611a9047bbdb8714ea792a4a33a63ebb89621eb Mon Sep 17 00:00:00 2001
 From: Romain Guy <romainguy@google.com>
 Date: Thu, 27 Sep 2012 19:01:55 -0700
-Subject: [PATCH 3/4] Plug memory leak that happens when reusing display lists
- Bug #7195815
+Subject: [PATCH 09/13] Plug memory leak that happens when reusing display
+ lists Bug #7195815
 
 We did not reclaim resources when reusing an existing DisplayList to
 record a new empty list of commands. This would lead to various memory
@@ -65,5 +65,5 @@ index a042a67..b2c922f 100644
  
  size_t DisplayList::getSize() {
 -- 
-1.8.0.3
+1.8.1.1
 

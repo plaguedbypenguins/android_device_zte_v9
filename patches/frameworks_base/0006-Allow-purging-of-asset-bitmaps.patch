@@ -1,7 +1,7 @@
-From f7b05421f7bb4f2c50aada07c2b1c699879ea95d Mon Sep 17 00:00:00 2001
+From 728b7a1e7cbfde1709e3ed11e14a9764398f83eb Mon Sep 17 00:00:00 2001
 From: Conn O'Griofa <connogriofa@gmail.com>
 Date: Fri, 4 Jan 2013 19:43:50 -0200
-Subject: [PATCH] Allow purging of asset bitmaps
+Subject: [PATCH 06/13] Allow purging of asset bitmaps
 
 It seems that neither CM9 nor CM10.x includes the actual framework-side
 code to facilitate user-controllable bitmap purging. Odd, since the
@@ -67,5 +67,5 @@ index 69ef080..4a67dd6 100644
                                      "android/graphics/BitmapFactory$Options",
                                      gOptionsMethods,
 -- 
-1.8.0
+1.8.1.1
 
