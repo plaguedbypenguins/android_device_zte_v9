@@ -1240,8 +1240,9 @@ status_t AudioHardware::doAudioRouteOrMute(uint32_t device)
 
     mFmPrev=mFmRadioEnabled;
 #ifdef QCOM_FM_ENABLED
-    if(mFmRadioEnabled && (device == SND_DEVICE_HEADSET)) {
+    if(mFmRadioEnabled) {
       mute = 0;
+      device = SND_DEVICE_HEADSET;
       ALOGI("unmute for radio");
     }
 #endif

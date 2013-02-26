@@ -206,11 +206,6 @@ audio_devices_t AudioPolicyManager::getDeviceForStrategy(routing_strategy strate
             device = 0;
             ALOGV("getDeviceForStrategy() incompatible media and phone devices");
         }
-#ifdef QCOM_FM_ENABLED
-        if (mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM) {
-            device |= AudioSystem::DEVICE_OUT_FM;
-        }
-#endif
 
         } break;
 
@@ -403,6 +398,17 @@ status_t AudioPolicyManager::setDeviceConnectionState(AudioSystem::audio_devices
             return BAD_VALUE;
         }
 
+#ifdef QCOM_FM_ENABLED
+        if (device == AudioSystem::DEVICE_OUT_FM) {
+            if (state == AudioSystem::DEVICE_STATE_AVAILABLE) {
+                mOutputs.valueFor(mPrimaryOutput)->changeRefCount(AudioSystem::FM, 1);
+            }
+            else {
+                mOutputs.valueFor(mPrimaryOutput)->changeRefCount(AudioSystem::FM, -1);
+            }
+        }
+#endif
+
         checkA2dpSuspend();
         checkOutputForAllStrategies();
         // outputs must be closed after checkOutputForAllStrategies() is executed
@@ -479,6 +485,24 @@ status_t AudioPolicyManager::setDeviceConnectionState(AudioSystem::audio_devices
 
     ALOGW("setDeviceConnectionState() invalid device: %x", device);
     return BAD_VALUE;
+}
+
+bool AudioPolicyManager::isStreamActive(int stream, uint32_t inPastMs) const
+{
+    nsecs_t sysTime = systemTime();
+    for (size_t i = 0; i < mOutputs.size(); i++) {
+        if (mOutputs.valueAt(i)->mRefCount[stream] != 0 ||
+            ns2ms(sysTime - mOutputs.valueAt(i)->mStopTime[stream]) < inPastMs) {
+            return true;
+        }
+    }
+
+    if (stream == AudioSystem::MUSIC &&
+            (mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM)) {
+        return true;
+    }
+
+    return false;
 }
 
 

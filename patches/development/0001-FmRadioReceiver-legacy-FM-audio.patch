@@ -1,13 +1,15 @@
-From 42d72631f42899ac8557db9d6545cf3a7ac5f856 Mon Sep 17 00:00:00 2001
+From 1b0d0940f3ddc8a625ab6b14a96a8d4c099d2361 Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Thu, 21 Feb 2013 00:56:19 +0100
 Subject: [PATCH] FmRadioReceiver: legacy FM audio
 
+v2: fix routing
+
 Change-Id: If0042e378f5c395e6e64a3ae6384ae4b8c53698f
 ---
- samples/FmRadioReceiver/AndroidManifest.xml                 |  1 +
- .../example/android/fmradioreceiver/FmRadioReceiver.java    | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ samples/FmRadioReceiver/AndroidManifest.xml                |  1 +
+ .../example/android/fmradioreceiver/FmRadioReceiver.java   | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/samples/FmRadioReceiver/AndroidManifest.xml b/samples/FmRadioReceiver/AndroidManifest.xml
 index f1aae65..147504f 100755
@@ -20,7 +22,7 @@ index f1aae65..147504f 100755
 +	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
  </manifest>
 diff --git a/samples/FmRadioReceiver/src/com/example/android/fmradioreceiver/FmRadioReceiver.java b/samples/FmRadioReceiver/src/com/example/android/fmradioreceiver/FmRadioReceiver.java
-index 269dd84..75da51c 100755
+index 269dd84..65461e6 100755
 --- a/samples/FmRadioReceiver/src/com/example/android/fmradioreceiver/FmRadioReceiver.java
 +++ b/samples/FmRadioReceiver/src/com/example/android/fmradioreceiver/FmRadioReceiver.java
 @@ -33,6 +33,8 @@ import android.widget.TextView;
@@ -41,33 +43,34 @@ index 269dd84..75da51c 100755
      // The name of the storage string
      public static final String PREFS_NAME = "FMRadioPrefsFile";
  
-@@ -128,6 +132,7 @@ public class FmRadioReceiver extends Activity {
+@@ -128,6 +132,8 @@ public class FmRadioReceiver extends Activity {
          SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
          mSelectedBand = settings.getInt("selectedBand", 1);
          mFmBand = new FmBand(mSelectedBand);
 +        audioman = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
++        setVolumeControlStream(AudioManager.STREAM_MUSIC);
          setupButtons();
      }
  
-@@ -258,6 +263,8 @@ public class FmRadioReceiver extends Activity {
+@@ -258,6 +264,8 @@ public class FmRadioReceiver extends Activity {
              mMediaPlayer.release();
              mMediaPlayer = null;
          }
-+        audioman.setParameters("fm_off=1");
 +        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
++        audioman.setParameters("fm_off=1");
      }
  
      /**
-@@ -319,7 +326,11 @@ public class FmRadioReceiver extends Activity {
+@@ -319,7 +327,11 @@ public class FmRadioReceiver extends Activity {
              mMediaPlayer.prepare();
              mMediaPlayer.start();
          } catch (IOException e) {
 -            showToast("Unable to start the media player", Toast.LENGTH_LONG);
 +            //showToast("Unable to start the media player", Toast.LENGTH_LONG);
 +            // fall back to legacy audio routing
-+            audioman.setParameters("fm_on=1");
-+            setVolumeControlStream(AudioManager.STREAM_MUSIC);
++            AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
 +            AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM, AudioSystem.DEVICE_STATE_AVAILABLE, "");
++            audioman.setParameters("fm_on=1");
          }
      }
  

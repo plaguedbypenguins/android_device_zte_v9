@@ -45,6 +45,7 @@ public:
         virtual status_t setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
                                                   const char *device_address);
+        virtual bool isStreamActive(int stream, uint32_t inPastMs) const;
 protected:
         // true is current platform implements a back microphone
         virtual bool hasBackMicrophone() const { return false; }
