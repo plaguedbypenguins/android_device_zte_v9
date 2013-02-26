@@ -1,7 +1,7 @@
-From a9f86cf6f49e9d447aacb2be702fc6d9f135c6f3 Mon Sep 17 00:00:00 2001
+From 3817e7045e9415751acb168d25e30b5271fd7dc1 Mon Sep 17 00:00:00 2001
 From: Sravan Kumar Ambapuram <asravan@codeaurora.org>
 Date: Mon, 30 Jul 2012 15:35:17 -0700
-Subject: [PATCH 05/13] Triggering EarlySuspend based on BackLight brightness
+Subject: [PATCH 05/14] Triggering EarlySuspend based on BackLight brightness
 
 EarlySuspend is triggered currently based on just timeout. Due to this,
 backlight brightness is not coming down to zero.
@@ -26,10 +26,10 @@ Change-Id: Id411fe2c4d4fd219fc198405d6c2f221a87874ff
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/services/java/com/android/server/PowerManagerService.java b/services/java/com/android/server/PowerManagerService.java
-index 588b9f3..a08be90 100644
+index 661bcb0..7264bcc 100644
 --- a/services/java/com/android/server/PowerManagerService.java
 +++ b/services/java/com/android/server/PowerManagerService.java
-@@ -2394,6 +2394,14 @@ public class PowerManagerService extends IPowerManager.Stub
+@@ -2398,6 +2398,14 @@ public class PowerManagerService extends IPowerManager.Stub
                      Message msg = mScreenBrightnessHandler
                              .obtainMessage(ANIMATE_LIGHTS, mask, newValue);
                      mScreenBrightnessHandler.sendMessageDelayed(msg, delay);
@@ -44,7 +44,7 @@ index 588b9f3..a08be90 100644
                  }
              }
          }
-@@ -2457,9 +2465,6 @@ public class PowerManagerService extends IPowerManager.Stub
+@@ -2461,9 +2469,6 @@ public class PowerManagerService extends IPowerManager.Stub
                      final boolean doScreenAnim = (mask & (SCREEN_BRIGHT_BIT | SCREEN_ON_BIT)) != 0;
                      final boolean turningOff = endValue == PowerManager.BRIGHTNESS_OFF;
                      if (turningOff && doScreenAnim) {

@@ -1,7 +1,7 @@
-From ef9388a5d462ead7c7bce9608e086029ab19d08c Mon Sep 17 00:00:00 2001
+From cb93779b07ff12cf8049456e818dced040806dd2 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Mon, 23 Jul 2012 12:42:28 +0300
-Subject: [PATCH 01/13] add option to display navbar (1/2)
+Subject: [PATCH 01/14] add option to display navbar (1/2)
 
 Change-Id: Ibc368a5c0851cd93d2cf18536c16d03218acb905
 ---

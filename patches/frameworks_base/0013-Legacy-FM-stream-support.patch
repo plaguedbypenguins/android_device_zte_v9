@@ -1,7 +1,7 @@
-From 2cc1e8cf1c53b80e673801d30fa78ad23225caf8 Mon Sep 17 00:00:00 2001
+From c4ff5dbabb9eaa6060aa5851ff403d72d9a4948d Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Thu, 21 Feb 2013 00:34:09 +0100
-Subject: [PATCH 13/13] Legacy FM stream support
+Subject: [PATCH 13/14] Legacy FM stream support
 
 Add stream type STREAM_FM for legacy FM radio volume control and
 audio routing.

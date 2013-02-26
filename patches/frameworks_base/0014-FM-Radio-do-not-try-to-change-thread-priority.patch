@@ -1,0 +1,61 @@
+From fe7fc6098ae07d9a0115c037e47687f58ee72ee4 Mon Sep 17 00:00:00 2001
+From: Grigori Goronzy <greg@chown.ath.cx>
+Date: Thu, 21 Feb 2013 05:34:45 +0100
+Subject: [PATCH 14/14] FM Radio: do not try to change thread priority
+
+The FM Radio services try to change the current thread when
+instantiated, for unknown reason. This actually ends up changing the
+priority of SystemServer's main thread. Probably a bad idea. This is
+the cause of the various glitch fallout after the FM Radio merges.
+
+Change-Id: I292aff3380c717ff1bc7d45f6303c0d330ef642d
+---
+ fmradio/java/com/stericsson/hardware/fm/FmReceiverService.java    | 3 ---
+ fmradio/java/com/stericsson/hardware/fm/FmTransmitterService.java | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/fmradio/java/com/stericsson/hardware/fm/FmReceiverService.java b/fmradio/java/com/stericsson/hardware/fm/FmReceiverService.java
+index b002cb1..45703d5 100644
+--- a/fmradio/java/com/stericsson/hardware/fm/FmReceiverService.java
++++ b/fmradio/java/com/stericsson/hardware/fm/FmReceiverService.java
+@@ -26,7 +26,6 @@ import android.content.IntentFilter;
+ import android.content.pm.PackageManager;
+ import android.os.Bundle;
+ import android.os.IBinder;
+-import android.os.Process;
+ import android.os.RemoteException;
+ import android.provider.Settings;
+ import android.util.Log;
+@@ -552,8 +551,6 @@ public class FmReceiverService extends IFmReceiver.Stub {
+         filter.addAction(Intent.ACTION_DOCK_EVENT);
+ 
+         mContext.registerReceiver(mReceiver, filter);
+-
+-        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+     }
+ 
+     public void start(FmBand band) {
+diff --git a/fmradio/java/com/stericsson/hardware/fm/FmTransmitterService.java b/fmradio/java/com/stericsson/hardware/fm/FmTransmitterService.java
+index 8434ebc..0236ac0 100644
+--- a/fmradio/java/com/stericsson/hardware/fm/FmTransmitterService.java
++++ b/fmradio/java/com/stericsson/hardware/fm/FmTransmitterService.java
+@@ -26,7 +26,6 @@ import android.content.IntentFilter;
+ import android.content.pm.PackageManager;
+ import android.os.Bundle;
+ import android.os.IBinder;
+-import android.os.Process;
+ import android.os.RemoteException;
+ import android.provider.Settings;
+ import android.util.Log;
+@@ -372,8 +371,6 @@ public class FmTransmitterService extends IFmTransmitter.Stub {
+         filter.addAction(Intent.ACTION_DOCK_EVENT);
+ 
+         mContext.registerReceiver(mReceiver, filter);
+-
+-        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+     }
+ 
+     public void start(FmBand band) {
+-- 
+1.8.1.1
+

@@ -1,7 +1,7 @@
-From 87622757211dd4793dcc5aa124e381254e672116 Mon Sep 17 00:00:00 2001
+From 97bd9ea24328ab75fd9af840d85ff90f0b55b04d Mon Sep 17 00:00:00 2001
 From: Romain Guy <romainguy@google.com>
 Date: Wed, 18 Jul 2012 20:26:02 -0700
-Subject: [PATCH 07/13] Optimize gradient textures
+Subject: [PATCH 07/14] Optimize gradient textures
 
 Compute the size of the backing textures based on the maximum possible
 number of shades in the gradient.

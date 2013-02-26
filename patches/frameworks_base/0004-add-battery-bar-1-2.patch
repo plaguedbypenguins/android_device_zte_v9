@@ -1,7 +1,7 @@
-From 2d0d4c85893b11b46bfe33b40f51a13def6aaf18 Mon Sep 17 00:00:00 2001
+From 777824aba95d0d4188040f78aa8e8b83b400590c Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Tue, 24 Jul 2012 16:01:58 +0300
-Subject: [PATCH 04/13] add battery bar (1/2)
+Subject: [PATCH 04/14] add battery bar (1/2)
 
 thanks to Spitemare
 https://github.com/Spitemare/android_frameworks_base/commit/2faad0bc7b7a14bab0a28363eda508c03cd790bd

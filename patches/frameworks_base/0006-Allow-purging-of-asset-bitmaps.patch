@@ -1,7 +1,7 @@
-From 728b7a1e7cbfde1709e3ed11e14a9764398f83eb Mon Sep 17 00:00:00 2001
+From 914698f8c56bf95fe61baedb8a495b53729a84aa Mon Sep 17 00:00:00 2001
 From: Conn O'Griofa <connogriofa@gmail.com>
 Date: Fri, 4 Jan 2013 19:43:50 -0200
-Subject: [PATCH 06/13] Allow purging of asset bitmaps
+Subject: [PATCH 06/14] Allow purging of asset bitmaps
 
 It seems that neither CM9 nor CM10.x includes the actual framework-side
 code to facilitate user-controllable bitmap purging. Odd, since the

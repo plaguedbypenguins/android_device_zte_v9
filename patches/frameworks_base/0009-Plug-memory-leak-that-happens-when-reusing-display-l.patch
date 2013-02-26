@@ -1,7 +1,7 @@
-From 4611a9047bbdb8714ea792a4a33a63ebb89621eb Mon Sep 17 00:00:00 2001
+From 86e4caea1d9a90c21245ac0cd9d6fd036027f97e Mon Sep 17 00:00:00 2001
 From: Romain Guy <romainguy@google.com>
 Date: Thu, 27 Sep 2012 19:01:55 -0700
-Subject: [PATCH 09/13] Plug memory leak that happens when reusing display
+Subject: [PATCH 09/14] Plug memory leak that happens when reusing display
  lists Bug #7195815
 
 We did not reclaim resources when reusing an existing DisplayList to
