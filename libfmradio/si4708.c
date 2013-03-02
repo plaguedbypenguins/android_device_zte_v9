@@ -211,19 +211,13 @@ static int setFreqSpacing(struct si4708_session *priv, int spacing)
 static int setMute(struct si4708_session *priv, int mute)
 {
     int ret;
-    int zero = 0;
 
     ALOGI("%s: setting mute %d", __func__, mute);
 
-    if (mute) {
-        ret = ioctl(priv->fd, Si4708_IOC_VOLUME_GET, &priv->lastVolume);
-        ret = ioctl(priv->fd, Si4708_IOC_VOLUME_SET, &zero);
-    } else {
-        ret = ioctl(priv->fd, Si4708_IOC_VOLUME_SET, &priv->lastVolume);
-    }
+    ret = ioctl(priv->fd, Si4708_IOC_MUTE, &mute);
 
     if (ret != 0) {
-        ALOGE("%s: IOCTL Si4708_IOC_MUTE failed failed %d", __func__, ret);
+        ALOGE("%s: IOCTL Si4708_IOC_MUTE failed %d", __func__, ret);
         return FMRADIO_IO_ERROR;
     }
 
