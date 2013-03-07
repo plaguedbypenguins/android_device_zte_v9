@@ -24,16 +24,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "bh1721.h"
+#include "PS_ALS_common.h"
 
 #include <cutils/log.h>
 
-#include "TaosLight.h"
+#include "V9Light.h"
 
 /*****************************************************************************/
 
-TaosLight::TaosLight()
-    : SensorBase(TAOS_DEVICE_NAME, "light"),
+V9Light::V9Light(char *dev)
+    : SensorBase(dev, "light"),
       mEnabled(0),
       mInputReader(4),
       mPendingMask(0)
@@ -45,8 +45,8 @@ TaosLight::TaosLight()
 
     open_device();
 
-    if (!ioctl(dev_fd, ALS_IOCTL_PW_ON)) {
-        mEnabled = ioctl(dev_fd, ALS_IOCTL_GET_ENABLED);
+    if (!ioctl(dev_fd, PS_ALS_IOCTL_ALS_ON)) {
+        mEnabled = ioctl(dev_fd, PS_ALS_IOCTL_ALS_GET_ENABLED);
         setInitialState();
     }
     if (!mEnabled) {
@@ -55,13 +55,13 @@ TaosLight::TaosLight()
 
 }
 
-TaosLight::~TaosLight() {
+V9Light::~V9Light() {
     if (mEnabled) {
         enable(ID_L, 0);
     }
 }
 
-int TaosLight::setInitialState() {
+int V9Light::setInitialState() {
     struct input_absinfo absinfo;
     if (!ioctl(data_fd, EVIOCGABS(EVENT_TYPE_LIGHT), &absinfo)) {
         mPendingEvents.light = absinfo.value;
@@ -69,7 +69,7 @@ int TaosLight::setInitialState() {
     return 0;
 }
 
-int TaosLight::enable(int32_t handle, int en) {
+int V9Light::enable(int32_t handle, int en) {
 
     if (handle != ID_L)
         return -EINVAL;
@@ -84,15 +84,15 @@ int TaosLight::enable(int32_t handle, int en) {
         int cmd;
 
 	if (newState) {
-            cmd = ALS_IOCTL_PW_ON;
-            LOGD_IF(DEBUG,"ALS ON");
+            cmd = PS_ALS_IOCTL_ALS_ON;
+            ALOGD_IF(DEBUG,"ALS ON");
         } else {
-            cmd = ALS_IOCTL_PW_OFF;
-            LOGD_IF(DEBUG,"ALS OFF");
+            cmd = PS_ALS_IOCTL_ALS_OFF;
+            ALOGD_IF(DEBUG,"ALS OFF");
         }
         err = ioctl(dev_fd, cmd);
         err = err<0 ? -errno : 0;
-        LOGE_IF(err, "ALS_IOCTL_XXX failed (%s)", strerror(-err));
+        ALOGE_IF(err, "PS_ALS_IOCTL_XXX failed (%s)", strerror(-err));
         if (!err) {
             if (en) {
                 setInitialState();
@@ -102,18 +102,18 @@ int TaosLight::enable(int32_t handle, int en) {
                 mEnabled = 0;
         }
         if (!mEnabled) {
-            LOGD_IF(DEBUG,"closing device");
+            ALOGD_IF(DEBUG,"closing device");
             close_device();
         }
     }
     return err;
 }
 
-bool TaosLight::hasPendingEvents() const {
+bool V9Light::hasPendingEvents() const {
     return mPendingMask;
 }
 
-int TaosLight::readEvents(sensors_event_t* data, int count)
+int V9Light::readEvents(sensors_event_t* data, int count)
 {
     if (count < 1)
         return -EINVAL;
@@ -128,7 +128,7 @@ int TaosLight::readEvents(sensors_event_t* data, int count)
         int type = event->type;
         if (type == EV_ABS) {
             if (event->code == EVENT_TYPE_LIGHT) {
-                LOGD_IF(DEBUG,"Light value=%i",event->value);
+                ALOGD_IF(DEBUG,"Light value=%i",event->value);
                 mPendingEvents.light = event->value;
             }
         } else if (type == EV_SYN) {
@@ -140,7 +140,7 @@ int TaosLight::readEvents(sensors_event_t* data, int count)
                  numEventReceived++;
              }
         } else {
-            LOGE("TaosLight: unknown event (type=%d, code=%d)",type, event->code);
+            ALOGE("V9Light: unknown event (type=%d, code=%d)",type, event->code);
         }
         mInputReader.next();
     }

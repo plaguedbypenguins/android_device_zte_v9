@@ -33,7 +33,8 @@ LOCAL_SRC_FILES := 						\
 				nusensors.cpp 			\
 				InputEventReader.cpp		\
 				SensorBase.cpp			\
-				TaosLight.cpp			\
+				V9Proximity.cpp			\
+				V9Light.cpp			\
 				AkmSensor.cpp
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils

@@ -1,4 +1,5 @@
-# Copyright (C) 2009 The Android Open Source Project
+#
+# Copyright (C) 2011 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,113 +12,126 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-#
-# This file is the build configuration for a full Android
-# build for sapphire hardware. This cleanly combines a set of
-# device-specific aspects (drivers) with a device-agnostic
-# product configuration (apps).
 #
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
-
-$(call inherit-product, device/common/gps/gps_eu_supl.mk)
+# This file includes all definitions that apply to ALL v9 devices, and
+# are also specific to v9 devices
+#
+# Everything in this directory will become public
 
 DEVICE_PACKAGE_OVERLAYS := device/zte/v9/overlay
+$(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
-# Discard inherited values and use our own instead.
-PRODUCT_NAME := zte_v9
-PRODUCT_DEVICE := v9
-PRODUCT_MODEL := ZTE V9
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
 
+# Graphics
+PRODUCT_PACKAGES := \
+        gralloc.msm7x27 \
+        hwcomposer.msm7x27 \
+        copybit.msm7x27
+
+# OMX
 PRODUCT_PACKAGES += \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers \
-    MagicSmokeWallpapers \
-    VisualizationWallpapers \
-    librs_jni \
-    Gallery3d \
-    SpareParts \
-    Development \
-    Term \
-    gralloc.v9 \
-    copybit.v9 \
-    gps.v9 \
-    lights.v9 \
-    sensors.v9 \
-    libOmxCore \
-    libOmxVidEnc \
-    FM \
-    V9Parts \
-    abtfilt \
-    dexpreopt
+        libmm-omxcore \
+        libOmxCore \
+        libstagefrighthw
 
-# proprietary side of the device
-$(call inherit-product-if-exists, vendor/zte/v9/v9-vendor.mk)
+# Camera
+PRODUCT_PACKAGES += \
+        camera.msm7x27
 
-DISABLE_DEXPREOPT := false
+# GPS
+PRODUCT_PACKAGES += \
+        librpc \
+        gps.v9
 
-PRODUCT_COPY_FILES += \
-    device/zte/v9/qwerty.kl:system/usr/keylayout/qwerty.kl \
-    device/zte/v9/v9-keypad.kl:system/usr/keylayout/v9-keypad.kl
+# V9 specific
+PRODUCT_PACKAGES += \
+        lights.v9 \
+        sensors.v9 \
+        V9Parts
 
-# fstab
-PRODUCT_COPY_FILES += \
-    device/zte/v9/vold.fstab:system/etc/vold.fstab
-
-# Init
-PRODUCT_COPY_FILES += \
-    device/zte/v9/init.v9.rc:root/init.v9.rc \
-    device/zte/v9/ueventd.v9.rc:root/ueventd.v9.rc
+# Power HAL
+PRODUCT_PACKAGES += \
+        power.msm7x27
 
 # Audio
+PRODUCT_PACKAGES += \
+        audio.primary.v9 \
+        audio_policy.v9 \
+        audio.a2dp.default \
+        libaudioutils
+
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+        LiveWallpapersPicker \
+        librs_jni
+
+# Other
+PRODUCT_PACKAGES += \
+        make_ext4fs \
+        setup_fs \
+        dexpreopt
+
+# for bugmailer
+ifneq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_PACKAGES += send_bug
+
 PRODUCT_COPY_FILES += \
-    device/zte/v9/AudioFilter.csv:system/etc/AudioFilter.csv \
-    device/zte/v9/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt
+         system/extras/bugmailer/bugmailer.sh:system/bin/bugmailer.sh \
+         system/extras/bugmailer/send_bug:system/bin/send_bug
+endif
 
-# WLAN + BT
+# Dalvik
+DISABLE_DEXPREOPT := false
+
+# Enable repeatable keys in CWM
+PRODUCT_PROPERTY_OVERRIDES += \
+        ro.cwm.enable_key_repeat=true
+
+PRODUCT_COPY_FILES := \
+        device/zte/v9/prebuilt/root/init.v9.rc:root/init.v9.rc \
+        device/zte/v9/prebuilt/root/init.v9.usb.rc:root/init.v9.usb.rc \
+        device/zte/v9/prebuilt/root/ueventd.v9.rc:root/ueventd.v9.rc \
+        device/zte/v9/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
+        device/zte/v9/prebuilt/system/usr/idc/msm-touchscreen.idc:/system/usr/idc/msm-touchscreen.idc \
+        device/zte/v9/prebuilt/system/usr/keylayout/msm-touchscreen.kl:/system/usr/keylayout/msm-touchscreen.kl \
+        device/zte/v9/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
+        device/zte/v9/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
+        device/zte/v9/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+        device/zte/v9/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
+        device/zte/v9/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+        device/zte/v9/prebuilt/system/etc/gps.conf:system/etc/gps.conf
+
+# Bluetooth configuration files
 PRODUCT_COPY_FILES += \
-    device/zte/v9/init.bt.sh:system/etc/init.bt.sh \
-    device/zte/v9/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    device/zte/v9/dhcpcd.conf:system/etc/dhcpcd/dhcpcd.conf \
-    device/zte/v9/prebuilt/hostapd:system/bin/hostapd \
-    device/zte/v9/prebuilt/hostapd.conf:system/etc/wifi/hostapd.conf
+        device/zte/v9/prebuilt/system/etc/init.bt.sh:system/etc/init.bt.sh
 
-# Install the features available on this device.
+# WiFi
 PRODUCT_COPY_FILES += \
-    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/base/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
-    frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
+        device/zte/v9/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+        device/zte/v9/prebuilt/system/bin/hostapd:system/bin/hostapd \
+        device/zte/v9/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf \
+        device/zte/v9/prebuilt/system/wifi/ar6000.ko:system/wifi/ar6000.ko \
+        device/zte/v9/prebuilt/system/wifi/regcode:system/wifi/regcode \
+        device/zte/v9/prebuilt/system/wifi/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
+        device/zte/v9/prebuilt/system/wifi/athwlan.bin.z77:system/wifi/athwlan.bin.z77 \
+        device/zte/v9/prebuilt/system/wifi/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin \
+        device/zte/v9/prebuilt/system/wifi/device.bin:system/wifi/device.bin \
+        device/zte/v9/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
+        device/zte/v9/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
 
-#Kernel Modules
+# These are the hardware-specific features
 PRODUCT_COPY_FILES += \
-    device/zte/v9/prebuilt/ar6000.ko:system/wifi/ar6000.ko \
-    device/zte/v9/prebuilt/tun.ko:system/lib/modules/tun.ko
+        frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+        frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
+        frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+        frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+        frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+        frameworks/native/data/etc/android.hardware.touchscreen.xml:system/etc/permissions/android.hardware.touchscreen.xml \
+        frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
+        frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
-#WiFi firmware
-PRODUCT_COPY_FILES += \
-    device/zte/v9/firmware/regcode:system/wifi/regcode \
-    device/zte/v9/firmware/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
-    device/zte/v9/firmware/athwlan.bin.z77:system/wifi/athwlan.bin.z77 \
-    device/zte/v9/firmware/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin \
-    device/zte/v9/firmware/device.bin:system/wifi/device.bin \
-    device/zte/v9/firmware/eeprom.bin:system/wifi/eeprom.bin \
-    device/zte/v9/firmware/eeprom.data:system/wifi/eeprom.data
-
-#Media profile
-PRODUCT_COPY_FILES += \
-    device/zte/v9/media_profiles.xml:system/etc/media_profiles.xml
-
-# V9 uses medium-density artwork where available
-PRODUCT_LOCALES += mdpi
-
-# we have enough storage space to hold precise GC data
-PRODUCT_TAGS += dalvik.gc.type-precise
-
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+$(call inherit-product-if-exists, vendor/zte/v9/v9-vendor.mk)

@@ -1,4 +1,5 @@
-# Copyright (C) 2007 The Android Open Source Project
+#
+# Copyright (C) 2011 The Android Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,81 +12,85 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# config.mk
-#
-# Product-specific compile-time definitions.
 #
 
-LOCAL_PATH:= $(call my-dir)
+# This variable is set first, so it can be overridden
+# by BoardConfigVendor.mk
+USE_CAMERA_STUB := true
 
-# WARNING: This line must come *before* including the proprietary
-# variant, so that it gets overwritten by the parent (which goes
-# against the traditional rules of inheritance).
-USE_CAMERA_STUB := false
+# Use the non-open-source parts, if they're present
+-include vendor/zte/v9/BoardConfigVendor.mk
 
+# CPU
+TARGET_ARCH := arm
+TARGET_CPU_ABI := armeabi
+TARGET_CPU_ABI2 := armeabi-v6l
+TARGET_ARCH_VARIANT := armv6-vfp
+
+# Target and board properties
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
+BOARD_PROVIDES_LIBRIL := true
+TARGET_BOARD_PLATFORM := msm7x27
+TARGET_BOOTLOADER_BOARD_NAME := v9
+TARGET_SPECIFIC_HEADER_PATH := device/zte/v9/include
 
-TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery_kernel
+# Recovery
+BOARD_CUSTOM_GRAPHICS := ../../../device/zte/v9/recovery/graphics.c
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/zte/v9/recovery/recovery_ui.c
+TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery/recovery_kernel
+TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc
+TARGET_RECOVERY_FSTAB := device/zte/v9/recovery/recovery.fstab
 
+# Kernel
+TARGET_KERNEL_SOURCE := kernel/zte/zte-kernel-msm7x27
+TARGET_KERNEL_CONFIG := cyanogen_v9_defconfig
+BOARD_KERNEL_BASE := 0x02600000
 BOARD_KERNEL_CMDLINE := androidboot.hardware=v9 console=null
 
-TARGET_BOARD_PLATFORM := msm7k
-TARGET_ARCH_VARIANT := armv6-vfp
-TARGET_CPU_ABI := armeabi
-TARGET_CPU_ABI := armeabi-v6l
-TARGET_CPU_ABI2 := armeabi
+# WiFi
+BOARD_WPA_SUPPLICANT_DRIVER := WEXT
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WLAN_DEVICE := ath6kl
+WIFI_DRIVER_MODULE_PATH := /system/wifi/ar6000.ko
+WIFI_DRIVER_MODULE_NAME := ar6000
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
-TARGET_BOOTLOADER_BOARD_NAME := v9
-
+# Bluetooth
 BOARD_HAVE_BLUETOOTH := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/zte/v9/bluetooth
 
-BOARD_HAVE_FM_RADIO := true
-BOARD_GLOBAL_CFLAGS += -DHAVE_FM_RADIO
-BOARD_FM_DEVICE := si4708
-
-# Wifi related defines
-BOARD_WPA_SUPPLICANT_DRIVER := AWEXT
-WIFI_DRIVER_MODULE_PATH     := /system/wifi/ar6000.ko
-WIFI_DRIVER_MODULE_NAME     := ar6000
-
+# Browser
 WITH_JIT := true
-ENABLE_JSC_JIT := true
+HTTP := chrome
 
-TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
+# Webkit
+ENABLE_WEBGL := true
+TARGET_FORCE_CPU_UPLOAD := true
 
-JS_ENGINE := v8
-
-# OpenGL drivers config file path
-BOARD_EGL_CFG := device/zte/v9/egl.cfg
-
-# No fallback font by default (space savings)
-#NO_FALLBACK_FONT:=true
-
-# GPS Related Defines
-BOARD_GPS_LIBRARIES := libloc
-BOARD_USES_GPSSHIM := true
-BOARD_GPS_NEEDS_XTRA := true
-
-#BOARD_USES_QCOM_GPS := true
-#BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := v9
-#BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 1240
-
+# QCOM
 BOARD_USES_QCOM_HARDWARE := true
-BOARD_USES_QCOM_LIBS := true
+COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DQCOM_LEGACY_OMX
 
-BOARD_KERNEL_BASE := 0x02600000
-#BOARD_PAGE_SIZE := 0x00000800
+# Graphics
+BOARD_EGL_CFG := device/zte/v9/prebuilt/system/lib/egl/egl.cfg
+USE_OPENGL_RENDERER := true
+TARGET_QCOM_DISPLAY_VARIANT := legacy
+BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
+COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT -DQCOM_NO_SECURE_PLAYBACK
 
-TARGET_PROVIDES_LIBRIL := true
-TARGET_PROVIDES_LIBAUDIO := true
+# Bootanimation
+TARGET_BOOTANIMATION_USE_RGB565 := true
 
-BOARD_CUSTOM_USB_CONTROLLER := ../../device/zte/v9/UsbController.cpp
+# Fonts
+SMALLER_FONT_FOOTPRINT := true
 
-BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
+# Camera
+TARGET_DISABLE_ARM_PIE := true
+BOARD_NEEDS_MEMORYHEAPPMEM := true
 
-# # cat /proc/mtd
+# cat /proc/mtd
+# dev:    size   erasesize  name
 # mtd0: 00500000 00020000 "recovery"
 # mtd1: 00500000 00020000 "boot"
 # mtd2: 00180000 00020000 "splash"
@@ -95,13 +100,8 @@ BOARD_UMS_LUNFILE := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
 # mtd6: 0a280000 00020000 "userdata"
 # mtd7: 01500000 00020000 "oem"
 # mtd8: 00180000 00020000 "persist"
-
-
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 0x00500000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00500000
-BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 0x0cf80000
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0d020000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 0x0dc00000 
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0a280000
 BOARD_FLASH_BLOCK_SIZE := 131072
-
-BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/zte/v9/recovery/recovery_ui.c
-TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc

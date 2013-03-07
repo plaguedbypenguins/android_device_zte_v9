@@ -62,7 +62,7 @@ static int write_int (const char *path, int value) {
 	fd = open(path, O_RDWR);
 	if (fd < 0) {
 		if (already_warned == 0) {
-			LOGE("write_int failed to open %s\n", path);
+			ALOGE("write_int failed to open %s\n", path);
 			already_warned = 1;
 		}
 		return -errno;
@@ -83,7 +83,7 @@ static int write_string (const char *path, const char *value) {
 	fd = open(path, O_RDWR);
 	if (fd < 0) {
 		if (already_warned == 0) {
-			LOGE("write_string failed to open %s\n", path);
+			ALOGE("write_string failed to open %s\n", path);
 			already_warned = 1;
 		}
 		return -errno;
@@ -114,12 +114,27 @@ static int set_light_backlight (struct light_device_t *dev, struct light_state_t
 	int err = 0;
 	int brightness = rgb_to_brightness(state);
 
-	LOGV("%s brightness=%d color=0x%08x", __func__,brightness,state->color);
+	ALOGV("%s brightness=%d color=0x%08x", __func__,brightness,state->color);
 	pthread_mutex_lock(&g_lock);
 	g_backlight = brightness;
 	err = write_int (LCD_BACKLIGHT_FILE, brightness);
 	pthread_mutex_unlock(&g_lock);
 	return err;
+}
+
+static int set_light_buttons (struct light_device_t *dev, struct light_state_t const* state) {
+	size_t i = 0;
+	int err = 0;
+	int on = is_lit(state);
+	pthread_mutex_lock(&g_lock);
+
+	for (i = 0; i < sizeof(BUTTON_BACKLIGHT_FILE)/sizeof(BUTTON_BACKLIGHT_FILE[0]); i++) {
+		err = write_int (BUTTON_BACKLIGHT_FILE[i],on?1:0);
+	}
+
+	pthread_mutex_unlock(&g_lock);
+
+	return 0;
 }
 
 static void set_shared_light_locked (struct light_device_t *dev, struct light_state_t *state) {
@@ -187,6 +202,9 @@ static int open_lights (const struct hw_module_t* module, char const* name,
 	if (0 == strcmp(LIGHT_ID_BACKLIGHT, name)) {
 		set_light = set_light_backlight;
 	}
+	else if (0 == strcmp(LIGHT_ID_BUTTONS, name)) {
+		set_light = set_light_buttons;
+	}
 	else if (0 == strcmp(LIGHT_ID_BATTERY, name)) {
 		set_light = set_light_battery;
 	}
@@ -216,7 +234,7 @@ static struct hw_module_methods_t lights_module_methods = {
 };
 
 
-const struct hw_module_t HAL_MODULE_INFO_SYM = {
+struct hw_module_t HAL_MODULE_INFO_SYM = {
 	.tag = HARDWARE_MODULE_TAG,
 	.version_major = 1,
 	.version_minor = 0,

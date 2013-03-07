@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ANDROID_TAOS_LIGHT_H
-#define ANDROID_TAOS_LIGHT_H
+#ifndef ANDROID_PS_ALS_LIGHT_H
+#define ANDROID_PS_ALS_LIGHT_H
 
 #include <stdint.h>
 #include <errno.h>
@@ -30,7 +30,7 @@
 
 struct input_event;
 
-class TaosLight : public SensorBase {
+class V9Light : public SensorBase {
   const static uint DEBUG = 0;
   uint mEnabled;
   InputEventCircularReader mInputReader;
@@ -38,8 +38,8 @@ class TaosLight : public SensorBase {
   int setInitialState();
 
 public:
-  TaosLight();
-  virtual ~TaosLight();
+  V9Light(char *dev);
+  virtual ~V9Light();
   virtual int readEvents(sensors_event_t* data, int count);
   virtual bool hasPendingEvents() const;
   virtual int enable(int32_t handle, int enabled);
@@ -48,4 +48,4 @@ public:
 
 /*****************************************************************************/
 
-#endif  // ANDROID_TAOS_LIGHT_H
+#endif  // ANDROID_PS_ALS_LIGHT_H
