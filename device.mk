@@ -68,6 +68,11 @@ PRODUCT_PACKAGES += \
         LiveWallpapersPicker \
         librs_jni
 
+# FM Radio
+PRODUCT_PACKAGES += \
+        libfmradio.si4708 \
+        FmRadioReceiver
+
 # Other
 PRODUCT_PACKAGES += \
         make_ext4fs \
@@ -121,6 +126,10 @@ PRODUCT_COPY_FILES += \
         device/zte/v9/prebuilt/system/wifi/device.bin:system/wifi/device.bin \
         device/zte/v9/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
         device/zte/v9/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
+
+# FM Radio
+PRODUCT_COPY_FILES += \
+        frameworks/native/data/etc/com.stericsson.hardware.fm.receiver.xml:system/etc/permissions/com.stericsson.hardware.fm.receiver.xml
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
