@@ -50,3 +50,5 @@ ro.zram.default=0
 persist.sys.purgeable_assets=1
 ro.media.dec.jpeg.memcap=20000000
 
+# Lockscreen
+ro.hwaccel.lockscreen=0
