@@ -49,6 +49,7 @@ dalvik.vm.execution-mode=int:jit
 ro.zram.default=0
 persist.sys.purgeable_assets=1
 ro.media.dec.jpeg.memcap=20000000
+sys.mem.max_hidden_apps=3
 
 # Lockscreen
 ro.hwaccel.lockscreen=0
