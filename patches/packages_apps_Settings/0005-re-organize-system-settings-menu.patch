@@ -1,11 +1,11 @@
-From cc519a9b9dbd9f673192c79216244fac4fa654b9 Mon Sep 17 00:00:00 2001
+From 56c159c1f4cf54143d178dd38f00774192c61259 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Fri, 27 Jul 2012 15:11:18 +0300
-Subject: [PATCH 05/10] re-organize system settings menu
+Subject: [PATCH 5/7] re-organize system settings menu
 
 Change-Id: Idefc4bfb6a18b958308b8a83bfcbd22bf2dcf8bc
 ---
- res/xml/system_settings.xml |   20 ++++++++++----------
+ res/xml/system_settings.xml | 20 ++++++++++----------
  1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/res/xml/system_settings.xml b/res/xml/system_settings.xml
@@ -51,5 +51,5 @@ index d566485..d6c87f2 100644
          android:key="konsta_navbar"
          android:title="@string/konsta_navbar"
 -- 
-1.7.9.5
+1.8.2
 

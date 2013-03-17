@@ -1,15 +1,15 @@
-From ea26094150b0a0493087fb35af57a6ebda5f7616 Mon Sep 17 00:00:00 2001
+From 7e2cababd5ee462896470039aa262aac47a381c4 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Tue, 24 Jul 2012 11:04:32 +0300
-Subject: [PATCH 04/10] add partition info
+Subject: [PATCH 4/7] add partition info
 
 Change-Id: I2abea99edc9765d898536b19ad9159fe3ed4e9b6
 ---
- AndroidManifest.xml                         |    9 ++
- res/values/strings.xml                      |    8 ++
- res/xml/partition_info.xml                  |   39 ++++++++
- res/xml/settings_headers.xml                |   10 +++
- src/com/android/settings/PartitionInfo.java |  127 +++++++++++++++++++++++++++
+ AndroidManifest.xml                         |   9 ++
+ res/values/strings.xml                      |   8 ++
+ res/xml/partition_info.xml                  |  39 +++++++++
+ res/xml/settings_headers.xml                |  10 +++
+ src/com/android/settings/PartitionInfo.java | 127 ++++++++++++++++++++++++++++
  5 files changed, 193 insertions(+)
  create mode 100644 res/xml/partition_info.xml
  create mode 100644 src/com/android/settings/PartitionInfo.java
@@ -35,10 +35,10 @@ index ac790fd..819d52d 100644
                  android:label="@string/location_settings_title"
                  android:configChanges="orientation|keyboardHidden|screenSize"
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index 47d6efb..d6886d1 100644
+index 404b857..fd41631 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -4985,5 +4985,13 @@
+@@ -4994,5 +4994,13 @@
      <!-- Performance : Disable bootanimation -->
      <string name="pref_disable_bootanimation_title">Disable boot animation</string>
      <string name="pref_disable_bootanimation_summary">Don\'t show the boot animation for faster boot</string>
@@ -252,5 +252,5 @@ index 0000000..6020be2
 +    }
 +}
 -- 
-1.7.9.5
+1.8.2
 
