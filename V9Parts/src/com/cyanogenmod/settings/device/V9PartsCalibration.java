@@ -1,4 +1,4 @@
-package com.cyanogenmod.V9Parts;
+package com.cyanogenmod.settings.device;
 
 import android.app.Activity;
 import android.graphics.Canvas;
