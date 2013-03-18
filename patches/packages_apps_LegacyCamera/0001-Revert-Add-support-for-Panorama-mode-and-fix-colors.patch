@@ -1,17 +1,17 @@
-From a7ac215ede98d9982cbf8aae9f95a1fc7ddd3939 Mon Sep 17 00:00:00 2001
+From 96248221c54904bfa773add0db1843cbe5e20ea4 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Sat, 17 Nov 2012 16:59:43 +0200
-Subject: [PATCH] Revert "Add support for Panorama mode and fix colors"
+Subject: [PATCH 1/2] Revert "Add support for Panorama mode and fix colors"
 
 This reverts commit 2595607df3cb7e4826fb7a5e1bd7438dd92e4ae6.
 ---
- jni/Android.mk                                     |    3 ---
- .../src/mosaic_renderer/SurfaceTextureRenderer.cpp |    2 +-
- .../src/mosaic_renderer/WarpRenderer.cpp           |    2 --
- .../src/mosaic_renderer/YVURenderer.cpp            |   12 +----------
- jni/feature_mos_jni.cpp                            |   22 --------------------
- jni/mosaic_renderer_jni.cpp                        |    3 ---
- src/com/android/camera/PanoramaActivity.java       |    8 ++-----
+ jni/Android.mk                                     |  3 ---
+ .../src/mosaic_renderer/SurfaceTextureRenderer.cpp |  2 +-
+ .../src/mosaic_renderer/WarpRenderer.cpp           |  2 --
+ .../src/mosaic_renderer/YVURenderer.cpp            | 12 +-----------
+ jni/feature_mos_jni.cpp                            | 22 ----------------------
+ jni/mosaic_renderer_jni.cpp                        |  3 ---
+ src/com/android/camera/PanoramaActivity.java       |  8 ++------
  7 files changed, 4 insertions(+), 48 deletions(-)
 
 diff --git a/jni/Android.mk b/jni/Android.mk
@@ -192,5 +192,5 @@ index 2732744..d5d6ee0 100755
  
      private void showFinalMosaic(Bitmap bitmap) {
 -- 
-1.7.9.5
+1.8.2
 
