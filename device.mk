@@ -118,7 +118,6 @@ PRODUCT_COPY_FILES += \
 # WiFi
 PRODUCT_COPY_FILES += \
         device/zte/v9/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-        device/zte/v9/prebuilt/system/bin/hostapd:system/bin/hostapd \
         device/zte/v9/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf \
         device/zte/v9/prebuilt/system/wifi/ar6000.ko:system/wifi/ar6000.ko \
         device/zte/v9/prebuilt/system/wifi/regcode:system/wifi/regcode \
