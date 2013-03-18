@@ -102,6 +102,8 @@ PRODUCT_COPY_FILES := \
         device/zte/v9/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
         device/zte/v9/prebuilt/system/usr/idc/msm-touchscreen.idc:/system/usr/idc/msm-touchscreen.idc \
         device/zte/v9/prebuilt/system/usr/keylayout/msm-touchscreen.kl:/system/usr/keylayout/msm-touchscreen.kl \
+        device/zte/v9/prebuilt/system/usr/idc/atmel-touchscreen.idc:system/usr/idc/atmel-touchscreen.idc \
+        device/zte/v9/prebuilt/system/usr/keylayout/atmel-touchscreen.kl:system/usr/keylayout/atmel-touchscreen.kl \
         device/zte/v9/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
         device/zte/v9/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
         device/zte/v9/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
