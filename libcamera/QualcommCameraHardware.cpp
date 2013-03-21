@@ -162,9 +162,9 @@ union zoomimage
     struct mdp_blit_req_list list;
 } zoomImage;
 
-//Default to VGA
-#define DEFAULT_PREVIEW_WIDTH 480
-#define DEFAULT_PREVIEW_HEIGHT 320
+//Default to QVGA
+#define DEFAULT_PREVIEW_WIDTH 320
+#define DEFAULT_PREVIEW_HEIGHT 240
 
 /*
  * Modifying preview size requires modification
@@ -314,8 +314,8 @@ static const str_map effects[] = {
     { CameraParameters::EFFECT_SOLARIZE,   CAMERA_EFFECT_SOLARIZE },
     { CameraParameters::EFFECT_SEPIA,      CAMERA_EFFECT_SEPIA },
 //    { CameraParameters::EFFECT_POSTERIZE,  CAMERA_EFFECT_POSTERIZE },
-//    { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
-//    { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
+    { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
+    { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
 //    { CameraParameters::EFFECT_AQUA,       CAMERA_EFFECT_AQUA }
 };
 
@@ -614,10 +614,10 @@ struct SensorType {
 
 static SensorType sensorTypes[] = {
         { "5mp", 2608, 1960, true,  2592, 1944,0x00000fff },
-        { "5mp", 5184, 1944, true,  2592, 1944,0x00000fff }, // actual 5MP v9
-        { "5mp", 2560, 1920, true,  2560, 1920,0x00000fff }, //should be 5MP v9
+        { "5mp", 5184, 1944, true,  2592, 1944,0x00000fff }, // actual 5MP blade
+        { "5mp", 2560, 1920, true,  2560, 1920,0x00000fff }, //should be 5MP blade
         { "3mp", 2064, 1544, false, 2048, 1536,0x000007ff },
-        { "3mp", 4096, 1536, true, 2048, 1536,0x000007ff }, // 3MP v9
+        { "3mp", 4096, 1536, true, 2048, 1536,0x000007ff }, // 3MP blade
         { "2mp", 3200, 1200, false, 1600, 1200,0x000007ff } };
 
 
@@ -852,7 +852,7 @@ void *opencamerafd(void *data) {
  * data will be placed in a buffer from DstSet, and this buffer will be given
  * to surface flinger to display.
  */
-#define NUM_MORE_BUFS 2
+#define NUM_MORE_BUFS 1
 
 QualcommCameraHardware::QualcommCameraHardware()
     : mParameters(),
@@ -914,8 +914,6 @@ QualcommCameraHardware::QualcommCameraHardware()
 
     switch(mCurrentTarget){
         case TARGET_MSM7627:
-            jpegPadding = 8;
-            break;
         case TARGET_QSD8250:
         case TARGET_MSM7630:
             jpegPadding = 0;
@@ -1036,7 +1034,7 @@ void QualcommCameraHardware::initDefaultParameters()
     mParameters.setPictureSize(DEFAULT_PICTURE_WIDTH, DEFAULT_PICTURE_HEIGHT);
     mParameters.setPictureFormat("jpeg"); // informative
 
-    mParameters.set(CameraParameters::KEY_JPEG_QUALITY, "85"); // max quality
+    mParameters.set(CameraParameters::KEY_JPEG_QUALITY, "100"); // max quality
     mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH,
                     THUMBNAIL_WIDTH_STR); // informative
     mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT,
@@ -2230,7 +2228,7 @@ bool QualcommCameraHardware::initPreview()
                 (uint32_t)mPreviewHeap->mHeap->base() + mPreviewHeap->mAlignedBufferSize * cnt;
             frames[cnt].y_off = 0;
             frames[cnt].cbcr_off = previewWidth * previewHeight;
-            frames[cnt].path = OUTPUT_TYPE_P; // MSM_FRAME_ENC;
+            frames[cnt].path = MSM_FRAME_ENC;
         }
 
         mFrameThreadWaitLock.lock();
@@ -2238,12 +2236,12 @@ bool QualcommCameraHardware::initPreview()
         pthread_attr_init(&attr);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-        frame_parms.frame = frames[kPreviewBufferCount - 1];
+        frame_parms.frame = frames[kPreviewBufferCount - 2];
 
         if( mCurrentTarget == TARGET_MSM7630 || mCurrentTarget == TARGET_QSD8250 )
             frame_parms.video_frame =  recordframes[kPreviewBufferCount - 1];
         else
-            frame_parms.video_frame =  frames[kPreviewBufferCount - 1];
+            frame_parms.video_frame =  frames[kPreviewBufferCount - 2];
 
         ALOGV ("initpreview before cam_frame thread carete , video frame  buffer=%lu fd=%d y_off=%d cbcr_off=%d \n",
           (unsigned long)frame_parms.video_frame.buffer, frame_parms.video_frame.fd, frame_parms.video_frame.y_off,
@@ -4023,9 +4021,12 @@ status_t QualcommCameraHardware::setBrightness(const CameraParameters& params) {
 status_t QualcommCameraHardware::setExposureCompensation(const CameraParameters& params) {
         int expcomp = params.getInt("exposure-compensation");
 
-        mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
+	mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION, expcomp);
 
-        expcomp+=2;
+	if(!strcmp(sensorType->name, "3mp"))
+	  expcomp+=4;
+	else
+	  expcomp+=2;
 
         bool ret = native_set_parm(CAMERA_SET_PARM_EXPOSURE_COMPENSATION, sizeof(expcomp),
                                        (void *)&expcomp);
