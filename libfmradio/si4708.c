@@ -398,7 +398,6 @@ static int
 si4708_full_scan(void **session_data, int **found_freqs,
                  int **signal_strengths)
 {
-#if 0
     struct si4708_session *priv = (struct si4708_session *)*session_data;
     int i;
     int lastFreq = priv->lastFreq;
@@ -414,7 +413,7 @@ si4708_full_scan(void **session_data, int **found_freqs,
         if (found <= 0 || found <= lastFreq)
             break;
         (*found_freqs)[i] = found;
-        (*signal_strengths)[i] = 75;
+        (*signal_strengths)[i] = 1000;
         lastFreq = found;
     }
 
@@ -422,8 +421,6 @@ si4708_full_scan(void **session_data, int **found_freqs,
     setMute(priv, 0);
 
     return i-1;
-#endif
-    return FMRADIO_UNSUPPORTED_OPERATION;
 }
 
 static int
