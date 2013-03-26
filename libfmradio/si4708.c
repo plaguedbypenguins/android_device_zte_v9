@@ -329,13 +329,8 @@ si4708_scan(void **session_data, enum fmradio_seek_direction_t dir)
 
     ALOGV("%s: direction=%d", __func__, dir);
 
-    if (dir == FMRADIO_SEEK_DOWN) {
-        val[0] = SEEKDOWN;
-        retval = ioctl(priv->fd, Si4708_IOC_CHAN_SEEK, val);
-    } else {
-        val[0] = SEEKUP;
-        retval = ioctl(priv->fd, Si4708_IOC_CHAN_SEEK, val);
-    }
+    val[0] = (dir == FMRADIO_SEEK_DOWN) ? SEEKDOWN : SEEKUP;
+    retval = ioctl(priv->fd, Si4708_IOC_CHAN_SEEK, val);
 
     if (retval != 0) {
         ALOGE("%s: seek failed", __func__);
