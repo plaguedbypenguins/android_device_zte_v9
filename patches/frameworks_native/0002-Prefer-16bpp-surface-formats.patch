@@ -1,7 +1,7 @@
-From 62919a2e9fe6049b4ef411b9ac85d6374f661225 Mon Sep 17 00:00:00 2001
+From 77618963f8b8fbb5446e24da399de65aa5797b79 Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Mon, 28 Jan 2013 08:05:39 +0100
-Subject: [PATCH] Prefer 16bpp surface formats
+Subject: [PATCH 2/2] Prefer 16bpp surface formats
 
 Adds a property to use RGB565 surface formats for the opaque
 surface default, enabled by default.
@@ -61,5 +61,5 @@ index 0492aa3..c225aab 100644
      SecHdmiClient *                         mHdmiClient;
  #endif
 -- 
-1.8.0.3
+1.8.2
 
