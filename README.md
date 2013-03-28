@@ -20,6 +20,11 @@ Add the following to your cm10/.repo/local_manifests/cm10_blade.xml and repo syn
         <project name="grigorig/android_packages_apps_Effem" path="packages/apps/Effem" revision="master" />
     </manifest>
 
+Apply patches:
+
+    cd device/zte/blade/patches
+    sh apply.sh
+
 Compile:
 
     . build/envsetup.sh && lunch cm_blade-userdebug
