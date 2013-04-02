@@ -1,0 +1,47 @@
+From 11c01fa273d3aa4147144b9840151b00ce413de2 Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Sat, 9 Feb 2013 21:46:16 +0200
+Subject: [PATCH 08/10] don't hide hardware key settings when navbar enabled
+
+Change-Id: I79f011f6ef5d4ba589e06edfc097501b5409e9d3
+---
+ .../settings/cyanogenmod/SystemSettings.java       |   12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/src/com/android/settings/cyanogenmod/SystemSettings.java b/src/com/android/settings/cyanogenmod/SystemSettings.java
+index 4ac51b5..5e793fc 100644
+--- a/src/com/android/settings/cyanogenmod/SystemSettings.java
++++ b/src/com/android/settings/cyanogenmod/SystemSettings.java
+@@ -75,17 +75,12 @@ public class SystemSettings extends SettingsPreferenceFragment implements Prefer
+         addPreferencesFromResource(R.xml.system_settings);
+         PreferenceScreen prefScreen = getPreferenceScreen();
+ 
+-        // Only show the hardware keys config on a device that does not have a navbar
+-        // and the navigation bar config on phones that has a navigation bar
+-        boolean removeKeys = false;
++        // Only show the navigation bar config on phones that has a navigation bar
+         boolean removeNavbar = false;
+-
+         IWindowManager windowManager = IWindowManager.Stub.asInterface(
+                 ServiceManager.getService(Context.WINDOW_SERVICE));
+         try {
+-            if (windowManager.hasNavigationBar()) {
+-                removeKeys = true;
+-            } else {
++            if (!windowManager.hasNavigationBar()) {
+                 removeNavbar = true;
+             }
+         } catch (RemoteException e) {
+@@ -116,9 +111,6 @@ public class SystemSettings extends SettingsPreferenceFragment implements Prefer
+             mNavButtonsHeight.setSummary(mNavButtonsHeight.getEntry());
+ 
+             // Act on the above
+-            if (removeKeys) {
+-                prefScreen.removePreference(findPreference(KEY_HARDWARE_KEYS));
+-            }
+             if (removeNavbar) {
+                 prefScreen.removePreference(findPreference(KEY_NAVIGATION_BAR));
+                 prefScreen.removePreference(findPreference(KEY_NAVIGATION_RING));
+-- 
+1.7.9.5
+

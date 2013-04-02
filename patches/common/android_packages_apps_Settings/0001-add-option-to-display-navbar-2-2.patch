@@ -1,0 +1,139 @@
+From bf1458b35754e82608ea556a7e5a2ee468a3225f Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Tue, 18 Dec 2012 14:58:36 +0200
+Subject: [PATCH 01/10] add option to display navbar (2/2)
+
+Change-Id: Idaf20f1a13db8045b5090fa9cf499ef33c5f790d
+---
+ res/values/strings.xml                             |    8 ++++
+ res/xml/system_settings.xml                        |    6 +++
+ .../settings/cyanogenmod/SystemSettings.java       |   47 ++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
+
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index 9a23234..25688aa 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -4435,6 +4435,14 @@
+ 
+     <!-- **** CYANOGENMOD ADDITIONS START **** -->
+ 
++    <!-- Navbar -->
++    <string name="konsta_navbar">Show navigation bar</string>
++    <string name="konsta_navbar_reboot">Requires a reboot</string>
++    <string name="konsta_navbar_dialog_title">Reboot required</string>
++    <string name="konsta_navbar_dialog_msg">Please reboot to enable/disable the navigation bar</string>
++    <string name="konsta_navbar_dialog_negative">Reboot later</string>
++    <string name="konsta_navbar_dialog_positive">Hot reboot now</string>
++
+     <string name="ok">OK</string>
+ 
+     <!-- Quiet hours -->
+diff --git a/res/xml/system_settings.xml b/res/xml/system_settings.xml
+index a95446f..c92d360 100644
+--- a/res/xml/system_settings.xml
++++ b/res/xml/system_settings.xml
+@@ -84,4 +84,10 @@
+             android:title="@string/navigation_ring_title" />
+     </PreferenceCategory>
+ 
++    <CheckBoxPreference
++        android:key="konsta_navbar"
++        android:title="@string/konsta_navbar"
++        android:summary="@string/konsta_navbar_reboot"
++        android:defaultValue="false" />
++
+ </PreferenceScreen>
+diff --git a/src/com/android/settings/cyanogenmod/SystemSettings.java b/src/com/android/settings/cyanogenmod/SystemSettings.java
+index 9e05b71..360ad3a 100644
+--- a/src/com/android/settings/cyanogenmod/SystemSettings.java
++++ b/src/com/android/settings/cyanogenmod/SystemSettings.java
+@@ -16,12 +16,20 @@
+ 
+ package com.android.settings.cyanogenmod;
+ 
++import android.app.AlertDialog;
+ import android.content.Context;
++import android.os.Bundle;
++import android.os.RemoteException;
++import android.os.ServiceManager;
++import android.content.DialogInterface;
+ import android.content.pm.PackageManager.NameNotFoundException;
+ import android.os.Bundle;
+ import android.os.RemoteException;
+ import android.os.ServiceManager;
+ import android.os.UserHandle;
++import android.os.IBinder;
++import android.os.IPowerManager;
++import android.preference.CheckBoxPreference;
+ import android.preference.Preference;
+ import android.preference.PreferenceScreen;
+ import android.provider.Settings;
+@@ -49,11 +57,13 @@ public class SystemSettings extends SettingsPreferenceFragment {
+     private static final String KEY_NOTIFICATION_DRAWER = "notification_drawer";
+     private static final String KEY_POWER_MENU = "power_menu";
+     private static final String KEY_PIE_CONTROL = "pie_control";
++    private static final String KONSTA_NAVBAR = "konsta_navbar";
+ 
+     private PreferenceScreen mNotificationPulse;
+     private PreferenceScreen mBatteryPulse;
+     private PreferenceScreen mPieControl;
+     private boolean mIsPrimary;
++    private CheckBoxPreference mKonstaNavbar;
+ 
+     @Override
+     public void onCreate(Bundle savedInstanceState) {
+@@ -125,6 +135,10 @@ public class SystemSettings extends SettingsPreferenceFragment {
+             }
+         }
+ 
++        mKonstaNavbar = (CheckBoxPreference) findPreference(KONSTA_NAVBAR);
++        mKonstaNavbar.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
++                Settings.System.KONSTA_NAVBAR, 0) == 1);
++
+         // Pie controls
+         mPieControl = (PreferenceScreen) findPreference(KEY_PIE_CONTROL);
+         if (mPieControl != null && removeNavbar) {
+@@ -178,6 +192,39 @@ public class SystemSettings extends SettingsPreferenceFragment {
+         }
+      }
+ 
++    @Override
++    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
++        boolean value;
++
++        if (preference == mKonstaNavbar) {
++            Settings.System.putInt(getContentResolver(), Settings.System.KONSTA_NAVBAR,
++                    mKonstaNavbar.isChecked() ? 1 : 0);
++
++            new AlertDialog.Builder(getActivity())
++                    .setTitle(getResources().getString(R.string.konsta_navbar_dialog_title))
++                    .setMessage(getResources().getString(R.string.konsta_navbar_dialog_msg))
++                    .setNegativeButton(getResources().getString(R.string.konsta_navbar_dialog_negative), null)
++                    .setCancelable(false)
++                    .setPositiveButton(getResources().getString(R.string.konsta_navbar_dialog_positive), new DialogInterface.OnClickListener() {
++                        @Override
++                        public void onClick(DialogInterface dialog, int which) {
++                            try {
++                                IBinder b = ServiceManager.getService(Context.POWER_SERVICE);
++                                IPowerManager pm = IPowerManager.Stub.asInterface(b);
++                                pm.crash("Navbar changed");
++                            } catch (android.os.RemoteException e) {
++                                //
++                            }
++                        }
++                    })
++                    .create()
++                    .show();
++        } else {
++            return super.onPreferenceTreeClick(preferenceScreen, preference);
++        }
++        return true;
++    }
++
+     private void updatePieControlDescription() {
+         if (Settings.System.getInt(getActivity().getContentResolver(),
+                 Settings.System.PIE_CONTROLS, 0) == 1) {
+-- 
+1.7.9.5
+
