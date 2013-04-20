@@ -106,7 +106,7 @@ on property:dev.bootcomplete=1
     stop dhcp-service
     start dhcp-service
 
-service qmuxd /system/bin/qmuxd 
+service qmuxd /system/bin/qmuxd
     class main
     user radio
 
