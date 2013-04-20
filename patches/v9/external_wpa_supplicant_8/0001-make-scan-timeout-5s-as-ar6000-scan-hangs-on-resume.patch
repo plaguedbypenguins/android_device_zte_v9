@@ -1,0 +1,13 @@
+diff --git a/src/drivers/driver_wext.c b/src/drivers/driver_wext.c
+index 701b7a3..ffcfe8a 100644
+--- a/src/drivers/driver_wext.c
++++ b/src/drivers/driver_wext.c
+@@ -1065,7 +1065,7 @@ int wpa_driver_wext_scan(void *priv, struct wpa_driver_scan_params *params)
+ 		 * when scan is complete, so use longer timeout to avoid race
+ 		 * conditions with scanning and following association request.
+ 		 */
+-		timeout = 30;
++		timeout = 5;
+ 	}
+ 	wpa_printf(MSG_DEBUG, "Scan requested (ret=%d) - scan timeout %d "
+ 		   "seconds", ret, timeout);
