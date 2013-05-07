@@ -1,0 +1,12 @@
+diff --git a/config/common.mk b/config/common.mk
+index 5b0295e..f0ee8c9 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -142,6 +142,7 @@ PRODUCT_PACKAGES += \
+     DSPManager \
+     libcyanogen-dsp \
+     audio_effects.conf \
++    CMWallpapers \
+     Apollo \
+     CMFileManager \
+     LockClock
