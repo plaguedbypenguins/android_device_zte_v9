@@ -1,6 +1,6 @@
 CyanogenMod 10 device configuration for ZTE V9.
 
-http://www.modaco.com/topic/360395-
+http://www.modaco.com/topic/359832-cyanogenmod-10.1
 
 How to build:
 -------------
@@ -8,17 +8,8 @@ How to build:
 Initialize CyanogenMod repo:
 
     repo init -u git://github.com/CyanogenMod/android.git -b jellybean
+    curl -L -o .repo/local_manifests/manifest_zte_v9.xml -O -L https://raw.github.com/plaguedbypenguins/android_local_manifest/cm-10/manifest_zte_v9.xml
     repo sync
-
-Add the following to your cm10/.repo/local_manifests/cm10_v9.xml and repo sync again:
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <manifest>
-        <project name="grigorig/android_device_zte_v9" path="device/zte/v9" revision="jellybean" />
-        <project name="grigorig/proprietary_vendor_zte" path="vendor/zte" revision="jellybean" />
-        <project name="grigorig/zte-kernel-msm7x27" path="kernel/zte/zte-kernel-msm7x27" revision="jellybean" />
-        <project name="grigorig/android_packages_apps_Effem" path="packages/apps/Effem" revision="master" />
-    </manifest>
 
 Apply patches:
 

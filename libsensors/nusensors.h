@@ -71,9 +71,12 @@ int init_nusensors(hw_module_t const* module, hw_device_t** device);
 #define EVENT_TYPE_ROLL             ABS_RZ
 #define EVENT_TYPE_ORIENT_STATUS    ABS_RUDDER
 
-#define EVENT_TYPE_MAGV_X           ABS_HAT0X
-#define EVENT_TYPE_MAGV_Y           ABS_HAT0Y
+#define EVENT_TYPE_MAGV_X           ABS_HAT0Y
+#define EVENT_TYPE_MAGV_Y           ABS_HAT0X
+//#define EVENT_TYPE_MAGV_X           ABS_HAT0X
+//#define EVENT_TYPE_MAGV_Y           ABS_HAT0Y
 #define EVENT_TYPE_MAGV_Z           ABS_BRAKE
+ 
 
 #define EVENT_TYPE_TEMPERATURE      ABS_THROTTLE
 #define EVENT_TYPE_STEP_COUNT       ABS_GAS
@@ -92,7 +95,7 @@ int init_nusensors(hw_module_t const* module, hw_device_t** device);
 // conversion of magnetic data to uT units
 #define CONVERT_M                   (1.0f/16.0f)
 #define CONVERT_M_X                 (-CONVERT_M)
-#define CONVERT_M_Y                 (CONVERT_M)
+#define CONVERT_M_Y                 (-CONVERT_M)
 #define CONVERT_M_Z                 (-CONVERT_M)
 
 #define CONVERT_O                   (1.0f/64.0f)

@@ -908,8 +908,11 @@ static int msm72xx_enable_postproc(bool state)
     }
     if(snd_device == SND_DEVICE_HANDSET)
     {
-        device_id = 1;
-        ALOGI("set device to SND_DEVICE_HANDSET device_id=1");
+//        device_id = 1;
+//        ALOGI("set device to SND_DEVICE_HANDSET device_id=1");
+    	snd_device = SND_DEVICE_SPEAKER;
+        device_id = 0;
+        ALOGI("set device to SND_DEVICE_SPEAKER device_id=0");
     }
     if(snd_device == SND_DEVICE_HEADSET)
     {
@@ -1288,8 +1291,11 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
                     new_snd_device = SND_DEVICE_SPEAKER;
                     new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
                 } else {
-                    ALOGI("Routing audio to Handset\n");
-                    new_snd_device = SND_DEVICE_HANDSET;
+//                    ALOGI("Routing audio to Handset\n");
+//                    new_snd_device = SND_DEVICE_HANDSET;
+                    ALOGI("Routing audio to Speakerphone\n");
+                    new_snd_device = SND_DEVICE_SPEAKER;
+                    new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
                 }
             }
         }
@@ -1348,8 +1354,11 @@ status_t AudioHardware::doRouting(AudioStreamInMSM72xx *input)
             new_snd_device = SND_DEVICE_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
         } else {
-            ALOGI("Routing audio to Handset\n");
-            new_snd_device = SND_DEVICE_HANDSET;
+//            ALOGI("Routing audio to Handset\n");
+//            new_snd_device = SND_DEVICE_HANDSET;
+//            new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
+            ALOGI("Routing audio to Speakerphone\n");
+            new_snd_device = SND_DEVICE_SPEAKER;
             new_post_proc_feature_mask = (ADRC_ENABLE | EQ_ENABLE | RX_IIR_ENABLE | MBADRC_ENABLE);
         }
     }
@@ -1499,7 +1508,7 @@ AudioHardware::AudioStreamOutMSM72xx::~AudioStreamOutMSM72xx()
 
 ssize_t AudioHardware::AudioStreamOutMSM72xx::write(const void* buffer, size_t bytes)
 {
-    // LOGD("AudioStreamOutMSM72xx::write(%p, %u)", buffer, bytes);
+    // ALOGD("AudioStreamOutMSM72xx::write(%p, %u)", buffer, bytes);
     status_t status = NO_INIT;
     size_t count = bytes;
     const uint8_t* p = static_cast<const uint8_t*>(buffer);

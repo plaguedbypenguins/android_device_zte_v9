@@ -45,7 +45,7 @@ on property:ro.debuggable=1
     write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/iProduct ${ro.product.model}
     write /sys/class/android_usb/android0/idVendor 19d2
-    write /sys/class/android_usb/android0/idProduct 1351
+    write /sys/class/android_usb/android0/idProduct 1354
     write /sys/class/android_usb/android0/functions mass_storage,adb
     write /sys/class/android_usb/android0/enable 1
     start adbd

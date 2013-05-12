@@ -18,6 +18,14 @@ on boot
     chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
     chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/boostpulse
 
+# Setup touchscreen calibration
+    chown system system /sys/module/msm_ts/parameters/tscal_xoffset
+    chown system system /sys/module/msm_ts/parameters/tscal_yoffset
+    chown system system /sys/module/msm_ts/parameters/tscal_xscale
+    chown system system /sys/module/msm_ts/parameters/tscal_yscale
+    chown system system /sys/module/msm_ts/parameters/tscal_gesture_pressure
+    chown system system /sys/module/msm_ts/parameters/tscal_gesture_blindspot
+
 # Setup charging
     chown system system /sys/module/msm_battery/parameters/usb_chg_enable
 

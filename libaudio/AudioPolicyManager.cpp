@@ -502,10 +502,12 @@ bool AudioPolicyManager::isStreamActive(int stream, uint32_t inPastMs) const
         }
     }
 
+#ifdef QCOM_FM_ENABLED
     if (stream == AudioSystem::MUSIC &&
             (mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM)) {
         return true;
     }
+#endif
 
     return false;
 }

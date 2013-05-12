@@ -91,15 +91,16 @@ BOARD_USES_STE_FMRADIO := true
 BOARD_HAVE_QCOM_FM := true
 COMMON_GLOBAL_CFLAGS += -DSTE_FM -DQCOM_FM_ENABLED
 
+# cat /proc/mtd
 # dev:    size   erasesize  name
 # mtd0: 00500000 00020000 "recovery"
 # mtd1: 00500000 00020000 "boot"
 # mtd2: 00180000 00020000 "splash"
 # mtd3: 00080000 00020000 "misc"
-# mtd4: 00200000 00020000 "cache"
-# mtd5: 08a00000 00020000 "system"
-# mtd6: 13ba0000 00020000 "userdata"
-# mtd7: 00020000 00020000 "oem"
+# mtd4: 02580000 00020000 "cache"
+# mtd5: 0dc00000 00020000 "system"
+# mtd6: 0a280000 00020000 "userdata"
+# mtd7: 01500000 00020000 "oem"
 # mtd8: 00180000 00020000 "persist"
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 0x00500000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00500000
