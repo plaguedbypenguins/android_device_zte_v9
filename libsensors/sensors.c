@@ -162,7 +162,7 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
         .version_major = 1,
         .version_minor = 0,
         .id = SENSORS_HARDWARE_MODULE_ID,
-        .name = "ZTE Blade Sensors Module",
+        .name = "ZTE V9 Sensors Module",
         .author = "Tom Giordano",
         .methods = &sensors_module_methods,
     },

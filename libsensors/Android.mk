@@ -21,7 +21,7 @@ ifneq ($(TARGET_SIMULATOR),true)
 # hw/<SENSORS_HARDWARE_MODULE_ID>.<ro.product.board>.so
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := sensors.blade
+LOCAL_MODULE := sensors.v9
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 
@@ -33,8 +33,8 @@ LOCAL_SRC_FILES :=                                              \
                                 nusensors.cpp                   \
                                 InputEventReader.cpp            \
                                 SensorBase.cpp                  \
-                                BladeProximity.cpp              \
-                                BladeLight.cpp                  \
+                                V9Proximity.cpp              \
+                                V9Light.cpp                  \
                                 AkmSensor.cpp
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils

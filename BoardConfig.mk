@@ -19,7 +19,7 @@
 USE_CAMERA_STUB := true
 
 # Use the non-open-source parts, if they're present
--include vendor/zte/blade/BoardConfigVendor.mk
+-include vendor/zte/v9/BoardConfigVendor.mk
 
 # CPU
 TARGET_CPU_ABI := armeabi-v6l
@@ -31,21 +31,21 @@ TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 BOARD_PROVIDES_LIBRIL := true
 TARGET_BOARD_PLATFORM := msm7x27
-TARGET_BOOTLOADER_BOARD_NAME := blade
-TARGET_SPECIFIC_HEADER_PATH := device/zte/blade/include
+TARGET_BOOTLOADER_BOARD_NAME := v9
+TARGET_SPECIFIC_HEADER_PATH := device/zte/v9/include
 
 # Recovery
-BOARD_CUSTOM_GRAPHICS := ../../../device/zte/blade/recovery/graphics.c
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/zte/blade/recovery/recovery_ui.c
-TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/blade/recovery/recovery_kernel
-TARGET_RECOVERY_INITRC := device/zte/blade/recovery/recovery.rc
-TARGET_RECOVERY_FSTAB := device/zte/blade/recovery/recovery.fstab
+BOARD_CUSTOM_GRAPHICS := ../../../device/zte/v9/recovery/graphics.c
+BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/zte/v9/recovery/recovery_ui.c
+TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery/recovery_kernel
+TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc
+TARGET_RECOVERY_FSTAB := device/zte/v9/recovery/recovery.fstab
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/zte/zte-kernel-msm7x27
-TARGET_KERNEL_CONFIG := cyanogen_blade_defconfig
+TARGET_KERNEL_CONFIG := cyanogen_v9_defconfig
 BOARD_KERNEL_BASE := 0x02600000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=blade console=null
+BOARD_KERNEL_CMDLINE := androidboot.hardware=v9 console=null
 
 # WiFi
 BOARD_WPA_SUPPLICANT_DRIVER := AR6000
@@ -70,7 +70,7 @@ BOARD_USES_QCOM_HARDWARE := true
 COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DQCOM_LEGACY_OMX
 
 # Graphics
-BOARD_EGL_CFG := device/zte/blade/prebuilt/system/lib/egl/egl.cfg
+BOARD_EGL_CFG := device/zte/v9/prebuilt/system/lib/egl/egl.cfg
 USE_OPENGL_RENDERER := true
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
 COMMON_GLOBAL_CFLAGS += -DQCOM_ICS_COMPAT -DQCOM_NO_SECURE_PLAYBACK

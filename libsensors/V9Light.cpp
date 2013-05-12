@@ -28,11 +28,11 @@
 
 #include <cutils/log.h>
 
-#include "BladeLight.h"
+#include "V9Light.h"
 
 /*****************************************************************************/
 
-BladeLight::BladeLight(char *dev)
+V9Light::V9Light(char *dev)
     : SensorBase(dev, "light"),
       mEnabled(0),
       mInputReader(4),
@@ -55,13 +55,13 @@ BladeLight::BladeLight(char *dev)
 
 }
 
-BladeLight::~BladeLight() {
+V9Light::~V9Light() {
     if (mEnabled) {
         enable(ID_L, 0);
     }
 }
 
-int BladeLight::setInitialState() {
+int V9Light::setInitialState() {
     struct input_absinfo absinfo;
     if (!ioctl(data_fd, EVIOCGABS(EVENT_TYPE_LIGHT), &absinfo)) {
         mPendingEvents.light = absinfo.value;
@@ -69,7 +69,7 @@ int BladeLight::setInitialState() {
     return 0;
 }
 
-int BladeLight::enable(int32_t handle, int en) {
+int V9Light::enable(int32_t handle, int en) {
 
     if (handle != ID_L)
         return -EINVAL;
@@ -109,11 +109,11 @@ int BladeLight::enable(int32_t handle, int en) {
     return err;
 }
 
-bool BladeLight::hasPendingEvents() const {
+bool V9Light::hasPendingEvents() const {
     return mPendingMask;
 }
 
-int BladeLight::readEvents(sensors_event_t* data, int count)
+int V9Light::readEvents(sensors_event_t* data, int count)
 {
     if (count < 1)
         return -EINVAL;
@@ -140,7 +140,7 @@ int BladeLight::readEvents(sensors_event_t* data, int count)
                  numEventReceived++;
              }
         } else {
-            ALOGE("BladeLight: unknown event (type=%d, code=%d)",type, event->code);
+            ALOGE("V9Light: unknown event (type=%d, code=%d)",type, event->code);
         }
         mInputReader.next();
     }

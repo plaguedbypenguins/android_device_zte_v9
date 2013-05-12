@@ -7,7 +7,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := android-support-v13
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-LOCAL_PACKAGE_NAME := BladeParts
+LOCAL_PACKAGE_NAME := V9Parts
 LOCAL_CERTIFICATE := platform
 
 LOCAL_REQUIRED_MODULES := prox_cal

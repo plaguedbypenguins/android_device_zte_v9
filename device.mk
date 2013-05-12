@@ -14,12 +14,12 @@
 # limitations under the License.
 #
 
-# This file includes all definitions that apply to ALL blade devices, and
-# are also specific to blade devices
+# This file includes all definitions that apply to ALL v9 devices, and
+# are also specific to v9 devices
 #
 # Everything in this directory will become public
 
-DEVICE_PACKAGE_OVERLAYS := device/zte/blade/overlay
+DEVICE_PACKAGE_OVERLAYS := device/zte/v9/overlay
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
 PRODUCT_AAPT_CONFIG := normal hdpi
@@ -44,13 +44,13 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
         librpc \
-        gps.blade
+        gps.v9
 
-# Blade specific
+# V9 specific
 PRODUCT_PACKAGES += \
-        lights.blade \
-        sensors.blade \
-        BladeParts
+        lights.v9 \
+        sensors.v9 \
+        V9Parts
 
 # Power HAL
 PRODUCT_PACKAGES += \
@@ -58,8 +58,8 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
-        audio.primary.blade \
-        audio_policy.blade \
+        audio.primary.v9 \
+        audio_policy.v9 \
         audio.a2dp.default \
         libaudioutils
 
@@ -96,35 +96,35 @@ PRODUCT_PROPERTY_OVERRIDES += \
         ro.cwm.enable_key_repeat=true
 
 PRODUCT_COPY_FILES := \
-        device/zte/blade/prebuilt/root/init.blade.rc:root/init.blade.rc \
-        device/zte/blade/prebuilt/root/init.blade.usb.rc:root/init.blade.usb.rc \
-        device/zte/blade/prebuilt/root/ueventd.blade.rc:root/ueventd.blade.rc \
-        device/zte/blade/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
-        device/zte/blade/prebuilt/system/usr/keylayout/blade_keypad.kl:/system/usr/keylayout/blade_keypad.kl \
-        device/zte/blade/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
-        device/zte/blade/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
-        device/zte/blade/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
-        device/zte/blade/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
-        device/zte/blade/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
-        device/zte/blade/prebuilt/system/etc/gps.conf:system/etc/gps.conf
+        device/zte/v9/prebuilt/root/init.v9.rc:root/init.v9.rc \
+        device/zte/v9/prebuilt/root/init.v9.usb.rc:root/init.v9.usb.rc \
+        device/zte/v9/prebuilt/root/ueventd.v9.rc:root/ueventd.v9.rc \
+        device/zte/v9/prebuilt/system/etc/vold.fstab:system/etc/vold.fstab \
+        device/zte/v9/prebuilt/system/usr/keylayout/v9_keypad.kl:/system/usr/keylayout/v9_keypad.kl \
+        device/zte/v9/prebuilt/system/etc/AudioFilter.csv:system/etc/AudioFilter.csv \
+        device/zte/v9/prebuilt/system/etc/AutoVolumeControl.txt:system/etc/AutoVolumeControl.txt \
+        device/zte/v9/prebuilt/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+        device/zte/v9/prebuilt/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
+        device/zte/v9/prebuilt/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
+        device/zte/v9/prebuilt/system/etc/gps.conf:system/etc/gps.conf
 
 # Bluetooth configuration files
 PRODUCT_COPY_FILES += \
-        device/zte/blade/prebuilt/system/etc/init.bt.sh:system/etc/init.bt.sh \
+        device/zte/v9/prebuilt/system/etc/init.bt.sh:system/etc/init.bt.sh \
         system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
 
 # WiFi
 PRODUCT_COPY_FILES += \
-        device/zte/blade/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-        device/zte/blade/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf \
-        device/zte/blade/prebuilt/system/wifi/ar6000.ko:system/wifi/ar6000.ko \
-        device/zte/blade/prebuilt/system/wifi/regcode:system/wifi/regcode \
-        device/zte/blade/prebuilt/system/wifi/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
-        device/zte/blade/prebuilt/system/wifi/athwlan.bin.z77:system/wifi/athwlan.bin.z77 \
-        device/zte/blade/prebuilt/system/wifi/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin \
-        device/zte/blade/prebuilt/system/wifi/device.bin:system/wifi/device.bin \
-        device/zte/blade/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
-        device/zte/blade/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
+        device/zte/v9/prebuilt/system/etc/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+        device/zte/v9/prebuilt/system/etc/wifi/hostapd.conf:system/etc/wifi/hostapd.conf \
+        device/zte/v9/prebuilt/system/wifi/ar6000.ko:system/wifi/ar6000.ko \
+        device/zte/v9/prebuilt/system/wifi/regcode:system/wifi/regcode \
+        device/zte/v9/prebuilt/system/wifi/data.patch.hw2_0.bin:system/wifi/data.patch.hw2_0.bin \
+        device/zte/v9/prebuilt/system/wifi/athwlan.bin.z77:system/wifi/athwlan.bin.z77 \
+        device/zte/v9/prebuilt/system/wifi/athtcmd_ram.bin:system/wifi/athtcmd_ram.bin \
+        device/zte/v9/prebuilt/system/wifi/device.bin:system/wifi/device.bin \
+        device/zte/v9/prebuilt/system/wifi/eeprom.bin:system/wifi/eeprom.bin \
+        device/zte/v9/prebuilt/system/wifi/eeprom.data:system/wifi/eeprom.data
 
 # FM Radio
 PRODUCT_COPY_FILES += \
@@ -144,4 +144,4 @@ PRODUCT_COPY_FILES += \
         packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
-$(call inherit-product-if-exists, vendor/zte/blade/blade-vendor.mk)
+$(call inherit-product-if-exists, vendor/zte/v9/v9-vendor.mk)

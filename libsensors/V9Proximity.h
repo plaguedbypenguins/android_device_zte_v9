@@ -32,7 +32,7 @@
 
 struct input_event;
 
-class BladeProximity : public SensorBase {
+class V9Proximity : public SensorBase {
   const static uint DEBUG = 0;
   uint mEnabled;
   InputEventCircularReader mInputReader;
@@ -45,8 +45,8 @@ class BladeProximity : public SensorBase {
   float indexToValue(size_t index) const;
 
 public:
-  BladeProximity(char *dev);
-  virtual ~BladeProximity();
+  V9Proximity(char *dev);
+  virtual ~V9Proximity();
   virtual int readEvents(sensors_event_t* data, int count);
   virtual bool hasPendingEvents() const;
   virtual int enable(int32_t handle, int enabled);

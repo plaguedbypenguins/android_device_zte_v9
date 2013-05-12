@@ -12,7 +12,7 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_WHOLE_STATIC_LIBRARIES := libaudiopolicy_legacy
 LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_LIBRARIES := libmedia_helper
-LOCAL_MODULE:= audio_policy.blade
+LOCAL_MODULE:= audio_policy.v9
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 
 
@@ -28,7 +28,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := audio.primary.blade
+LOCAL_MODULE := audio.primary.v9
 LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_LIBRARIES := libmedia_helper libaudiohw_legacy
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw

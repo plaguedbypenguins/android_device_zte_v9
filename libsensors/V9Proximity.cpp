@@ -28,11 +28,11 @@
 
 #include <cutils/log.h>
 
-#include "BladeProximity.h"
+#include "V9Proximity.h"
 
 /*****************************************************************************/
 
-BladeProximity::BladeProximity(char *dev)
+V9Proximity::V9Proximity(char *dev)
     : SensorBase(dev, "proximity"),
       mEnabled(0),
       mInputReader(4),
@@ -58,13 +58,13 @@ BladeProximity::BladeProximity(char *dev)
     }
 }
 
-BladeProximity::~BladeProximity() {
+V9Proximity::~V9Proximity() {
     if (mEnabled) {
         enable(ID_P,0);
     }
 }
 
-int BladeProximity::initialise() {
+int V9Proximity::initialise() {
     struct PS_ALS_cfg cfg;
     FILE * cFile;
     int array[20];
@@ -106,7 +106,7 @@ int BladeProximity::initialise() {
     return 1;
 }
 
-int BladeProximity::setInitialState() {
+int V9Proximity::setInitialState() {
     struct input_absinfo absinfo;
     if (!ioctl(data_fd, EVIOCGABS(EVENT_TYPE_PROXIMITY), &absinfo)) {
         mPendingEvents.distance = indexToValue(absinfo.value);
@@ -114,7 +114,7 @@ int BladeProximity::setInitialState() {
     return 0;
 }
 
-int BladeProximity::enable(int32_t handle, int en) {
+int V9Proximity::enable(int32_t handle, int en) {
     if (handle != ID_P)
         return -EINVAL;
 
@@ -153,11 +153,11 @@ int BladeProximity::enable(int32_t handle, int en) {
     return err;
 }
 
-bool BladeProximity::hasPendingEvents() const {
+bool V9Proximity::hasPendingEvents() const {
      return mPendingMask;
 }
 
-int BladeProximity::readEvents(sensors_event_t* data, int count)
+int V9Proximity::readEvents(sensors_event_t* data, int count)
 {
     if (count < 1)
         return -EINVAL;
@@ -185,14 +185,14 @@ int BladeProximity::readEvents(sensors_event_t* data, int count)
                 numEventReceived++;
             }
         } else {
-            ALOGE("BladeSensor: unknown event (type=%d, code=%d)",type, event->code);
+            ALOGE("V9Sensor: unknown event (type=%d, code=%d)",type, event->code);
         }
         mInputReader.next();
     }
     return numEventReceived;
 }
 
-float BladeProximity::indexToValue(size_t index) const
+float V9Proximity::indexToValue(size_t index) const
 {
     return index;
 }

@@ -29,8 +29,8 @@
 #include <cutils/log.h>
 
 #include "nusensors.h"
-#include "BladeProximity.h"
-#include "BladeLight.h"
+#include "V9Proximity.h"
+#include "V9Light.h"
 #include "AkmSensor.h"
 /*****************************************************************************/
 
@@ -80,23 +80,23 @@ sensors_poll_context_t::sensors_poll_context_t()
 {
     if(fopen(TAOS_DEVICE_NAME,"rw")) {
         ALOGD("Using taos prox/light sensor");
-        mSensors[prox] = new BladeProximity(const_cast<char *>(TAOS_DEVICE_NAME));
+        mSensors[prox] = new V9Proximity(const_cast<char *>(TAOS_DEVICE_NAME));
         mPollFds[prox].fd = mSensors[prox]->getFd();
         mPollFds[prox].events = POLLIN;
         mPollFds[prox].revents = 0;
 
-        mSensors[light] = new BladeLight(const_cast<char *>(TAOS_DEVICE_NAME));
+        mSensors[light] = new V9Light(const_cast<char *>(TAOS_DEVICE_NAME));
         mPollFds[light].fd = mSensors[light]->getFd();
         mPollFds[light].events = POLLIN;
         mPollFds[light].revents = 0;
     } else {
         ALOGD("Using ISL prox/light sensor");
-        mSensors[prox] = new BladeProximity(const_cast<char *>(ISL_DEVICE_NAME));
+        mSensors[prox] = new V9Proximity(const_cast<char *>(ISL_DEVICE_NAME));
         mPollFds[prox].fd = mSensors[prox]->getFd();
         mPollFds[prox].events = POLLIN;
         mPollFds[prox].revents = 0;
 
-        mSensors[light] = new BladeLight(const_cast<char *>(ISL_DEVICE_NAME));
+        mSensors[light] = new V9Light(const_cast<char *>(ISL_DEVICE_NAME));
         mPollFds[light].fd = mSensors[light]->getFd();
         mPollFds[light].events = POLLIN;
         mPollFds[light].revents = 0;

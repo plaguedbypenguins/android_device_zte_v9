@@ -11,7 +11,7 @@ import java.io.SyncFailedException;
 
 public class Utils
 {
-    private static final String TAG = "BladeParts";
+    private static final String TAG = "V9Parts";
 
     public static void writeValue(String parameter, int value) {
         FileOutputStream fos = null;

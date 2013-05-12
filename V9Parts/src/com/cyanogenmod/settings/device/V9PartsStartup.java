@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class BladePartsStartup extends BroadcastReceiver
+public class V9PartsStartup extends BroadcastReceiver
 {
     @Override
     public void onReceive(final Context context, final Intent bootintent) {

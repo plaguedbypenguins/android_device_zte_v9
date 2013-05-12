@@ -30,7 +30,7 @@
 
 struct input_event;
 
-class BladeLight : public SensorBase {
+class V9Light : public SensorBase {
   const static uint DEBUG = 0;
   uint mEnabled;
   InputEventCircularReader mInputReader;
@@ -38,8 +38,8 @@ class BladeLight : public SensorBase {
   int setInitialState();
 
 public:
-  BladeLight(char *dev);
-  virtual ~BladeLight();
+  V9Light(char *dev);
+  virtual ~V9Light();
   virtual int readEvents(sensors_event_t* data, int count);
   virtual bool hasPendingEvents() const;
   virtual int enable(int32_t handle, int enabled);

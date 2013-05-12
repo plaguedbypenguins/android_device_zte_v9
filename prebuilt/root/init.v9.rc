@@ -1,4 +1,4 @@
-import init.blade.usb.rc
+import init.v9.usb.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug

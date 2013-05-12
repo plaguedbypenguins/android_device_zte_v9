@@ -40,7 +40,7 @@ void writeCfg(struct PS_ALS_cfg *cfg){
 }
 
 void help(){
-    printf("ZTE Blade Taos/ISL proximity sensor calibration program\n");
+    printf("ZTE V9 Taos/ISL proximity sensor calibration program\n");
     printf("CyanogenMod Project\n");
     printf("Author: Tom Giordano\n\n");
     printf("-c : Calibrate proximity sensor and write data to file\n");

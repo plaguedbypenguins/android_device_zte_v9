@@ -13,7 +13,7 @@ public class DeviceSettings extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.bladeparts);
+        addPreferencesFromResource(R.xml.v9parts);
         }
 
     @Override
