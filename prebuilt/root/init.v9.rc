@@ -15,8 +15,26 @@ on boot
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
     chown system system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
     chown system system /sys/devices/system/cpu/cpufreq/ondemand/boostpulse
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/down_differential
     chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
     chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/boostpulse
+    chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+    chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+    chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+    chmod 0666 /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+
+# cpufreq configurations
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 245760
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 500000
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/down_threshold 30
+
+# use a more interactive governor by default
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor smartassV2
 
 # Setup touchscreen calibration
     chown system system /sys/module/msm_ts/parameters/tscal_xoffset
@@ -42,7 +60,7 @@ on boot
     chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
 
 # Setup android gadget
-    write /sys/module/g_android/parameters/serial_number CM10-V9
+    write /sys/module/g_android/parameters/serial_number CM7-V9
     write /sys/module/g_android/parameters/product_id 0x1354
 
 # Create wifi filesystem structure
@@ -157,9 +175,3 @@ service abtfilt /system/bin/abtfilt -c -d -z -n
 service akmd /system/bin/akmd2
     class main
     oneshot
-
-service hostapd /system/bin/hostapd /data/misc/wifi/hostapd.conf
-    socket hostapd_athap0 dgram 660 wifi wifi
-    group wifi inet
-    oneshot
-    disabled
