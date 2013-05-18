@@ -1,0 +1,31 @@
+From 929d8814ac9200f702286e13efaff6fe4b6892f3 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Sat, 18 May 2013 20:35:25 +1000
+Subject: [PATCH] enable bind mounts in initramfs tools
+
+Change-Id: I3d758d904fd4c3dde1cad87a61a48ade1359c114
+
+diff --git a/fs_mgr/fs_mgr.c b/fs_mgr/fs_mgr.c
+index 60aed42..83d4ea7 100644
+--- a/fs_mgr/fs_mgr.c
++++ b/fs_mgr/fs_mgr.c
+@@ -58,6 +58,7 @@ static struct flag_list mount_flags[] = {
+     { "ro",         MS_RDONLY },
+     { "rw",         0 },
+     { "remount",    MS_REMOUNT },
++    { "bind",       MS_BIND },
+     { "defaults",   0 },
+     { 0,            0 },
+ };
+diff --git a/init/builtins.c b/init/builtins.c
+index ddbe25d..4fff94b 100644
+--- a/init/builtins.c
++++ b/init/builtins.c
+@@ -424,6 +424,7 @@ static struct {
+     { "ro",         MS_RDONLY },
+     { "rw",         0 },
+     { "remount",    MS_REMOUNT },
++    { "bind",       MS_BIND },
+     { "defaults",   0 },
+     { 0,            0 },
+ };
