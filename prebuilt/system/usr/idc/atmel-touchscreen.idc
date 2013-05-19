@@ -2,6 +2,8 @@
 touch.deviceType = touchScreen
 touch.orientationAware = 1
 
+device.internal = 1
+
 # Touch Size
 touch.touchSize.calibration = pressure
 
