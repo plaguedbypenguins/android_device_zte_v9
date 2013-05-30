@@ -1,6 +1,10 @@
 on early-init
     start ueventd
 
+# Setup android gadget
+    write /sys/module/g_android/parameters/serial_number CWM-V9
+    write /sys/module/g_android/parameters/product_id 0x1354
+
 on init
     export PATH /sbin
     export ANDROID_ROOT /system
@@ -38,6 +42,12 @@ service recovery /sbin/recovery
 
 service adbd /sbin/adbd recovery
     disabled
+
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    stop adbd
 
 on property:ro.debuggable=1
     write /sys/class/android_usb/android0/enable 0
