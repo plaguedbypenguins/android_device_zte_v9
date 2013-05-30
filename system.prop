@@ -52,3 +52,6 @@ sys.mem.max_hidden_apps=10
 # msm Touchscreen
 debug.velocitytracker.strategy=legacy
 #debug.velocitytracker.strategy=int1
+
+# Lockscreen
+ro.hwaccel.lockscreen=0
