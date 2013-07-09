@@ -1,4 +1,4 @@
-From 8b0cb7fc0b99b70d2a6462998f1e2a3da8c88a68 Mon Sep 17 00:00:00 2001
+From 3514231d6db64544b9b5a9df46e43f6dbf708cf7 Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Mon, 28 Jan 2013 06:43:09 +0100
 Subject: [PATCH 08/14] Use RGB565 surface for wallpaper
@@ -50,7 +50,7 @@ index 6d5705d..0c6c663 100644
  
              @Override
 diff --git a/packages/SystemUI/src/com/android/systemui/ImageWallpaper.java b/packages/SystemUI/src/com/android/systemui/ImageWallpaper.java
-index 9da883a..0cb2784 100644
+index 8d0fe75..ff9895e 100644
 --- a/packages/SystemUI/src/com/android/systemui/ImageWallpaper.java
 +++ b/packages/SystemUI/src/com/android/systemui/ImageWallpaper.java
 @@ -24,6 +24,7 @@ import android.content.Context;
@@ -61,7 +61,7 @@ index 9da883a..0cb2784 100644
  import android.graphics.Rect;
  import android.graphics.Region.Op;
  import android.opengl.GLUtils;
-@@ -441,7 +442,9 @@ public class ImageWallpaper extends WallpaperService {
+@@ -442,7 +443,9 @@ public class ImageWallpaper extends WallpaperService {
                          c.restore();
                      }
                      if (mBackground != null) {

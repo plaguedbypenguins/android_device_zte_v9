@@ -9,10 +9,10 @@ Change-Id: I79f011f6ef5d4ba589e06edfc097501b5409e9d3
  1 file changed, 2 insertions(+), 10 deletions(-)
 
 diff --git a/src/com/android/settings/cyanogenmod/SystemSettings.java b/src/com/android/settings/cyanogenmod/SystemSettings.java
-index ff318f4..b32a55a 100644
+index 7be4e03..c559819 100644
 --- a/src/com/android/settings/cyanogenmod/SystemSettings.java
 +++ b/src/com/android/settings/cyanogenmod/SystemSettings.java
-@@ -76,17 +76,12 @@ public class SystemSettings extends SettingsPreferenceFragment  implements
+@@ -70,9 +75,7 @@ public class SystemSettings extends SettingsPreferenceFragment  implements
          addPreferencesFromResource(R.xml.system_settings);
          PreferenceScreen prefScreen = getPreferenceScreen();
  
@@ -21,7 +21,9 @@ index ff318f4..b32a55a 100644
 -        boolean removeKeys = false;
 +        // Only show the navigation bar config on phones that has a navigation bar
          boolean removeNavbar = false;
--
+ 
+         PreferenceCategory navbarCategory =
+@@ -81,18 +84,13 @@ public class SystemSettings extends SettingsPreferenceFragment  implements
          IWindowManager windowManager = IWindowManager.Stub.asInterface(
                  ServiceManager.getService(Context.WINDOW_SERVICE));
          try {
@@ -32,16 +34,15 @@ index ff318f4..b32a55a 100644
                  removeNavbar = true;
              }
          } catch (RemoteException e) {
-@@ -117,9 +112,6 @@ public class SystemSettings extends SettingsPreferenceFragment  implements
-             mNavButtonsHeight.setSummary(mNavButtonsHeight.getEntry());
+             // Do nothing
+         }
  
-             // Act on the above
--            if (removeKeys) {
--                prefScreen.removePreference(findPreference(KEY_HARDWARE_KEYS));
--            }
-             if (removeNavbar) {
-                 prefScreen.removePreference(findPreference(KEY_NAVIGATION_BAR));
-                 prefScreen.removePreference(findPreference(KEY_NAVIGATION_RING));
+-        if (removeKeys) {
+-            prefScreen.removePreference(findPreference(KEY_HARDWARE_KEYS));
+-        }
+         if (removeNavbar) {
+             prefScreen.removePreference(navbarCategory);
+         }
 -- 
 1.7.9.5
 
