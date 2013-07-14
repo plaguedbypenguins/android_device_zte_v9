@@ -1,0 +1,25 @@
+From 4371c8f6f2263392a3189ef3f28d33e2b13875b6 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 11 Jul 2013 22:49:53 +1000
+Subject: [PATCH] make notification shade transparent.
+
+backported from e4f513cc0907d957d4f211de324678a9689bf467
+
+Change-Id: Idd1c0c8ea4c12e9d609878260893d98f4c49ff52
+
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java
+index bdc8d4d..339978c 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java
+@@ -461,11 +461,6 @@ public class PhoneStatusBar extends BaseStatusBar {
+                   View.STATUS_BAR_DISABLE_NOTIFICATION_TICKER
+                 | (mNotificationPanelIsFullScreenWidth ? 0 : View.STATUS_BAR_DISABLE_SYSTEM_INFO));
+ 
+-        if (!ActivityManager.isHighEndGfx(mDisplay)) {
+-            mStatusBarWindow.setBackground(null);
+-            mNotificationPanel.setBackground(new FastColorDrawable(context.getResources().getColor(
+-                    R.color.notification_panel_solid_background)));
+-        }
+         if (ENABLE_INTRUDERS) {
+             mIntruderAlertView = (IntruderAlertView) View.inflate(context, R.layout.intruder_alert, null);
+             mIntruderAlertView.setVisibility(View.GONE);
