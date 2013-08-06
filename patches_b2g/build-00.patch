@@ -1,0 +1,195 @@
+diff --git a/core/Makefile b/core/Makefile
+index 94f8b19..fbb2a74 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -694,14 +694,15 @@ OTA_PUBLIC_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem
+ # recovery binary.
+ RECOVERY_INSTALL_OTA_KEYS := \
+ 	$(call intermediates-dir-for,PACKAGING,ota_keys)/keys
+-DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
++#DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
+ $(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
+ $(RECOVERY_INSTALL_OTA_KEYS): extra_keys := $(patsubst %,%.x509.pem,$(PRODUCT_EXTRA_RECOVERY_KEYS))
+ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
+ 	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys)"
+ 	@rm -rf $@
+ 	@mkdir -p $(dir $@)
+-	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
++	touch $@
++#	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
+ 
+ TARGET_RECOVERY_ROOT_TIMESTAMP := $(TARGET_RECOVERY_OUT)/root.ts
+ 
+diff --git a/core/base_rules.mk b/core/base_rules.mk
+index 6e007fc..1e49596 100644
+--- a/core/base_rules.mk
++++ b/core/base_rules.mk
+@@ -67,6 +67,10 @@ endif
+ #$(warning default tags: $(lastword $(filter-out config/% out/%,$(MAKEFILE_LIST))))
+ endif
+ 
++ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
++LOCAL_MODULE_TAGS := optional
++endif
++
+ # Only the tags mentioned in this test are expected to be set by module
+ # makefiles. Anything else is either a typo or a source of unexpected
+ # behaviors.
+@@ -309,6 +313,9 @@ $(proto_java_sources_file_stamp) : $(proto_sources_fullpath) $(PROTOC)
+ LOCAL_INTERMEDIATE_TARGETS += $(proto_java_sources_file_stamp)
+ endif # proto_sources
+ 
++ifneq ($(filter $(DISABLED_USER_MODULES),$(LOCAL_MODULE)),)
++LOCAL_BUILT_MODULE :=
++endif
+ 
+ ###########################################################
+ ## Java: Compile .java files to .class
+diff --git a/core/config.mk b/core/config.mk
+index 0c2a81a..c857d63 100644
+--- a/core/config.mk
++++ b/core/config.mk
+@@ -62,15 +62,16 @@ BUILD_SHARED_LIBRARY:= $(BUILD_SYSTEM)/shared_library.mk
+ BUILD_EXECUTABLE:= $(BUILD_SYSTEM)/executable.mk
+ BUILD_RAW_EXECUTABLE:= $(BUILD_SYSTEM)/raw_executable.mk
+ BUILD_HOST_EXECUTABLE:= $(BUILD_SYSTEM)/host_executable.mk
+-BUILD_PACKAGE:= $(BUILD_SYSTEM)/package.mk
++BUILD_PACKAGE:= $(BUILD_SYSTEM)/empty.mk
+ BUILD_PHONY_PACKAGE:= $(BUILD_SYSTEM)/phony_package.mk
+ BUILD_HOST_PREBUILT:= $(BUILD_SYSTEM)/host_prebuilt.mk
+ BUILD_PREBUILT:= $(BUILD_SYSTEM)/prebuilt.mk
+ BUILD_MULTI_PREBUILT:= $(BUILD_SYSTEM)/multi_prebuilt.mk
+-BUILD_JAVA_LIBRARY:= $(BUILD_SYSTEM)/java_library.mk
+-BUILD_STATIC_JAVA_LIBRARY:= $(BUILD_SYSTEM)/static_java_library.mk
+-BUILD_HOST_JAVA_LIBRARY:= $(BUILD_SYSTEM)/host_java_library.mk
+-BUILD_DROIDDOC:= $(BUILD_SYSTEM)/droiddoc.mk
++BUILD_JAVA_LIBRARY:= $(BUILD_SYSTEM)/empty.mk
++BUILD_STATIC_JAVA_LIBRARY:= $(BUILD_SYSTEM)/empty.mk
++BUILD_HOST_JAVA_LIBRARY:= $(BUILD_SYSTEM)/empty.mk
++BUILD_DROIDDOC:= $(BUILD_SYSTEM)/empty.mk
++BUILD_EMPTY:= $(BUILD_SYSTEM)/empty.mk
+ BUILD_COPY_HEADERS := $(BUILD_SYSTEM)/copy_headers.mk
+ BUILD_NATIVE_TEST := $(BUILD_SYSTEM)/native_test.mk
+ BUILD_HOST_NATIVE_TEST := $(BUILD_SYSTEM)/host_native_test.mk
+@@ -282,7 +283,7 @@ MKBOOTFS := $(HOST_OUT_EXECUTABLES)/mkbootfs$(HOST_EXECUTABLE_SUFFIX)
+ MINIGZIP := $(HOST_OUT_EXECUTABLES)/minigzip$(HOST_EXECUTABLE_SUFFIX)
+ MKBOOTIMG := $(HOST_OUT_EXECUTABLES)/mkbootimg$(HOST_EXECUTABLE_SUFFIX)
+ MKYAFFS2 := $(HOST_OUT_EXECUTABLES)/mkyaffs2image$(HOST_EXECUTABLE_SUFFIX)
+-APICHECK := $(HOST_OUT_EXECUTABLES)/apicheck$(HOST_EXECUTABLE_SUFFIX)
++APICHECK := $(wildcard true)
+ MKIMAGE :=  $(HOST_OUT_EXECUTABLES)/mkimage$(HOST_EXECUTABLE_SUFFIX)
+ FS_GET_STATS := $(HOST_OUT_EXECUTABLES)/fs_get_stats$(HOST_EXECUTABLE_SUFFIX)
+ MKEXT2IMG := $(HOST_OUT_EXECUTABLES)/genext2fs$(HOST_EXECUTABLE_SUFFIX)
+@@ -293,7 +294,7 @@ MKTARBALL := build/tools/mktarball.sh
+ TUNE2FS := $(HOST_OUT_EXECUTABLES)/tune2fs$(HOST_EXECUTABLE_SUFFIX)
+ E2FSCK := $(HOST_OUT_EXECUTABLES)/e2fsck$(HOST_EXECUTABLE_SUFFIX)
+ JARJAR := $(HOST_OUT_JAVA_LIBRARIES)/jarjar.jar
+-PROGUARD := external/proguard/bin/proguard.sh
++PROGUARD := true
+ JAVATAGS := build/tools/java-event-log-tags.py
+ LLVM_RS_CC := $(HOST_OUT_EXECUTABLES)/llvm-rs-cc$(HOST_EXECUTABLE_SUFFIX)
+ LLVM_RS_LINK := $(HOST_OUT_EXECUTABLES)/llvm-rs-link$(HOST_EXECUTABLE_SUFFIX)
+@@ -345,7 +346,7 @@ HOST_JDK_TOOLS_JAR :=
+ else
+ HOST_JDK_TOOLS_JAR:= $(shell $(BUILD_SYSTEM)/find-jdk-tools-jar.sh)
+ ifeq ($(wildcard $(HOST_JDK_TOOLS_JAR)),)
+-$(error Error: could not find jdk tools.jar, please install JDK6, \
++#$(error Error: could not find jdk tools.jar, please install JDK6, \
+     which you can download from java.sun.com)
+ endif
+ endif
+diff --git a/core/definitions.mk b/core/definitions.mk
+index 04af09f..5db3519 100644
+--- a/core/definitions.mk
++++ b/core/definitions.mk
+@@ -2043,6 +2043,7 @@ include $(BUILD_SYSTEM)/distdir.mk
+ # -----------------------------------------------------------------
+ # The modules allowed to use a user tag
+ include $(BUILD_SYSTEM)/user_tags.mk
++include $(BUILD_SYSTEM)/disabled_modules.mk
+ 
+ # broken:
+ #	$(foreach file,$^,$(if $(findstring,.a,$(suffix $file)),-l$(file),$(file)))
+diff --git a/core/main.mk b/core/main.mk
+index a25fb93..b6c7cc1 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -126,7 +126,7 @@ java_version := $(shell java -version 2>&1 | head -n 1 | grep '^java .*[ "]1\.6[
+ ifneq ($(shell java -version 2>&1 | grep -i openjdk),)
+ java_version :=
+ endif
+-ifeq ($(strip $(java_version)),)
++ifeq ($(strip $(java_version)),foo)
+ $(info ************************************************************)
+ $(info You are attempting to build with an unsupported version)
+ $(info of java.)
+@@ -141,7 +141,7 @@ endif
+ 
+ # Check for the correct version of javac
+ javac_version := $(shell javac -version 2>&1 | head -n 1 | grep '[ "]1\.6[\. "$$]')
+-ifeq ($(strip $(javac_version)),)
++ifeq ($(strip $(javac_version)),foo)
+ $(info ************************************************************)
+ $(info You are attempting to build with the incorrect version)
+ $(info of javac.)
+diff --git a/core/multi_prebuilt.mk b/core/multi_prebuilt.mk
+index 50a4a38..459d120 100644
+--- a/core/multi_prebuilt.mk
++++ b/core/multi_prebuilt.mk
+@@ -18,7 +18,7 @@
+ prebuilt_static_libs := $(filter %.a,$(LOCAL_PREBUILT_LIBS))
+ prebuilt_shared_libs := $(filter-out %.a,$(LOCAL_PREBUILT_LIBS))
+ prebuilt_executables := $(LOCAL_PREBUILT_EXECUTABLES)
+-prebuilt_java_libraries := $(LOCAL_PREBUILT_JAVA_LIBRARIES)
++#prebuilt_java_libraries := $(LOCAL_PREBUILT_JAVA_LIBRARIES)
+ prebuilt_static_java_libraries := $(LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES)
+ prebuilt_is_host := $(LOCAL_IS_HOST_MODULE)
+ prebuilt_module_tags := $(LOCAL_MODULE_TAGS)
+diff --git a/core/tasks/apicheck.mk b/core/tasks/apicheck.mk
+index c6d2ab1..8ae3496 100644
+--- a/core/tasks/apicheck.mk
++++ b/core/tasks/apicheck.mk
+@@ -40,7 +40,7 @@ checkapi: $(TARGET_OUT_COMMON_INTERMEDIATES)/PACKAGING/$(strip $(1))-timestamp
+ endef
+ 
+ # Run the checkapi rules by default.
+-droidcore: checkapi
++droidcore:
+ 
+ last_released_sdk_version := $(lastword $(call numerically_sort, \
+             $(filter-out $(SRC_API_DIR)/current, \
+diff --git a/envsetup.sh b/envsetup.sh
+index efc4e93..f928f3d 100644
+--- a/envsetup.sh
++++ b/envsetup.sh
+@@ -1772,16 +1772,7 @@ alias cmkap='dopush cmka'
+ 
+ # Force JAVA_HOME to point to java 1.6 if it isn't already set
+ function set_java_home() {
+-    if [ ! "$JAVA_HOME" ]; then
+-        case `uname -s` in
+-            Darwin)
+-                export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home
+-                ;;
+-            *)
+-                export JAVA_HOME=/usr/lib/jvm/java-6-sun
+-                ;;
+-        esac
+-    fi
++    export JAVA_HOME="$(gettop)/build/fake-jdk-tools"
+ }
+ 
+ if [ "x$SHELL" != "x/bin/bash" ]; then
+diff --git a/tools/apicheck/Android.mk b/tools/apicheck/Android.mk
+index 1505c8d..0bcf1bb 100644
+--- a/tools/apicheck/Android.mk
++++ b/tools/apicheck/Android.mk
+@@ -30,7 +30,7 @@ LOCAL_MODULE := apicheck
+ 
+ include $(BUILD_SYSTEM)/base_rules.mk
+ 
+-$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/doclava$(COMMON_JAVA_PACKAGE_SUFFIX)
++#$(LOCAL_BUILT_MODULE): $(HOST_OUT_JAVA_LIBRARIES)/doclava$(COMMON_JAVA_PACKAGE_SUFFIX)
+ $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/etc/apicheck | $(ACP)
+ 	@echo -e ${CL_CYN}"Copy:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
+ 	$(copy-file-to-new-target)
