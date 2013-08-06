@@ -1,6 +1,6 @@
 # Correct bootanimation size for the screen
-TARGET_SCREEN_HEIGHT := 800
-TARGET_SCREEN_WIDTH := 480
+TARGET_SCREEN_HEIGHT := 480
+TARGET_SCREEN_WIDTH := 800
 
 $(call inherit-product, device/zte/v9/v9.mk)
 

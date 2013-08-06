@@ -19,13 +19,17 @@ debug.sf.hw=1
 com.qc.hardware=true
 ro.max.fling_velocity=4000
 ro.sf.lcd_density=160
-ro.sf.hwrotation=270
+#ro.sf.hwrotation=270
 qemu.sf.lcd_density=160
 persist.sys.use_dithering=2
 ro.opengles.version=131072
 debug.enabletr=false
 debug.hwui.render_dirty_regions=false
 debug.gr.numframebuffers=3
+
+# for b2g
+ro.sf.hwrotation=180
+#gfx.android.rgb16.force=true
 
 # Camcorder
 debug.camcorder.disablemeta=1
