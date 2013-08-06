@@ -1,0 +1,37 @@
+--- /dev/null	2013-06-12 16:00:53.686120073 +1000
++++ core/disabled_modules.mk	2013-07-24 23:57:06.231067854 +1000
+@@ -0,0 +1,34 @@
++DISABLED_USER_MODULES := \
++	system_server \
++	app_process \
++	surfaceflinger \
++	libsystem_server \
++	librs_jni \
++	libandroid_servers \
++	libsurfaceflinger \
++	libtestplugin \
++	temp_layoutlib \
++	libvideoeditor_jni \
++	libmedia_jni \
++	libmock_ril \
++	libI420colorconvert \
++	apkcheck \
++	elftree \
++	jdwpspy \
++	a3dconvert \
++	libsampleplugin \
++	libjavacore \
++	app_process__asan \
++	libanalogradiobroadcasting \
++	FileCheck \
++
++
++#	libLLVMWrap \
++#	libstlport \
++#	libRS \
++#	libbcc \
++#	bcc \
++#	libbcc.so.sha1 \
++#	libclcore.bc \
++#	libbcinfo \
++#	#

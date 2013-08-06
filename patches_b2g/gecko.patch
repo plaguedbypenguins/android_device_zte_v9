@@ -1,0 +1,734 @@
+diff --git a/b2g/config/mozconfigs/common.override b/b2g/config/mozconfigs/common.override
+index b94b773..ac5e689 100644
+--- a/b2g/config/mozconfigs/common.override
++++ b/b2g/config/mozconfigs/common.override
+@@ -4,4 +4,6 @@
+ 
+ # This file is included at the bottom of all b2g mozconfigs
+ 
++ac_add_options --with-arch=armv6
++export MOZ_PKG_SPECIAL=armv6
+ . "$topsrcdir/build/mozconfig.common.override"
+diff --git a/build/autoconf/android.m4 b/build/autoconf/android.m4
+index 6c29c10..6dc5bd3 100644
+--- a/build/autoconf/android.m4
++++ b/build/autoconf/android.m4
+@@ -209,10 +209,10 @@ AC_DEFUN([MOZ_ANDROID_STLPORT],
+ if test "$OS_TARGET" = "Android" -a -z "$gonkdir"; then
+     case "${CPU_ARCH}-${MOZ_ARCH}" in
+     arm-armv7*)
+-        ANDROID_CPU_ARCH=armeabi-v7a
++        ANDROID_CPU_ARCH=armeabi-v6l
+         ;;
+     arm-*)
+-        ANDROID_CPU_ARCH=armeabi
++        ANDROID_CPU_ARCH=armeabi-v6l
+         ;;
+     x86-*)
+         ANDROID_CPU_ARCH=x86
+diff --git a/build/autoconf/arch.m4 b/build/autoconf/arch.m4
+index ed7b2cd..26b2d7c 100644
+--- a/build/autoconf/arch.m4
++++ b/build/autoconf/arch.m4
+@@ -28,23 +28,23 @@ if test -z "$MOZ_ARCH"; then
+     dnl Defaults
+     case "${CPU_ARCH}-${OS_TARGET}" in
+     arm-Android)
+-        MOZ_THUMB=yes
+-        MOZ_ARCH=armv7-a
++        MOZ_THUMB=toolchain-default
++        MOZ_ARCH=toolchain-default
+         MOZ_FPU=vfp
+-        MOZ_FLOAT_ABI=softfp
++        MOZ_FLOAT_ABI=toolchain-default
+         ;;
+     arm-Darwin)
+         MOZ_ARCH=toolchain-default
+-        MOZ_THUMB=yes
++        MOZ_THUMB=toolchain-default
+         ;;
+     arm-*)
+         if test -n "$MOZ_PLATFORM_MAEMO"; then
+-            MOZ_THUMB=no
+-            MOZ_ARCH=armv7-a
+-            MOZ_FLOAT_ABI=softfp
++            MOZ_THUMB=toolchain-default
++            MOZ_ARCH=toolchain-default
++            MOZ_FLOAT_ABI=toolchain-default
+         fi
+         if test "$MOZ_PLATFORM_MAEMO" = 6; then
+-            MOZ_THUMB=yes
++            MOZ_THUMB=toolchain-default
+         fi
+         ;;
+     esac
+diff --git a/configure.in b/configure.in
+index a866115..f1102a0 100644
+--- a/configure.in
++++ b/configure.in
+@@ -214,7 +214,7 @@ if test -n "$gonkdir" ; then
+         AC_DEFINE(MOZ_OMX_DECODER)
+         AC_SUBST(MOZ_OMX_DECODER)
+         ;;
+-    18)
++    16|17|18)
+         GONK_INCLUDES="-I$gonkdir/frameworks/native/include"
+         ;;
+     *)
+@@ -6106,8 +6106,8 @@ if test -n "$MOZ_LIBJPEG_TURBO"; then
+     LIBJPEG_TURBO_X64_ASM=1
+   ;;
+   *:arm*)
+-    LIBJPEG_TURBO_ASFLAGS="-march=armv7-a -mfpu=neon"
+-    LIBJPEG_TURBO_ARM_ASM=1
++    #LIBJPEG_TURBO_ASFLAGS="-march=armv7-a -mfpu=neon"
++    LIBJPEG_TURBO_ARM_ASM=
+   ;;
+   *:x86|*:i?86)
+     if $CC -E -dM -</dev/null | grep -q __ELF__; then
+diff --git a/content/media/ogg/OggCodecState.cpp b/content/media/ogg/OggCodecState.cpp
+index 2a95b1e..81bd0cd 100644
+--- a/content/media/ogg/OggCodecState.cpp
++++ b/content/media/ogg/OggCodecState.cpp
+@@ -354,11 +354,6 @@ TheoraState::IsHeader(ogg_packet* aPacket) {
+   return th_packet_isheader(aPacket);
+ }
+ 
+-# define TH_VERSION_CHECK(_info,_maj,_min,_sub) \
+- (((_info)->version_major>(_maj)||(_info)->version_major==(_maj))&& \
+- (((_info)->version_minor>(_min)||(_info)->version_minor==(_min))&& \
+- (_info)->version_subminor>=(_sub)))
+-
+ int64_t TheoraState::Time(th_info* aInfo, int64_t aGranulepos)
+ {
+   if (aGranulepos < 0 || aInfo->fps_numerator == 0) {
+@@ -369,7 +364,7 @@ int64_t TheoraState::Time(th_info* aInfo, int64_t aGranulepos)
+   int shift = aInfo->keyframe_granule_shift; 
+   ogg_int64_t iframe = aGranulepos >> shift;
+   ogg_int64_t pframe = aGranulepos - (iframe << shift);
+-  int64_t frameno = iframe + pframe - TH_VERSION_CHECK(aInfo, 3, 2, 1);
++  int64_t frameno = iframe + pframe - TheoraVersion(aInfo, 3, 2, 1);
+   CheckedInt64 t = ((CheckedInt64(frameno) + 1) * USECS_PER_S) * aInfo->fps_denominator;
+   if (!t.isValid())
+     return -1;
+diff --git a/dom/system/gonk/AudioManager.cpp b/dom/system/gonk/AudioManager.cpp
+index 72a812b..6f1d917 100644
+--- a/dom/system/gonk/AudioManager.cpp
++++ b/dom/system/gonk/AudioManager.cpp
+@@ -95,7 +95,7 @@ public:
+ 
+     int32_t phoneState = nsIAudioManager::PHONE_STATE_INVALID;
+     am->GetPhoneState(&phoneState);
+-#if ANDROID_VERSION < 17
++#if ANDROID_VERSION < 16
+     AudioSystem::setPhoneState(phoneState);
+ #else
+     AudioSystem::setPhoneState(static_cast<audio_mode_t>(phoneState));
+@@ -410,7 +410,7 @@ AudioManager::SetPhoneState(int32_t aState)
+   if (aState == PHONE_STATE_NORMAL && usage == nsIAudioManager::FORCE_BT_SCO) {
+     SetForceForUse(nsIAudioManager::USE_COMMUNICATION, nsIAudioManager::FORCE_NONE);
+   }
+-#if ANDROID_VERSION < 17
++#if ANDROID_VERSION < 16
+   if (AudioSystem::setPhoneState(aState)) {
+ #else
+   if (AudioSystem::setPhoneState(static_cast<audio_mode_t>(aState))) {
+@@ -602,12 +602,16 @@ AudioManager::SetStreamVolumeIndex(int32_t aStream, int32_t aIndex) {
+   }
+ 
+   mCurrentStreamVolumeTbl[aStream] = aIndex;
+-#if ANDROID_VERSION < 17
++#if ANDROID_VERSION < 16
+   return AudioSystem::setStreamVolumeIndex(
+            static_cast<audio_stream_type_t>(aStream),
+            aIndex);
+ #else
++#if ANDROID_VERSION > 16
+   int device = 0;
++#else
++  audio_devices_t device = static_cast<audio_devices_t>(0);
++#endif
+ 
+   if (aStream == AUDIO_STREAM_BLUETOOTH_SCO) {
+     device = AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET;
+diff --git a/dom/system/gonk/android_audio/AudioSystem.h b/dom/system/gonk/android_audio/AudioSystem.h
+index a1a2742..6776a4d 100644
+--- a/dom/system/gonk/android_audio/AudioSystem.h
++++ b/dom/system/gonk/android_audio/AudioSystem.h
+@@ -223,7 +223,7 @@ typedef enum {
+                                AUDIO_CHANNEL_IN_VOICE_DNLINK),
+ } audio_channels_t;
+ 
+-#if ANDROID_VERSION >= 17
++#if ANDROID_VERSION >= 16
+ typedef enum {
+     AUDIO_MODE_INVALID          = -2,
+     AUDIO_MODE_CURRENT          = -1,
+@@ -767,7 +767,7 @@ public:
+     static status_t setDeviceConnectionState(audio_devices device, device_connection_state state, const char *device_address);
+     static device_connection_state getDeviceConnectionState(audio_devices device, const char *device_address);
+     static status_t setPhoneState(int state);
+-#if ANDROID_VERSION >= 17
++#if ANDROID_VERSION >= 16
+     static status_t setPhoneState(audio_mode_t state);
+ #endif
+     static status_t setRingerMode(uint32_t mode, uint32_t mask);
+@@ -826,7 +826,7 @@ public:
+                                       int indexMax);
+     static status_t setStreamVolumeIndex(stream_type stream, int index);
+     static status_t setStreamVolumeIndex(audio_stream_type_t stream, int index);
+-#if ANDROID_VERSION >= 17
++#if ANDROID_VERSION >= 16
+     static status_t setStreamVolumeIndex(audio_stream_type_t stream,
+                                          int index,
+                                          audio_devices_t device);
+diff --git a/dom/system/gonk/android_audio/EffectApi.h b/dom/system/gonk/android_audio/EffectApi.h
+index 729545d..eb7eccf 100644
+--- a/dom/system/gonk/android_audio/EffectApi.h
++++ b/dom/system/gonk/android_audio/EffectApi.h
+@@ -600,7 +600,7 @@ enum audio_device_e {
+     DEVICE_EXTERNAL_SPEAKER = 0x800             // external speaker (stereo and High quality)
+ };
+ 
+-#if ANDROID_VERSION < 17
++#if ANDROID_VERSION < 16
+ // Audio mode
+ enum audio_mode_e {
+     AUDIO_MODE_NORMAL,      // device idle
+diff --git a/dom/system/gonk/systemlibs.js b/dom/system/gonk/systemlibs.js
+index c1276d4..692a15c 100644
+--- a/dom/system/gonk/systemlibs.js
++++ b/dom/system/gonk/systemlibs.js
+@@ -456,6 +456,8 @@ this.netHelpers = {
+   stringToIP: function stringToIP(string) {
+     let ip = 0;
+     let start, end = -1;
++    if (string == null) { dump("stringToIP is null\n"); return 0; }
++    dump("rjh - stringToIP string --" + string + "--\n");
+     for (let i = 0; i < 4; i++) {
+       start = end + 1;
+       end = string.indexOf(".", start);
+diff --git a/gfx/gl/GLContextProviderEGL.cpp b/gfx/gl/GLContextProviderEGL.cpp
+index 9797c83..c538820 100644
+--- a/gfx/gl/GLContextProviderEGL.cpp
++++ b/gfx/gl/GLContextProviderEGL.cpp
+@@ -275,16 +275,20 @@ public:
+ #ifdef DEBUG
+         printf_stderr("Initializing context %p surface %p on display %p\n", mContext, mSurface, EGL_DISPLAY());
+ #endif
+-#if defined(MOZ_WIDGET_GONK) && ANDROID_VERSION <= 15
++#if defined(MOZ_WIDGET_GONK) && ANDROID_VERSION <= 17
+         if (!mIsOffscreen) {
+             mHwc = HwcComposer2D::GetInstance();
+             MOZ_ASSERT(!mHwc->Initialized());
+ 
++LOG("rjh - GLContextEGL about to call HwcComposer2D::Init with %p %p", EGL_DISPLAY(), mSurface);
+             if (mHwc->Init(EGL_DISPLAY(), mSurface)) {
+                 NS_WARNING("HWComposer initialization failed!");
+                 mHwc = nullptr;
+             }
+         }
++else {
++LOG("rjh - GLContextEGL mIsOffscreen %d", mIsOffscreen);
++}
+ #endif
+     }
+ 
+@@ -1594,7 +1598,8 @@ static const EGLint kEGLConfigAttribsRGBA32[] = {
+     LOCAL_EGL_GREEN_SIZE,      8,
+     LOCAL_EGL_BLUE_SIZE,       8,
+     LOCAL_EGL_ALPHA_SIZE,      8,
+-#if defined(MOZ_WIDGET_GONK) && ANDROID_VERSION >= 17
++#if defined(MOZ_WIDGET_GONK) && ANDROID_VERSION >= 16 // rjh - was 17
++// rjh was:
+     LOCAL_EGL_FRAMEBUFFER_TARGET_ANDROID, LOCAL_EGL_TRUE,
+ #endif
+     LOCAL_EGL_NONE
+diff --git a/gfx/skia/moz.build b/gfx/skia/moz.build
+index 99bc7b0..d78602f 100644
+--- a/gfx/skia/moz.build
++++ b/gfx/skia/moz.build
+@@ -244,12 +244,12 @@ if CONFIG['INTEL_ARCHITECTURE']:
+         CPP_SOURCES += [
+             'SkBitmapProcState_opts_SSSE3.cpp',
+         ]
+-elif CONFIG['CPU_ARCH'] == 'arm' and CONFIG['GNU_CC']:
+-        CPP_SOURCES += [
+-            'SkBitmapProcState_opts_arm.cpp',
+-            'SkBlitRow_opts_arm.cpp',
+-            'opts_check_arm.cpp',
+-        ]
++#elif CONFIG['CPU_ARCH'] == 'arm' and CONFIG['GNU_CC']:
++#        CPP_SOURCES += [
++#            'SkBitmapProcState_opts_arm.cpp',
++#            'SkBlitRow_opts_arm.cpp',
++#            'opts_check_arm.cpp',
++#        ]
+ else:
+     CPP_SOURCES += [
+         'SkBitmapProcState_opts_none.cpp',
+diff --git a/gfx/thebes/gfxAndroidPlatform.cpp b/gfx/thebes/gfxAndroidPlatform.cpp
+index 628c609..06fcfe8 100644
+--- a/gfx/thebes/gfxAndroidPlatform.cpp
++++ b/gfx/thebes/gfxAndroidPlatform.cpp
+@@ -105,6 +105,8 @@ gfxAndroidPlatform::gfxAndroidPlatform()
+ 
+     if (Preferences::GetBool("gfx.android.rgb16.force", false)) {
+         mOffscreenFormat = gfxASurface::ImageFormatRGB16_565;
++// rjh
++        mScreenDepth = 16;
+     }
+ 
+ }
+diff --git a/js/src/build/autoconf/android.m4 b/js/src/build/autoconf/android.m4
+index 6c29c10..6dc5bd3 100644
+--- a/js/src/build/autoconf/android.m4
++++ b/js/src/build/autoconf/android.m4
+@@ -209,10 +209,10 @@ AC_DEFUN([MOZ_ANDROID_STLPORT],
+ if test "$OS_TARGET" = "Android" -a -z "$gonkdir"; then
+     case "${CPU_ARCH}-${MOZ_ARCH}" in
+     arm-armv7*)
+-        ANDROID_CPU_ARCH=armeabi-v7a
++        ANDROID_CPU_ARCH=armeabi-v6l
+         ;;
+     arm-*)
+-        ANDROID_CPU_ARCH=armeabi
++        ANDROID_CPU_ARCH=armeabi-v6l
+         ;;
+     x86-*)
+         ANDROID_CPU_ARCH=x86
+diff --git a/js/src/build/autoconf/arch.m4 b/js/src/build/autoconf/arch.m4
+index ed7b2cd..26b2d7c 100644
+--- a/js/src/build/autoconf/arch.m4
++++ b/js/src/build/autoconf/arch.m4
+@@ -28,23 +28,23 @@ if test -z "$MOZ_ARCH"; then
+     dnl Defaults
+     case "${CPU_ARCH}-${OS_TARGET}" in
+     arm-Android)
+-        MOZ_THUMB=yes
+-        MOZ_ARCH=armv7-a
++        MOZ_THUMB=toolchain-default
++        MOZ_ARCH=toolchain-default
+         MOZ_FPU=vfp
+-        MOZ_FLOAT_ABI=softfp
++        MOZ_FLOAT_ABI=toolchain-default
+         ;;
+     arm-Darwin)
+         MOZ_ARCH=toolchain-default
+-        MOZ_THUMB=yes
++        MOZ_THUMB=toolchain-default
+         ;;
+     arm-*)
+         if test -n "$MOZ_PLATFORM_MAEMO"; then
+-            MOZ_THUMB=no
+-            MOZ_ARCH=armv7-a
+-            MOZ_FLOAT_ABI=softfp
++            MOZ_THUMB=toolchain-default
++            MOZ_ARCH=toolchain-default
++            MOZ_FLOAT_ABI=toolchain-default
+         fi
+         if test "$MOZ_PLATFORM_MAEMO" = 6; then
+-            MOZ_THUMB=yes
++            MOZ_THUMB=toolchain-default
+         fi
+         ;;
+     esac
+diff --git a/media/libvpx/vpx_config_arm-linux-gcc.h b/media/libvpx/vpx_config_arm-linux-gcc.h
+index 53a317c..6a3ff8c 100644
+--- a/media/libvpx/vpx_config_arm-linux-gcc.h
++++ b/media/libvpx/vpx_config_arm-linux-gcc.h
+@@ -17,7 +17,7 @@
+ #define ARCH_PPC64 0
+ #define HAVE_ARMV5TE 1
+ #define HAVE_ARMV6 1
+-#define HAVE_ARMV7 1
++#define HAVE_ARMV7 0
+ #define HAVE_MIPS32 0
+ #define HAVE_MMX 0
+ #define HAVE_SSE 0
+diff --git a/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h b/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
+index 86a6bc9..0773921 100644
+--- a/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
++++ b/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
+@@ -11,7 +11,6 @@
+ #ifndef SRC_MODULES_AUDIO_DEVICE_ANDROID_AUDIO_DEVICE_OPENSLES_ANDROID_H_
+ #define SRC_MODULES_AUDIO_DEVICE_ANDROID_AUDIO_DEVICE_OPENSLES_ANDROID_H_
+ 
+-#include <jni.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+diff --git a/widget/gonk/HwcComposer2D.cpp b/widget/gonk/HwcComposer2D.cpp
+index 1b5c7d2..7014d4c 100644
+--- a/widget/gonk/HwcComposer2D.cpp
++++ b/widget/gonk/HwcComposer2D.cpp
+@@ -45,7 +45,7 @@ using namespace mozilla::layers;
+ enum {
+     HWC_USE_GPU = HWC_FRAMEBUFFER,
+     HWC_USE_OVERLAY = HWC_OVERLAY,
+-    HWC_USE_COPYBIT
++    HWC_USE_COPYBIT = 4
+ };
+ 
+ // HWC layer flags
+diff --git a/widget/gonk/libdisplay/GonkDisplayICS.cpp b/widget/gonk/libdisplay/GonkDisplayICS.cpp
+index fe511f0..80272cd 100644
+--- a/widget/gonk/libdisplay/GonkDisplayICS.cpp
++++ b/widget/gonk/libdisplay/GonkDisplayICS.cpp
+@@ -74,6 +74,98 @@ frameBufferWatcher(void *)
+ 
+ namespace mozilla {
+ 
++
++enum {
++    ACQUIRE_PARTIAL_WAKE_LOCK = 0,
++    RELEASE_WAKE_LOCK,
++    REQUEST_STATE,
++    OUR_FD_COUNT
++};
++
++static int g_initialized = 0;
++static int g_fds[OUR_FD_COUNT];
++static int g_error = 1;
++
++static const char *off_state = "mem";
++static const char *on_state = "on";
++
++const char * const OLD_PATHS[] = {
++    "/sys/android_power/acquire_partial_wake_lock",
++    "/sys/android_power/release_wake_lock",
++    "/sys/android_power/request_state"
++};
++
++const char * const NEW_PATHS[] = {
++    "/sys/power/wake_lock",
++    "/sys/power/wake_unlock",
++    "/sys/power/state"
++};
++
++static int
++open_file_descriptors(const char * const paths[])
++{
++    int i;
++    for (i=0; i<OUR_FD_COUNT; i++) {
++        int fd = open(paths[i], O_RDWR);
++        if (fd < 0) {
++            fprintf(stderr, "fatal error opening \"%s\"\n", paths[i]);
++            g_error = errno;
++            return -1;
++        }
++        g_fds[i] = fd;
++    }
++
++    g_error = 0;
++    return 0;
++}
++
++
++static inline void
++initialize_fds(void)
++{
++    // XXX: should be this:
++    //pthread_once(&g_initialized, open_file_descriptors);
++    // XXX: not this:
++    if (g_initialized == 0) {
++        if(open_file_descriptors(NEW_PATHS) < 0) {
++            open_file_descriptors(OLD_PATHS);
++            on_state = "wake";
++            off_state = "standby";
++        }
++        g_initialized = 1;
++    }
++}
++
++int
++set_screen_state(int on)
++{
++    //QEMU_FALLBACK(set_screen_state(on));
++
++    ALOGI("*** set_screen_state %d", on);
++
++    initialize_fds();
++
++    //LOGI("go_to_sleep eventTime=%lld now=%lld g_error=%s\n", eventTime,
++      //      systemTime(), strerror(g_error));
++
++    if (g_error) return g_error;
++
++    char buf[32];
++    int len;
++    if(on)
++        len = snprintf(buf, sizeof(buf), "%s", on_state);
++    else
++        len = snprintf(buf, sizeof(buf), "%s", off_state);
++
++    buf[sizeof(buf) - 1] = '\0';
++    len = write(g_fds[REQUEST_STATE], buf, len);
++    if(len < 0) {
++        ALOGE("Failed setting last user activity: g_error=%d\n", g_error);
++    }
++    return 0;
++}
++
++
+ static GonkDisplayICS* sGonkDisplay = nullptr;
+ 
+ GonkDisplayICS::GonkDisplayICS()
+@@ -98,17 +190,17 @@ GonkDisplayICS::GonkDisplayICS()
+             len = read(fd.get(), &buf, 1);
+         } while (len < 0 && errno == EINTR);
+         if (len < 0) {
+-            LOGE("BootAnimation: wait_for_fb_sleep failed errno: %d", errno);
++            ALOGE("BootAnimation: wait_for_fb_sleep failed errno: %d", errno);
+         }
+     }
+ 
+     mFBSurface = new FramebufferNativeWindow();
+ 
+     int err = hw_get_module(HWC_HARDWARE_MODULE_ID, &mModule);
+-    LOGW_IF(err, "%s module not found", HWC_HARDWARE_MODULE_ID);
++    ALOGW_IF(err, "%s module not found", HWC_HARDWARE_MODULE_ID);
+     if (!err) {
+         err = hwc_open(mModule, &mHwc);
+-        LOGE_IF(err, "%s device failed to initialize (%s)",
++        ALOGE_IF(err, "%s device failed to initialize (%s)",
+                  HWC_HARDWARE_COMPOSER, strerror(-err));
+     }
+ 
+@@ -166,8 +258,8 @@ GonkDisplayICS::SwapBuffers(EGLDisplay dpy, EGLSurface sur)
+     if (!mHwc)
+         return eglSwapBuffers(dpy, sur);
+ 
+-    mHwc->prepare(mHwc, nullptr);
+-    return !mHwc->set(mHwc, dpy, sur, 0);
++    // rjh - for HWC 1.0 which is NEWER than this implementation
++    return eglSwapBuffers(dpy, sur);
+ }
+ 
+ ANativeWindowBuffer*
+@@ -175,7 +267,11 @@ GonkDisplayICS::DequeueBuffer()
+ {
+     ANativeWindow *window = static_cast<ANativeWindow *>(mFBSurface.get());
+     ANativeWindowBuffer *buf = nullptr;
++#if ANDROID_VERSION >= 17
++    window->dequeueBuffer_DEPRECATED(window, &buf);
++#else
+     window->dequeueBuffer(window, &buf);
++#endif
+     return buf;
+ }
+ 
+@@ -183,7 +279,11 @@ bool
+ GonkDisplayICS::QueueBuffer(ANativeWindowBuffer *buf)
+ {
+     ANativeWindow *window = static_cast<ANativeWindow *>(mFBSurface.get());
++#if ANDROID_VERSION >= 17
++    return !window->queueBuffer_DEPRECATED(window, buf);
++#else
+     return !window->queueBuffer(window, buf);
++#endif
+ }
+ 
+ __attribute__ ((visibility ("default")))
+diff --git a/widget/gonk/libdisplay/GonkDisplayJB.cpp b/widget/gonk/libdisplay/GonkDisplayJB.cpp
+index 11fb231..0dac8ccf 100644
+--- a/widget/gonk/libdisplay/GonkDisplayJB.cpp
++++ b/widget/gonk/libdisplay/GonkDisplayJB.cpp
+@@ -15,6 +15,9 @@
+ 
+ #include "GonkDisplayJB.h"
+ #include <gui/Surface.h>
++#ifdef BOARD_EGL_NEEDS_LEGACY_FB
++#include <ui/FramebufferNativeWindow.h>
++#endif
+ 
+ #include <hardware/hardware.h>
+ #include <hardware/hwcomposer.h>
+@@ -123,7 +126,12 @@ GonkDisplayJB::~GonkDisplayJB()
+ ANativeWindow*
+ GonkDisplayJB::GetNativeWindow()
+ {
+-    return mSTClient.get();
++#ifndef BOARD_EGL_NEEDS_LEGACY_FB
++    ANativeWindow* const window = mSTClient.get();
++#else
++    ANativeWindow* const window = new FramebufferNativeWindow();
++#endif
++return window;
+ }
+ 
+ void
+diff --git a/widget/gonk/libdisplay/Makefile.in b/widget/gonk/libdisplay/Makefile.in
+index 76e13b98..b22c728 100644
+--- a/widget/gonk/libdisplay/Makefile.in
++++ b/widget/gonk/libdisplay/Makefile.in
+@@ -28,6 +28,9 @@ STL_FLAGS=
+ include $(topsrcdir)/config/rules.mk
+ include $(topsrcdir)/ipc/chromium/chromium-config.mk
+ 
++# rjh
++CXXFLAGS += -DBOARD_EGL_NEEDS_LEGACY_FB
++
+ DEFINES += -DXPCOM_GLUE
+ 
+ LOCAL_INCLUDES += \
+diff --git a/widget/gonk/libdisplay/moz.build b/widget/gonk/libdisplay/moz.build
+index ea186b6..1fe013c 100644
+--- a/widget/gonk/libdisplay/moz.build
++++ b/widget/gonk/libdisplay/moz.build
+@@ -20,13 +20,13 @@ CPP_SOURCES += [
+     'BootAnimation.cpp',
+ ]
+ 
+-if CONFIG['ANDROID_VERSION'] == '18':
++if CONFIG['ANDROID_VERSION'] >= '17':
+     CPP_SOURCES += [
+         'FramebufferSurface.cpp',
+         'GraphicBufferAlloc.cpp',
+         'GonkDisplayJB.cpp',
+     ]
+-elif CONFIG['ANDROID_VERSION'] == '15':
++elif CONFIG['ANDROID_VERSION'] >= '15':
+     CPP_SOURCES += [
+         'GonkDisplayICS.cpp'
+     ]
+diff --git a/widget/gonk/libui/InputReader.cpp b/widget/gonk/libui/InputReader.cpp
+index a521556..564bc4e 100644
+--- a/widget/gonk/libui/InputReader.cpp
++++ b/widget/gonk/libui/InputReader.cpp
+@@ -2675,6 +2675,10 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
+         height = mAssociatedDisplayHeight;
+         orientation = mParameters.orientationAware ?
+                 mAssociatedDisplayOrientation : DISPLAY_ORIENTATION_0;
++        orientation += 3;
++        orientation %= 4;
++        width = mAssociatedDisplayHeight;
++        height = mAssociatedDisplayWidth;
+     } else {
+         width = mRawPointerAxes.x.maxValue - mRawPointerAxes.x.minValue + 1;
+         height = mRawPointerAxes.y.maxValue - mRawPointerAxes.y.minValue + 1;
+@@ -2887,8 +2891,8 @@ void TouchInputMapper::configureSurface(nsecs_t when, bool* outResetNeeded) {
+         // Note that the maximum value reported is an inclusive maximum value so it is one
+         // unit less than the total width or height of surface.
+         switch (mSurfaceOrientation) {
+-        case DISPLAY_ORIENTATION_90:
+-        case DISPLAY_ORIENTATION_270:
++        case DISPLAY_ORIENTATION_0:
++        case DISPLAY_ORIENTATION_180:
+             mOrientedSurfaceWidth = mSurfaceHeight;
+             mOrientedSurfaceHeight = mSurfaceWidth;
+ 
+diff --git a/widget/gonk/moz.build b/widget/gonk/moz.build
+index 2331e63..32509e5 100644
+--- a/widget/gonk/moz.build
++++ b/widget/gonk/moz.build
+@@ -55,7 +55,7 @@ CPP_SOURCES += [
+     'nsWindow.cpp',
+ ]
+ 
+-if CONFIG['ANDROID_VERSION'] == '15':
++if CONFIG['ANDROID_VERSION'] == '16':
+     CPP_SOURCES += [
+         'HwcComposer2D.cpp'
+     ]
+diff --git a/widget/gonk/nsAppShell.cpp b/widget/gonk/nsAppShell.cpp
+index 00452d1..bceaa5e 100644
+--- a/widget/gonk/nsAppShell.cpp
++++ b/widget/gonk/nsAppShell.cpp
+@@ -453,7 +453,7 @@ GeckoInputReaderPolicy::setDisplayInfo()
+                   DISPLAY_ORIENTATION_270,
+                   "Orientation enums not matched!");
+ 
+-    mConfig.setDisplayInfo(0, false, gScreenBounds.width, gScreenBounds.height, nsScreenGonk::GetRotation());
++    mConfig.setDisplayInfo(0, false, gScreenBounds.width, gScreenBounds.height, nsScreenGonk::GetEffectiveRotation());
+ }
+ 
+ void GeckoInputReaderPolicy::getReaderConfiguration(InputReaderConfiguration* outConfig)
+diff --git a/widget/gonk/nsScreenManagerGonk.h b/widget/gonk/nsScreenManagerGonk.h
+index a5593f5..4bec73f 100644
+--- a/widget/gonk/nsScreenManagerGonk.h
++++ b/widget/gonk/nsScreenManagerGonk.h
+@@ -39,6 +39,7 @@ public:
+     NS_IMETHOD SetRotation(uint32_t  aRotation);
+ 
+     static uint32_t GetRotation();
++    static uint32_t GetEffectiveRotation();  // rjh added
+     static ScreenConfiguration GetConfiguration();
+ };
+ 
+diff --git a/widget/gonk/nsWindow.cpp b/widget/gonk/nsWindow.cpp
+index 2fa23d5..35e5c42 100644
+--- a/widget/gonk/nsWindow.cpp
++++ b/widget/gonk/nsWindow.cpp
+@@ -43,10 +43,13 @@
+ #include "libdisplay/GonkDisplay.h"
+ #include "pixelflinger/format.h"
+ 
+-#if ANDROID_VERSION == 15
++#if ANDROID_VERSION == 16
+ #include "HwcComposer2D.h"
+ #endif
+ 
++// rjh added:
++uint32_t rotationFudge = 1;
++
+ #define LOG(args...)  __android_log_print(ANDROID_LOG_INFO, "Gonk" , ## args)
+ #define LOGW(args...) __android_log_print(ANDROID_LOG_WARN, "Gonk", ## args)
+ #define LOGE(args...) __android_log_print(ANDROID_LOG_ERROR, "Gonk", ## args)
+@@ -156,6 +159,8 @@ nsWindow::nsWindow()
+                                                gScreenBounds.height));
+             sRotationMatrix.Rotate(M_PI);
+             break;
++        case nsIScreen::ROTATION_270_DEG:
++            break;
+         default:
+             MOZ_CRASH("Unknown rotation");
+         }
+@@ -702,8 +707,9 @@ nsWindow::GetComposer2D()
+         return nullptr;
+     }
+ 
+-#if ANDROID_VERSION == 15
++#if ANDROID_VERSION == 16
+     if (HwcComposer2D* hwc = HwcComposer2D::GetInstance()) {
++        LOGW("rjh - nsWindow::GetComposer2D init'd hwc %p init'd ok %d", hwc, hwc->Initialized());
+         return hwc->Initialized() ? hwc : nullptr;
+     }
+ #endif
+@@ -771,7 +777,8 @@ nsScreenGonk::GetColorDepth(int32_t *aColorDepth)
+ NS_IMETHODIMP
+ nsScreenGonk::GetRotation(uint32_t* aRotation)
+ {
+-    *aRotation = sScreenRotation;
++    // rjh - hack
++    *aRotation = ((sScreenRotation - rotationFudge + 4) % 4);
+     return NS_OK;
+ }
+ 
+@@ -781,10 +788,11 @@ nsScreenGonk::SetRotation(uint32_t aRotation)
+     if (!(aRotation <= ROTATION_270_DEG))
+         return NS_ERROR_ILLEGAL_VALUE;
+ 
+-    if (sScreenRotation == aRotation)
++    if (sScreenRotation == (aRotation + rotationFudge)%4) {
+         return NS_OK;
++    }
+ 
+-    sScreenRotation = aRotation;
++    sScreenRotation = (aRotation + rotationFudge)%4;
+     sRotationMatrix =
+         ComputeTransformForRotation(gScreenBounds,
+                                     ScreenRotation(EffectiveScreenRotation()));
+@@ -839,6 +847,12 @@ nsScreenGonk::GetRotation()
+     return sScreenRotation;
+ }
+ 
++/*static*/ uint32_t
++nsScreenGonk::GetEffectiveRotation()
++{
++    return (sScreenRotation + sPhysicalScreenRotation + 2) % 4;
++}
++
+ /*static*/ ScreenConfiguration
+ nsScreenGonk::GetConfiguration()
+ {

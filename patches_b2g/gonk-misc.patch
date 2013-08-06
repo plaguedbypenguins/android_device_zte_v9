@@ -1,0 +1,38 @@
+diff --git a/add-revision.py b/add-revision.py
+index 14eed10..a848c24 100755
+--- a/add-revision.py
++++ b/add-revision.py
+@@ -100,10 +100,18 @@ def add_revision(man_filename, b2g_root, output, force=False, tags=False, only_a
+         else:
+             manifest_path = project.getAttribute('path')
+             fs_path = os.path.join(b2g_root, manifest_path)
+-            commit_id = find_rev(fs_path)
++            try:
++                commit_id = find_rev(fs_path)
++            except MissingRepositoryException:
++                print 'rjh - except rev caught'
++                commit_id = ''
+             project.setAttribute('revision', commit_id)
+             parentNode = project.parentNode
+-            tag = find_ref(fs_path, only_annotated)
++            try:
++                tag = find_ref(fs_path, only_annotated)
++            except MissingRepositoryException:
++                print 'rjh - except ref caught'
++                tag = ''
+             if tags and tag != commit_id:
+                 comment = " Information: %s is tagged with %s " % (project.getAttribute('name'), tag)
+                 parentNode.insertBefore(doc.createComment(comment), project)
+diff --git a/init.rc.patch b/init.rc.patch
+index 5cd7184..e6df667 100644
+--- a/init.rc.patch
++++ b/init.rc.patch
+@@ -2,7 +2,7 @@ diff --git a/rootdir/init.rc b/rootdir/init.rc
+ index 236c97b..fe9f5c5 100644
+ --- a/rootdir/init.rc
+ +++ b/rootdir/init.rc
+-@@ -98,6 +98,9 @@ on fs
++@@ -117,6 +117,9 @@ on fs
+  # mount mtd partitions
+      # Mount /system rw first to give the filesystem a chance to save a checkpoint
+      mount yaffs2 mtd@system /system
