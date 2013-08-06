@@ -49,8 +49,7 @@ PRODUCT_PACKAGES += \
 # V9 specific
 PRODUCT_PACKAGES += \
         lights.v9 \
-        sensors.v9 \
-        V9Parts
+        sensors.v9
 
 # Power HAL
 PRODUCT_PACKAGES += \
@@ -63,24 +62,17 @@ PRODUCT_PACKAGES += \
         audio.a2dp.default \
         libaudioutils
 
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-        LiveWallpapersPicker \
-        librs_jni
-
 # FM Radio
 PRODUCT_PACKAGES += \
-		libfmradio.si4708 \
-		Effem
+		libfmradio.si4708
 
 # Other
 PRODUCT_PACKAGES += \
         make_ext4fs \
-        setup_fs \
-        dexpreopt
+        setup_fs
 
 # Dalvik
-DISABLE_DEXPREOPT := false
+DISABLE_DEXPREOPT := true
 
 # Enable repeatable keys in CWM
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -113,7 +105,6 @@ PRODUCT_COPY_FILES += \
         frameworks/native/data/etc/android.hardware.touchscreen.xml:system/etc/permissions/android.hardware.touchscreen.xml \
         frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
         frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-        packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:/system/etc/permissions/android.software.live_wallpaper.xml
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product-if-exists, vendor/zte/v9/v9-vendor.mk)

@@ -35,11 +35,7 @@ TARGET_BOOTLOADER_BOARD_NAME := v9
 TARGET_SPECIFIC_HEADER_PATH := device/zte/v9/include
 
 # Recovery
-BOARD_CUSTOM_GRAPHICS := ../../../device/zte/v9/recovery/graphics.c
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/zte/v9/recovery/recovery_ui.c
-TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery/recovery_kernel
-TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc
-TARGET_RECOVERY_FSTAB := device/zte/v9/recovery/recovery.fstab
+TARGET_NO_RECOVERY := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/zte/zte-kernel-msm7x27
@@ -56,10 +52,6 @@ WIFI_DRIVER_MODULE_NAME     := ar6000
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
-
-# Browser
-WITH_JIT := true
-HTTP := chrome
 
 # Webkit
 #ENABLE_WEBGL := false
