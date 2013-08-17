@@ -23,9 +23,12 @@ USE_CAMERA_STUB := true
 
 # CPU
 TARGET_ARCH := arm
-TARGET_CPU_ABI := armeabi
-TARGET_CPU_ABI2 := armeabi-v6l
+TARGET_CPU_ABI := armeabi-v6l
+TARGET_CPU_ABI2 := armeabi
 TARGET_ARCH_VARIANT := armv6-vfp
+TARGET_CPU_SMP := false
+TARGET_CPU_VARIANT := arm11
+ARCH_ARM_HAVE_TLS_REGISTER := false
 
 # Target and board properties
 TARGET_NO_BOOTLOADER := true
@@ -84,7 +87,7 @@ TARGET_BOOTANIMATION_USE_RGB565 := true
 SMALLER_FONT_FOOTPRINT := true
 
 # Camera
-TARGET_DISABLE_ARM_PIE := true
+#TARGET_DISABLE_ARM_PIE := true
 BOARD_NEEDS_MEMORYHEAPPMEM := true
 
 # FM Radio
