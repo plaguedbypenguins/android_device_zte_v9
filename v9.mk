@@ -70,9 +70,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
-    device/zte/v9/ramdisk/init.v9.rc:root/init.v9.rc \
-    device/zte/v9/ramdisk/init.v9.usb.rc:root/init.v9.usb.rc \
-    device/zte/v9/ramdisk/ueventd.v9.rc:root/ueventd.v9.rc
+    $(call find-copy-subdir-files,*,device/zte/v9/ramdisk,root)
 
 # Prebuilt
 PRODUCT_COPY_FILES += \
