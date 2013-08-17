@@ -5,10 +5,13 @@ on early-init
 
 on init
     mkdir /storage/sdcard0 0000 root root
+    mkdir /storage/usbdisk0 0000 root root
     export EXTERNAL_STORAGE /storage/sdcard0
     # for backwards compatibility
     symlink /storage/sdcard0 /mnt/sdcard
     symlink /storage/sdcard0 /sdcard
+    symlink /storage/usbdisk0 /mnt/usbdisk
+    symlink /storage/usbdisk0 /usbdisk
 
 on boot
 # Setup boostpulse
