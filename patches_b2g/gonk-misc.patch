@@ -23,6 +23,28 @@ index 14eed10..a848c24 100755
              if tags and tag != commit_id:
                  comment = " Information: %s is tagged with %s " % (project.getAttribute('name'), tag)
                  parentNode.insertBefore(doc.createComment(comment), project)
+diff --git a/fakesched.cpp b/fakesched.cpp
+index e6dcbbe..5071e42 100644
+--- a/fakesched.cpp
++++ b/fakesched.cpp
+@@ -32,7 +32,7 @@ public:
+     static const char *getServiceName() { return "scheduling_policy"; }
+ 
+     virtual status_t dump(int fd, const Vector<String16>& args);
+-    virtual int requestPriority(int32_t pid, int32_t tid, int32_t prio, bool async);
++    virtual int requestPriority(int32_t pid, int32_t tid, int32_t prio);
+ };
+ 
+ FakeSchedulePolicyService::FakeSchedulePolicyService()
+@@ -51,7 +51,7 @@ FakeSchedulePolicyService::dump(int fd, const Vector<String16>& args)
+ }
+ 
+ int
+-FakeSchedulePolicyService::requestPriority(int32_t pid, int32_t tid, int32_t prio, bool async)
++FakeSchedulePolicyService::requestPriority(int32_t pid, int32_t tid, int32_t prio)
+ {
+     return 0; /* PackageManger.PERMISSION_GRANTED */
+ }
 diff --git a/init.rc.patch b/init.rc.patch
 index 5cd7184..e6df667 100644
 --- a/init.rc.patch

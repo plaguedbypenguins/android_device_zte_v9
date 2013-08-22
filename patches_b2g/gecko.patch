@@ -27,7 +27,7 @@ index 6c29c10..6dc5bd3 100644
      x86-*)
          ANDROID_CPU_ARCH=x86
 diff --git a/build/autoconf/arch.m4 b/build/autoconf/arch.m4
-index ed7b2cd..26b2d7c 100644
+index de521bf..3ef7637 100644
 --- a/build/autoconf/arch.m4
 +++ b/build/autoconf/arch.m4
 @@ -28,23 +28,23 @@ if test -z "$MOZ_ARCH"; then
@@ -63,7 +63,7 @@ index ed7b2cd..26b2d7c 100644
          ;;
      esac
 diff --git a/configure.in b/configure.in
-index a866115..f1102a0 100644
+index c869852..f3aa43e 100644
 --- a/configure.in
 +++ b/configure.in
 @@ -214,7 +214,7 @@ if test -n "$gonkdir" ; then
@@ -73,9 +73,9 @@ index a866115..f1102a0 100644
 -    18)
 +    16|17|18)
          GONK_INCLUDES="-I$gonkdir/frameworks/native/include"
-         ;;
-     *)
-@@ -6106,8 +6106,8 @@ if test -n "$MOZ_LIBJPEG_TURBO"; then
+         if test -d "$gonkdir/external/bluetooth/bluez"; then
+             GONK_INCLUDES+=" -I$gonkdir/external/dbus -I$gonkdir/external/bluetooth/bluez/lib"
+@@ -6129,8 +6129,8 @@ if test -n "$MOZ_LIBJPEG_TURBO"; then
      LIBJPEG_TURBO_X64_ASM=1
    ;;
    *:arm*)
@@ -151,6 +151,28 @@ index 72a812b..6f1d917 100644
  
    if (aStream == AUDIO_STREAM_BLUETOOTH_SCO) {
      device = AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET;
+diff --git a/dom/system/gonk/VolumeCommand.h b/dom/system/gonk/VolumeCommand.h
+index f8872f1c..a798d85 100644
+--- a/dom/system/gonk/VolumeCommand.h
++++ b/dom/system/gonk/VolumeCommand.h
+@@ -69,7 +69,7 @@ private:
+                       nsACString& aResponseStr)
+   {
+     mResponseCode = aResponseCode;
+-#if ANDROID_VERSION >= 17
++#if ANDROID_VERSION >= 16
+     // There's a sequence number here that we don't care about
+     // We expect it to be 0. See VolumeCommand::SetCmd
+     mResponseStr = Substring(aResponseStr, 2);
+@@ -127,7 +127,7 @@ public:
+   void SetCmd(const nsACString& aCommand)
+   {
+     mCmd.Truncate();
+-#if ANDROID_VERSION >= 17
++#if ANDROID_VERSION >= 16
+     // JB requires a sequence number at the beginning of messages.
+     // It doesn't matter what we use, so we use 0.
+     mCmd = "0 ";
 diff --git a/dom/system/gonk/android_audio/AudioSystem.h b/dom/system/gonk/android_audio/AudioSystem.h
 index a1a2742..6776a4d 100644
 --- a/dom/system/gonk/android_audio/AudioSystem.h
@@ -209,7 +231,7 @@ index c1276d4..692a15c 100644
        start = end + 1;
        end = string.indexOf(".", start);
 diff --git a/gfx/gl/GLContextProviderEGL.cpp b/gfx/gl/GLContextProviderEGL.cpp
-index 9797c83..c538820 100644
+index a657a6c2..c9d9966 100644
 --- a/gfx/gl/GLContextProviderEGL.cpp
 +++ b/gfx/gl/GLContextProviderEGL.cpp
 @@ -275,16 +275,20 @@ public:
@@ -234,7 +256,7 @@ index 9797c83..c538820 100644
  #endif
      }
  
-@@ -1594,7 +1598,8 @@ static const EGLint kEGLConfigAttribsRGBA32[] = {
+@@ -1602,7 +1606,8 @@ static const EGLint kEGLConfigAttribsRGBA32[] = {
      LOCAL_EGL_GREEN_SIZE,      8,
      LOCAL_EGL_BLUE_SIZE,       8,
      LOCAL_EGL_ALPHA_SIZE,      8,
@@ -298,7 +320,7 @@ index 6c29c10..6dc5bd3 100644
      x86-*)
          ANDROID_CPU_ARCH=x86
 diff --git a/js/src/build/autoconf/arch.m4 b/js/src/build/autoconf/arch.m4
-index ed7b2cd..26b2d7c 100644
+index de521bf..3ef7637 100644
 --- a/js/src/build/autoconf/arch.m4
 +++ b/js/src/build/autoconf/arch.m4
 @@ -28,23 +28,23 @@ if test -z "$MOZ_ARCH"; then
@@ -346,20 +368,39 @@ index 53a317c..6a3ff8c 100644
  #define HAVE_MIPS32 0
  #define HAVE_MMX 0
  #define HAVE_SSE 0
-diff --git a/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h b/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
-index 86a6bc9..0773921 100644
---- a/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
-+++ b/media/webrtc/trunk/webrtc/modules/audio_device/audio_device_opensles.h
-@@ -11,7 +11,6 @@
- #ifndef SRC_MODULES_AUDIO_DEVICE_ANDROID_AUDIO_DEVICE_OPENSLES_ANDROID_H_
- #define SRC_MODULES_AUDIO_DEVICE_ANDROID_AUDIO_DEVICE_OPENSLES_ANDROID_H_
+diff --git a/mozglue/build/BionicGlue.cpp b/mozglue/build/BionicGlue.cpp
+index 7ed0127..1626a87 100644
+--- a/mozglue/build/BionicGlue.cpp
++++ b/mozglue/build/BionicGlue.cpp
+@@ -16,7 +16,7 @@
  
--#include <jni.h>
- #include <stdio.h>
- #include <stdlib.h>
+ #define NS_EXPORT __attribute__ ((visibility("default")))
  
+-#if ANDROID_VERSION < 17 || defined(MOZ_WIDGET_ANDROID)
++#if ANDROID_VERSION < 16 || defined(MOZ_WIDGET_ANDROID)
+ /* Android doesn't have pthread_atfork(), so we need to use our own. */
+ struct AtForkFuncs {
+   void (*prepare)(void);
+@@ -67,7 +67,7 @@ static std::vector<AtForkFuncs, SpecialAllocator<AtForkFuncs> > atfork;
+ #include "cpuacct.h"
+ #define WRAP(x) x
+ 
+-#if ANDROID_VERSION < 17 || defined(MOZ_WIDGET_ANDROID)
++#if ANDROID_VERSION < 16 || defined(MOZ_WIDGET_ANDROID)
+ extern "C" NS_EXPORT int
+ timer_create(clockid_t, struct sigevent*, timer_t*)
+ {
+@@ -82,7 +82,7 @@ timer_create(clockid_t, struct sigevent*, timer_t*)
+ #define WRAP(x) __wrap_##x
+ #endif
+ 
+-#if ANDROID_VERSION < 17 || defined(MOZ_WIDGET_ANDROID)
++#if ANDROID_VERSION < 16 || defined(MOZ_WIDGET_ANDROID)
+ extern "C" NS_EXPORT int
+ WRAP(pthread_atfork)(void (*prepare)(void), void (*parent)(void), void (*child)(void))
+ {
 diff --git a/widget/gonk/HwcComposer2D.cpp b/widget/gonk/HwcComposer2D.cpp
-index 1b5c7d2..7014d4c 100644
+index fda8a1d..d28dc69 100644
 --- a/widget/gonk/HwcComposer2D.cpp
 +++ b/widget/gonk/HwcComposer2D.cpp
 @@ -45,7 +45,7 @@ using namespace mozilla::layers;
@@ -372,7 +413,7 @@ index 1b5c7d2..7014d4c 100644
  
  // HWC layer flags
 diff --git a/widget/gonk/libdisplay/GonkDisplayICS.cpp b/widget/gonk/libdisplay/GonkDisplayICS.cpp
-index fe511f0..80272cd 100644
+index 8127c55..6795586 100644
 --- a/widget/gonk/libdisplay/GonkDisplayICS.cpp
 +++ b/widget/gonk/libdisplay/GonkDisplayICS.cpp
 @@ -74,6 +74,98 @@ frameBufferWatcher(void *)
@@ -495,7 +536,7 @@ index fe511f0..80272cd 100644
                   HWC_HARDWARE_COMPOSER, strerror(-err));
      }
  
-@@ -166,8 +258,8 @@ GonkDisplayICS::SwapBuffers(EGLDisplay dpy, EGLSurface sur)
+@@ -170,8 +262,8 @@ GonkDisplayICS::SwapBuffers(EGLDisplay dpy, EGLSurface sur)
      if (!mHwc)
          return eglSwapBuffers(dpy, sur);
  
@@ -506,7 +547,7 @@ index fe511f0..80272cd 100644
  }
  
  ANativeWindowBuffer*
-@@ -175,7 +267,11 @@ GonkDisplayICS::DequeueBuffer()
+@@ -179,7 +271,11 @@ GonkDisplayICS::DequeueBuffer()
  {
      ANativeWindow *window = static_cast<ANativeWindow *>(mFBSurface.get());
      ANativeWindowBuffer *buf = nullptr;
@@ -518,7 +559,7 @@ index fe511f0..80272cd 100644
      return buf;
  }
  
-@@ -183,7 +279,11 @@ bool
+@@ -187,7 +283,11 @@ bool
  GonkDisplayICS::QueueBuffer(ANativeWindowBuffer *buf)
  {
      ANativeWindow *window = static_cast<ANativeWindow *>(mFBSurface.get());
@@ -531,7 +572,7 @@ index fe511f0..80272cd 100644
  
  __attribute__ ((visibility ("default")))
 diff --git a/widget/gonk/libdisplay/GonkDisplayJB.cpp b/widget/gonk/libdisplay/GonkDisplayJB.cpp
-index 11fb231..0dac8ccf 100644
+index c0dc9a4..1bf4fb4 100644
 --- a/widget/gonk/libdisplay/GonkDisplayJB.cpp
 +++ b/widget/gonk/libdisplay/GonkDisplayJB.cpp
 @@ -15,6 +15,9 @@
@@ -619,7 +660,7 @@ index a521556..564bc4e 100644
              mOrientedSurfaceHeight = mSurfaceWidth;
  
 diff --git a/widget/gonk/moz.build b/widget/gonk/moz.build
-index 2331e63..32509e5 100644
+index bf37f18..19864cb 100644
 --- a/widget/gonk/moz.build
 +++ b/widget/gonk/moz.build
 @@ -55,7 +55,7 @@ CPP_SOURCES += [
