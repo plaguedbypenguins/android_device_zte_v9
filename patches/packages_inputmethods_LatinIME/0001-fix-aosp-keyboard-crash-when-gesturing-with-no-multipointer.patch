@@ -1,0 +1,53 @@
+From 7dc8e4180543256a984d862f9ca8058119467ff3 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Sun, 31 Mar 2013 20:09:48 +1100
+Subject: [PATCH] fix a null dereference of sPointerTrackerQueue
+
+this fixes a crash in AOSP keyboard which occurs when a gesture is
+started on a device that doesn't have Distinct Multitouch set.
+
+Change-Id: I73cbe887e352899e0e7bef98c3491308bd43cb0d
+
+diff --git a/java/src/com/android/inputmethod/keyboard/PointerTracker.java b/java/src/com/android/inputmethod/keyboard/PointerTracker.java
+index d0f7cb2..79c40d2 100644
+--- a/java/src/com/android/inputmethod/keyboard/PointerTracker.java
++++ b/java/src/com/android/inputmethod/keyboard/PointerTracker.java
+@@ -685,6 +685,11 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
+         return (sPointerTrackerQueue == null) ? 1 : sPointerTrackerQueue.size();
+     }
+ 
++    private boolean isOldestTrackerElement() {
++        return (sPointerTrackerQueue != null) ?
++                sPointerTrackerQueue.getOldestElement() == this : false;
++    }
++
+     private void mayStartBatchInput(final Key key) {
+         if (sInGesture || !mGestureStrokeWithPreviewPoints.isStartOfAGesture()) {
+             return;
+@@ -702,7 +707,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
+             sLastRecognitionTime = 0;
+             mListener.onStartBatchInput();
+         }
+-        final boolean isOldestTracker = sPointerTrackerQueue.getOldestElement() == this;
++        final boolean isOldestTracker = isOldestTrackerElement();
+         mDrawingProxy.showGesturePreviewTrail(this, isOldestTracker);
+     }
+ 
+@@ -724,7 +729,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
+                 }
+             }
+         }
+-        final boolean isOldestTracker = sPointerTrackerQueue.getOldestElement() == this;
++        final boolean isOldestTracker = isOldestTrackerElement();
+         mDrawingProxy.showGesturePreviewTrail(this, isOldestTracker);
+     }
+ 
+@@ -741,7 +746,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element {
+                 mListener.onEndBatchInput(sAggregratedPointers);
+             }
+         }
+-        final boolean isOldestTracker = sPointerTrackerQueue.getOldestElement() == this;
++        final boolean isOldestTracker = isOldestTrackerElement();
+         mDrawingProxy.showGesturePreviewTrail(this, isOldestTracker);
+     }
+ 

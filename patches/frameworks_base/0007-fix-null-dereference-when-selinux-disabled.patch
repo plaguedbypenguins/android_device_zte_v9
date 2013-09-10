@@ -1,0 +1,31 @@
+From 983096bd5f6c49b08addafb57625c95d70033e10 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Sat, 17 Aug 2013 17:52:14 +1000
+Subject: [PATCH] fix null dereference when selinux disabled
+
+Change-Id: I246b97666d9a400234e8cc057223c1e494c8f256
+
+diff --git a/services/java/com/android/server/DevicePolicyManagerService.java b/services/java/com/android/server/DevicePolicyManagerService.java
+index 9be2d3f..3ccf2bf 100644
+--- a/services/java/com/android/server/DevicePolicyManagerService.java
++++ b/services/java/com/android/server/DevicePolicyManagerService.java
+@@ -2694,10 +2694,15 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
+     private void saveOriginalSELinuxSettings() {
+         // SELinux booleans
+         String[] seboolNames = SELinux.getBooleanNames();
+-        seboolsOrig = new HashMap<String, Boolean>(seboolNames.length);
+-        for (String sebool : seboolNames) {
+-            boolean value = SELinux.getBooleanValue(sebool);
+-            seboolsOrig.put(sebool, value);
++        if (seboolNames == null) {
++            seboolsOrig = new HashMap<String, Boolean>(0);
++        }
++        else {
++            seboolsOrig = new HashMap<String, Boolean>(seboolNames.length);
++            for (String sebool : seboolNames) {
++                boolean value = SELinux.getBooleanValue(sebool);
++                seboolsOrig.put(sebool, value);
++            }
+         }
+         seboolsOrig = Collections.unmodifiableMap(seboolsOrig);
+     }

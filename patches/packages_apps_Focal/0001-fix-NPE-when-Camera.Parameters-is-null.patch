@@ -1,0 +1,59 @@
+From 37db4eb7cc83f7fba239ab73eb7e229bf14ae031 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 22 Aug 2013 01:15:34 +1000
+Subject: [PATCH] fix NPE when Camera.Parameters is null
+
+Change-Id: Idf253ce54acfbcae5a60fadc3ff47b42796b3a12
+
+diff --git a/src/org/cyanogenmod/focal/widgets/ExposureCompensationWidget.java b/src/org/cyanogenmod/focal/widgets/ExposureCompensationWidget.java
+index 76ccec0..c3914cb 100644
+--- a/src/org/cyanogenmod/focal/widgets/ExposureCompensationWidget.java
++++ b/src/org/cyanogenmod/focal/widgets/ExposureCompensationWidget.java
+@@ -22,6 +22,8 @@ package org.cyanogenmod.focal.widgets;
+ import android.content.Context;
+ import android.hardware.Camera;
+ 
++import android.util.Log;
++
+ import org.cyanogenmod.focal.CameraManager;
+ import org.cyanogenmod.focal.R;
+ import org.cyanogenmod.focal.SettingsStorage;
+@@ -35,6 +37,7 @@ public class ExposureCompensationWidget extends WidgetBase implements
+     private static final String KEY_PARAMETER = "exposure-compensation";
+     private static final String KEY_MAX_PARAMETER = "max-exposure-compensation";
+     private static final String KEY_MIN_PARAMETER = "min-exposure-compensation";
++    private static final String TAG = "ExposureCompensation";
+ 
+     private WidgetOptionCenteredSeekBar mSeekBar;
+     private WidgetOptionLabel mValueLabel;
+@@ -64,15 +67,27 @@ public class ExposureCompensationWidget extends WidgetBase implements
+     }
+ 
+     public int getExposureValue() {
+-        return Integer.parseInt(mCamManager.getParameters().get(KEY_PARAMETER));
++        Camera.Parameters cp = mCamManager.getParameters();
++        if ( cp != null )
++            return Integer.parseInt(cp.get(KEY_PARAMETER));
++        Log.w(TAG, KEY_PARAMETER + " with null parameters");
++        return 0;
+     }
+ 
+     public int getMinExposureValue() {
+-        return Integer.parseInt(mCamManager.getParameters().get(KEY_MIN_PARAMETER));
++        Camera.Parameters cp = mCamManager.getParameters();
++        if ( cp != null )
++            return Integer.parseInt(cp.get(KEY_MIN_PARAMETER));
++        Log.w(TAG, KEY_MIN_PARAMETER + " with null parameters");
++        return 0;
+     }
+ 
+     public int getMaxExposureValue() {
+-        return Integer.parseInt(mCamManager.getParameters().get(KEY_MAX_PARAMETER));
++        Camera.Parameters cp = mCamManager.getParameters();
++        if ( cp != null )
++            return Integer.parseInt(cp.get(KEY_MAX_PARAMETER));
++        Log.w(TAG, KEY_MAX_PARAMETER + " with null parameters");
++        return 0;
+     }
+ 
+     public void setExposureValue(int value) {

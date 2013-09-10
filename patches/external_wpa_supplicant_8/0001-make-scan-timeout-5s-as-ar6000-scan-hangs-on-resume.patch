@@ -1,0 +1,27 @@
+From 82f04312ee22b1b9118b4ec146e67bdcd2f3fbb3 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Mon, 9 Sep 2013 15:13:53 +1000
+Subject: [PATCH] wpa_supplicant: reduce scan timeout to workaround ar6000
+ problem
+
+Ar6k hangs on the first scan after resume causing slow wifi reconnects
+as wpa_supplicant must timeout (30s) and then retry. Work around the
+binary module bug by setting the wpa_supplicant scan timeout to be much
+shorter. Hopefully 5s is still long enough. Scans typically take 2-3s
+on my network.
+
+Change-Id: I94e5d40ece8ca0a1a1aa93df4365333c412133d5
+
+diff --git a/src/drivers/driver_wext.c b/src/drivers/driver_wext.c
+index b7ba586..7a4dd96 100644
+--- a/src/drivers/driver_wext.c
++++ b/src/drivers/driver_wext.c
+@@ -1076,7 +1076,7 @@ scan_out:
+ 		 * when scan is complete, so use longer timeout to avoid race
+ 		 * conditions with scanning and following association request.
+ 		 */
+-		timeout = 30;
++		timeout = 5;
+ 	}
+ 	wpa_printf(MSG_DEBUG, "Scan requested (ret=%d) - scan timeout %d "
+ 		   "seconds", ret, timeout);

@@ -1,0 +1,22 @@
+From 24f36cd9e63b32c6feb125c7ca97fa810f6c56c5 Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Fri, 14 Dec 2012 20:12:45 +0200
+Subject: [PATCH] always rebuild build.prop
+
+Change-Id: I9a6f4706cdc3e0ca4e40acb1b00419d72a236f65
+
+Conflicts:
+	core/Makefile
+
+diff --git a/core/Makefile b/core/Makefile
+index bb9a9b8..fde7b95 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -174,6 +174,7 @@ else
+ system_prop_file := $(wildcard $(TARGET_DEVICE_DIR)/system.prop)
+ endif
+ 
++.PHONY: $(INSTALLED_BUILD_PROP_TARGET)
+ $(INSTALLED_BUILD_PROP_TARGET): $(BUILDINFO_SH) $(INTERNAL_BUILD_ID_MAKEFILE) $(BUILD_SYSTEM)/version_defaults.mk $(system_prop_file)
+ 	@echo Target buildinfo: $@
+ 	@mkdir -p $(dir $@)

@@ -1,0 +1,33 @@
+From 7a7c691515f332597d680c13158287d59dceba1f Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Wed, 27 Feb 2013 13:34:52 +0200
+Subject: [PATCH] Revert "Enable ADB authentication by default."
+
+Screw security, this makes using adb too difficult. :P
+
+This reverts commit 59df363c6097eb4c8b53c1b952d7384a567bafac.
+
+Change-Id: I35f8c72a695076242fd2afc439402e2511d68a1d
+
+Conflicts:
+	config/common.mk
+
+diff --git a/config/common.mk b/config/common.mk
+index f70875f..344d6b1 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -70,12 +70,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.com.android.dataroaming=false
+ 
+ PRODUCT_PROPERTY_OVERRIDES += \
+-    ro.build.selinux=1 \
++    ro.build.selinux=0 \
+     persist.sys.root_access=1
+ 
+ ifneq ($(TARGET_BUILD_VARIANT),eng)
+ # Enable ADB authentication
+-ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
++ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=0
+ endif
+ 
+ # Copy over the changelog to the device

@@ -1,0 +1,27 @@
+From 2ee99b6b958dc10fd29640e56360506e7d62b51a Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Sat, 23 Feb 2013 11:32:35 +0200
+Subject: [PATCH] add workaround for atk6kl wifi
+
+Change-Id: I6dc12a6cb3e1e6063addd4974d072c36a027730a
+
+diff --git a/wifi/wifi.c b/wifi/wifi.c
+index 0046c67..97016a8 100644
+--- a/wifi/wifi.c
++++ b/wifi/wifi.c
+@@ -904,6 +904,15 @@ int wifi_start_supplicant(int p2p_supported)
+     }
+ #endif
+ 
++#ifdef WIFI_DRIVER_MODULE_PATH
++    /* The ath6kl driver needs the interface up in order to scan! */
++    if (!strncmp(DRIVER_MODULE_NAME, "ath6kl", 6)) {
++        ifc_init();
++        ifc_up("wlan0");
++        sleep(2);
++    }
++#endif
++
+     property_get("wifi.interface", primary_iface, WIFI_TEST_INTERFACE);
+ 
+     property_set("ctl.start", supplicant_name);

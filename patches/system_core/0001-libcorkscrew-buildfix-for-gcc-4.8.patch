@@ -1,0 +1,22 @@
+From 87a4e2e7ad72b6547332a01c28800a859df6750a Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Tue, 3 Sep 2013 00:46:32 +1000
+Subject: [PATCH] libcorkscrew buildfix for gcc 4.8
+
+clearly gcc 4.8 is smarter than 4.7, so ignore it
+
+Change-Id: I67c4c5e7c8d47ae4f9dfbe5c8d46a385a58ad933
+
+diff --git a/libcorkscrew/Android.mk b/libcorkscrew/Android.mk
+index 8370789..82be799 100644
+--- a/libcorkscrew/Android.mk
++++ b/libcorkscrew/Android.mk
+@@ -51,7 +51,7 @@ endif
+ 
+ LOCAL_SHARED_LIBRARIES += libdl libcutils liblog libgccdemangle
+ 
+-LOCAL_CFLAGS += -std=gnu99 -Werror
++LOCAL_CFLAGS += -std=gnu99 -Werror -Wno-unused-parameter
+ LOCAL_MODULE := libcorkscrew
+ LOCAL_MODULE_TAGS := optional
+ 
