@@ -1,5 +1,6 @@
 CyanogenMod 10.2 device configuration for ZTE V9.
 
+see http://www.modaco.com/topic/365005-devrom-cyanogenmod-102-android-43-for-zte-v9/
 
 How to build:
 -------------
