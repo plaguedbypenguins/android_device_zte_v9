@@ -1,4 +1,4 @@
-From 913acb04c0b3a3fce63942ed575418adb24305d2 Mon Sep 17 00:00:00 2001
+From a93c2823307f26efb517e933b28c749c8164f1d5 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Mon, 19 Aug 2013 13:03:28 +0300
 Subject: [PATCH] cmhw: USB charging (2/2)
@@ -6,10 +6,10 @@ Subject: [PATCH] cmhw: USB charging (2/2)
 Change-Id: Ia627239addddd45adaf4fc617c6904495660de73
 
 diff --git a/res/values/cm_strings.xml b/res/values/cm_strings.xml
-index 835e9e0..b512cc3 100644
+index bdc0003..6eacfdc 100644
 --- a/res/values/cm_strings.xml
 +++ b/res/values/cm_strings.xml
-@@ -989,6 +989,10 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
+@@ -981,6 +981,10 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
      <string name="gamma_tuning_title_head">Gamma calibration</string>
      <string name="gamma_tuning_summary_head">Tweak gamma values</string>
  
@@ -21,10 +21,10 @@ index 835e9e0..b512cc3 100644
      <string name="more_device_controls_title">More\u2026</string>
      <string name="more_device_settings_title">Other device options</string>
 diff --git a/res/xml/more_device_settings.xml b/res/xml/more_device_settings.xml
-index 4d8ebfe..eccfaa0 100644
+index 6f8f797..f64aca1 100644
 --- a/res/xml/more_device_settings.xml
 +++ b/res/xml/more_device_settings.xml
-@@ -62,4 +62,15 @@
+@@ -72,4 +72,15 @@
  
      </PreferenceCategory>
  
@@ -53,10 +53,10 @@ index 0cb32f1..2b06a88 100644
  
      private void initFreqCapFiles(Context ctx)
 diff --git a/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java b/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
-index 1eb8ab5..257421a 100644
+index 554f4f7..2f6981e 100644
 --- a/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
 +++ b/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
-@@ -18,15 +18,21 @@ package com.android.settings.cyanogenmod;
+@@ -18,9 +18,13 @@ package com.android.settings.cyanogenmod;
  
  import android.content.ContentResolver;
  import android.content.Context;
@@ -70,15 +70,16 @@ index 1eb8ab5..257421a 100644
  import android.preference.PreferenceScreen;
  import android.provider.Settings;
  
- import com.android.settings.R;
+@@ -28,6 +32,8 @@ import com.android.settings.R;
  import com.android.settings.SettingsPreferenceFragment;
+ import com.android.settings.Utils;
  
 +import org.cyanogenmod.hardware.UsbCharging;
 +
  public class MoreDeviceSettings extends SettingsPreferenceFragment {
      private static final String TAG = "MoreDeviceSettings";
  
-@@ -34,6 +40,10 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
+@@ -36,6 +42,10 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
      private static final String KEY_DISPLAY_CALIBRATION_CATEGORY = "display_calibration_category";
      private static final String KEY_DISPLAY_COLOR = "color_calibration";
      private static final String KEY_DISPLAY_GAMMA = "gamma_tuning";
@@ -89,11 +90,10 @@ index 1eb8ab5..257421a 100644
  
      @Override
      public void onCreate(Bundle savedInstanceState) {
-@@ -60,5 +70,47 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
-                 calibrationCategory.removePreference(findPreference(KEY_DISPLAY_GAMMA));
+@@ -62,7 +72,49 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
              }
          }
-+
+ 
 +        final PreferenceGroup usbChargingCategory =
 +                (PreferenceGroup) findPreference(KEY_USB_CHARGING_CATEGORY);
 +        mUsbCharging = (CheckBoxPreference) findPreference(KEY_USB_CHARGING);
@@ -103,6 +103,9 @@ index 1eb8ab5..257421a 100644
 +        } else {
 +            getPreferenceScreen().removePreference(usbChargingCategory);
 +        }
++
+         Utils.updatePreferenceToSpecificActivityFromMetaDataOrRemove(getActivity(),
+                 getPreferenceScreen(), KEY_DEVICE_PARTS);
      }
 +
 +    @Override
