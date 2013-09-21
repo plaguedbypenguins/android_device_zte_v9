@@ -1,0 +1,69 @@
+From 990ae424181aa5edfac9e2ec7af45c26c416a500 Mon Sep 17 00:00:00 2001
+From: Konsta <konsta09@gmail.com>
+Date: Tue, 5 Feb 2013 13:44:11 +0200
+Subject: [PATCH] unbreak softap for other devices
+
+Change-Id: I71cfc269b08d0359bd0be8d0b21a5feb839652e5
+
+Conflicts:
+	SoftapController.h
+
+diff --git a/Android.mk b/Android.mk
+index 0d8a439..f515358 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -49,6 +49,7 @@ else ifeq ($(WIFI_DRIVER_MODULE_NAME),ar6000)
+   LOCAL_C_INCLUDES += external/wpa_supplicant_6/wpa_supplicant/src/common
+   LOCAL_SRC_FILES += SoftapControllerATH.cpp
+   LOCAL_SHARED_LIBRARIES := $(LOCAL_SHARED_LIBRARIES) libwpa_client
++  LOCAL_CFLAGS += -DBLADE_SOFTAP
+ else
+   LOCAL_SRC_FILES += SoftapController.cpp
+ endif
+diff --git a/CommandListener.cpp b/CommandListener.cpp
+index 84aa9b4..9360e14 100644
+--- a/CommandListener.cpp
++++ b/CommandListener.cpp
+@@ -744,12 +744,17 @@ int CommandListener::SoftapCmd::runCommand(SocketClient *cli,
+         return 0;
+     }
+ 
++#ifdef BLADE_SOFTAP
+     if (!strcmp(argv[1], "start")) {
+         rc = sSoftapCtrl->startDriver(argv[2]);
+     } else if (!strcmp(argv[1], "stop")) {
+         rc = sSoftapCtrl->stopDriver(argv[2]);
+     } else if (!strcmp(argv[1], "startap")) {
+         rc = sSoftapCtrl->startSoftap();
++#else
++    if (!strcmp(argv[1], "startap")) {
++        rc = sSoftapCtrl->startSoftap();
++#endif
+     } else if (!strcmp(argv[1], "stopap")) {
+         rc = sSoftapCtrl->stopSoftap();
+     } else if (!strcmp(argv[1], "fwreload")) {
+diff --git a/SoftapController.h b/SoftapController.h
+index 3fd0dc8..7a20efb 100644
+--- a/SoftapController.h
++++ b/SoftapController.h
+@@ -31,16 +31,20 @@ public:
+     SoftapController();
+     virtual ~SoftapController();
+ 
++#ifdef BLADE_SOFTAP
+     int startDriver(char *iface);
+     int stopDriver(char *iface);
++#endif
+     int startSoftap();
+     int stopSoftap();
+     bool isSoftapStarted();
+     int setSoftap(int argc, char *argv[]);
+     int fwReloadSoftap(int argc, char *argv[]);
+ private:
++#ifdef BLADE_SOFTAP
+     char mBuf[SOFTAP_MAX_BUFFER_SIZE];
+     char mIface[IFNAMSIZ];
++#endif
+     pid_t mPid;
+     void generatePsk(char *ssid, char *passphrase, char *psk);
+ };

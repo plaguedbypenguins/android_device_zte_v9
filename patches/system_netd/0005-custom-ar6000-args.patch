@@ -1,0 +1,48 @@
+From b0e2a278a4cc53ebd4b1f5f138dff43ba6675970 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?D=C4=81vis=20M=C4=81lnieks?= <daavis.90@gmail.com>
+Date: Tue, 9 Jul 2013 00:12:57 +0300
+Subject: [PATCH] allow using custom module argument for ATH softap contoller
+
+
+diff --git a/Android.mk b/Android.mk
+index eee69ab..48a6d4a 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -54,6 +54,10 @@ else
+   LOCAL_SRC_FILES += SoftapController.cpp
+ endif
+ 
++ifdef WIFI_DRIVER_MODULE_AP_ARG
++  LOCAL_CFLAGS += -DWIFI_DRIVER_MODULE_AP_ARG=\"$(WIFI_DRIVER_MODULE_AP_ARG)\"
++endif
++
+ ifneq ($(BOARD_HOSTAPD_DRIVER),)
+   LOCAL_CFLAGS += -DHAVE_HOSTAPD
+   ifneq ($(BOARD_HOSTAPD_DRIVER_NAME),)
+diff --git a/SoftapControllerATH.cpp b/SoftapControllerATH.cpp
+index 94eb649..f9ad985 100644
+--- a/SoftapControllerATH.cpp
++++ b/SoftapControllerATH.cpp
+@@ -60,6 +60,10 @@ static const char HOSTAPD_CONFIG_TEMPLATE[]= "/system/etc/wifi/hostapd.conf";
+ static const char HOSTAPD_CONFIG_FILE[]    = "/data/misc/wifi/hostapd.conf";
+ static const char HOSTAPD_PROP_NAME[]      = "init.svc.hostapd";
+ 
++#ifdef WIFI_DRIVER_MODULE_AP_ARG
++static const char DRIVER_MODULE_AP_ARG[] = WIFI_DRIVER_MODULE_AP_ARG;
++#endif
++
+ #define WIFI_DEFAULT_BI         100         /* in TU */
+ #define WIFI_DEFAULT_DTIM       1           /* in beacon */
+ #define WIFI_DEFAULT_CHANNEL    6
+@@ -454,7 +458,11 @@ int SoftapController::startDriver(const char *iface) {
+ 
+ #ifdef WIFI_MODULE_PATH
+     rmmod("ar6000");
++#ifdef WIFI_DRIVER_MODULE_AP_ARG
++	ret = insmod(WIFI_MODULE_PATH, DRIVER_MODULE_AP_ARG);
++#else
+ 	ret = insmod(WIFI_MODULE_PATH, "ifname=athap0 wowenable=0");
++#endif
+ 	sleep(1);
+ #else
+ 	set_wifi_power(0);
