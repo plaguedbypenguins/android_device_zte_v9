@@ -1,0 +1,22 @@
+From 52c4b8533a9f5a491f964f06a688b405206699a5 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Wed, 18 Sep 2013 16:42:59 +1000
+Subject: [PATCH] turn off auditd
+
+Change-Id: I9eb92410370fefca7a83d9d0255e4a4bb9f73b53
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index c4f8f22..6530ad9 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -513,8 +513,8 @@ service console /system/bin/sh
+     user shell
+     group log
+ 
+-service auditd /system/bin/auditd -k
+-    class main
++#service auditd /system/bin/auditd -k
++#    class main
+ 
+ on property:ro.debuggable=1
+     start console
