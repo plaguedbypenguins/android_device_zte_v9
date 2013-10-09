@@ -1,0 +1,20 @@
+From dd8394c17718b12af02cd0c7d644f5267fd4033a Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Wed, 9 Oct 2013 14:32:32 +1100
+Subject: [PATCH] add global -Wno-unused-parameter to make gcc 4.8 happy
+
+Change-Id: I58b163ce1221ec08d71b76e19fa69d369550dded
+
+diff --git a/core/config.mk b/core/config.mk
+index 150b4f8..16e2fed 100644
+--- a/core/config.mk
++++ b/core/config.mk
+@@ -97,7 +97,7 @@ SHOW_COMMANDS:= $(filter showcommands,$(MAKECMDGOALS))
+ # ###############################################################
+ 
+ # These can be changed to modify both host and device modules.
+-COMMON_GLOBAL_CFLAGS:= -DANDROID -fmessage-length=0 -W -Wall -Wno-unused -Winit-self -Wpointer-arith
++COMMON_GLOBAL_CFLAGS:= -DANDROID -fmessage-length=0 -W -Wall -Wno-unused -Winit-self -Wpointer-arith -Wno-unused-parameter
+ COMMON_RELEASE_CFLAGS:= -DNDEBUG -UDEBUG
+ 
+ COMMON_GLOBAL_CPPFLAGS:= $(COMMON_GLOBAL_CFLAGS) -Wsign-promo
