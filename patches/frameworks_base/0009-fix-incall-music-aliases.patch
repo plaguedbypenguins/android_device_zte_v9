@@ -1,4 +1,4 @@
-From 8501fc5537a232833be714e030f6463f8cfc5cda Mon Sep 17 00:00:00 2001
+From c69bf4149f2354167f7751148a8effc1b3be69e3 Mon Sep 17 00:00:00 2001
 From: Robin Humble <plaguedbypenguins@gmail.com>
 Date: Wed, 18 Sep 2013 13:18:04 +1000
 Subject: [PATCH] media: fix incall music stream aliases
