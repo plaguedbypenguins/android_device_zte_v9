@@ -1,4 +1,4 @@
-From 7a7c691515f332597d680c13158287d59dceba1f Mon Sep 17 00:00:00 2001
+From 3e6d5c7799d9005b42ec8d80a25e425d723f0914 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Wed, 27 Feb 2013 13:34:52 +0200
 Subject: [PATCH] Revert "Enable ADB authentication by default."
@@ -13,16 +13,19 @@ Conflicts:
 	config/common.mk
 
 diff --git a/config/common.mk b/config/common.mk
-index f70875f..344d6b1 100644
+index 53ed256..cdfe2c9 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -70,12 +70,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
+@@ -70,7 +70,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
      ro.com.android.dataroaming=false
  
  PRODUCT_PROPERTY_OVERRIDES += \
 -    ro.build.selinux=1 \
 +    ro.build.selinux=0 \
      persist.sys.root_access=1
+ 
+ # Disable excessive dalvik debug messages
+@@ -79,7 +79,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
  
  ifneq ($(TARGET_BUILD_VARIANT),eng)
  # Enable ADB authentication

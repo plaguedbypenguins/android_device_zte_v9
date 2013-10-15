@@ -1,4 +1,4 @@
-From 9e8c546bb07de1c51883e0cf571bffb6dbee6953 Mon Sep 17 00:00:00 2001
+From 4a79e0840310e8e2f1bacb5cac171fdab5f38c06 Mon Sep 17 00:00:00 2001
 From: Robin Humble <plaguedbypenguins@gmail.com>
 Date: Wed, 18 Sep 2013 13:52:58 +1000
 Subject: [PATCH] media: add fm support
@@ -73,7 +73,7 @@ index 4051bf3..3ed0e82 100644
  
      private boolean mLinkNotificationWithVolume;
 diff --git a/media/java/android/media/AudioSystem.java b/media/java/android/media/AudioSystem.java
-index eacd624..ddf7bf8 100644
+index caa0f48..7fdc4d8 100644
 --- a/media/java/android/media/AudioSystem.java
 +++ b/media/java/android/media/AudioSystem.java
 @@ -54,13 +54,15 @@ public class AudioSystem
@@ -93,21 +93,3 @@ index eacd624..ddf7bf8 100644
      public static final int getNumStreamTypes() { return NUM_STREAM_TYPES; }
  
      /*
-@@ -232,6 +234,8 @@ public class AudioSystem
-     public static final int DEVICE_OUT_ANC_HEADSET = 0x10000;
-     public static final int DEVICE_OUT_ANC_HEADPHONE = 0x20000;
-     public static final int DEVICE_OUT_PROXY = 0x40000;
-+    public static final int DEVICE_OUT_FM = 0x80000;
-+    public static final int DEVICE_OUT_FM_TX = 0x100000;
-     public static final int DEVICE_OUT_DEFAULT = DEVICE_BIT_DEFAULT;
- 
-     public static final int DEVICE_OUT_ALL = (DEVICE_OUT_EARPIECE |
-@@ -253,6 +257,8 @@ public class AudioSystem
-                                               DEVICE_OUT_ANC_HEADSET |
-                                               DEVICE_OUT_ANC_HEADPHONE |
-                                               DEVICE_OUT_PROXY |
-+                                              DEVICE_OUT_FM |
-+                                              DEVICE_OUT_FM_TX |
-                                               DEVICE_OUT_DEFAULT);
-     public static final int DEVICE_OUT_ALL_A2DP = (DEVICE_OUT_BLUETOOTH_A2DP |
-                                                    DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
