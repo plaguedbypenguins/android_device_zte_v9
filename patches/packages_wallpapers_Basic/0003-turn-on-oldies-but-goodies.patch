@@ -1,0 +1,25 @@
+From acae92d4da814fd214de358ddf0e0189be558479 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 24 Oct 2013 22:20:15 +1100
+Subject: [PATCH] un-hide old live wallpapers - grass, galaxy, polarclock
+
+Change-Id: I405a2baa563d0d95cd6b0f7deea2aa5806f2b5fb
+
+diff --git a/res/values/config.xml b/res/values/config.xml
+index a17d816..e893b6c 100644
+--- a/res/values/config.xml
++++ b/res/values/config.xml
+@@ -18,10 +18,10 @@
+ -->
+ 
+ <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+-    <bool name="config_enable_grass_wallpaper">false</bool>
+-    <bool name="config_enable_galaxy_wallpaper">false</bool>
++    <bool name="config_enable_grass_wallpaper">true</bool>
++    <bool name="config_enable_galaxy_wallpaper">true</bool>
+     <bool name="config_enable_fall_wallpaper">true</bool>
+     <bool name="config_enable_nexus_wallpaper">true</bool>
+-    <bool name="config_enable_polar_clock_wallpaper">false</bool>
++    <bool name="config_enable_polar_clock_wallpaper">true</bool>
+ </resources>
+ 

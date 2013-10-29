@@ -1,0 +1,22 @@
+From 619fae705c160407dcf0a0e57dbe3e84f254d875 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 24 Oct 2013 22:14:03 +1100
+Subject: [PATCH] allow grass to work without any location service at all
+
+Change-Id: Ideaf0d8ffa32035278d2dc6a29c7445ecab62495
+
+diff --git a/src/com/android/wallpaper/grass/GrassRS.java b/src/com/android/wallpaper/grass/GrassRS.java
+index 30bc851..1388135 100644
+--- a/src/com/android/wallpaper/grass/GrassRS.java
++++ b/src/com/android/wallpaper/grass/GrassRS.java
+@@ -99,9 +99,7 @@ class GrassRS extends RenderScriptScene {
+               mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                       LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationUpdater);
+             } catch (java.lang.IllegalArgumentException e) {
+-              if (!e.getMessage().equals("provider=network")) {
+-                throw e;
+-              }
++              // we don't care too much if location isn't available or fails
+             }
+         }
+ 
