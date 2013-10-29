@@ -1,0 +1,76 @@
+From 9375b98253afbe74a813a5386114f0f28c4130cb Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Tue, 29 Oct 2013 18:27:11 +1100
+Subject: [PATCH] make nsUptimeMillis be uint32 on armv6
+
+this means that millis will wrap in ~49 days, and nano in about 1 hour
+which isn't ideal, but I can't see how else to deal with it.
+AFAICT none of the in-tree users of renderscript use nano, and the
+users of millis aren't affected by it wrapping.
+
+Change-Id: I6ee03426753c6223599c5a963c79cc1959ed3b76
+
+diff --git a/Android.mk b/Android.mk
+index 4c02056..96cb09d 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -6,6 +6,10 @@ ifeq ($(TARGET_BUILD_PDK), true)
+   rs_base_CFLAGS += -D__RS_PDK__
+ endif
+ 
++ifeq ($(TARGET_CPU_VARIANT),arm11)
++  rs_base_CFLAGS += -DTARGET_CPU_VARIANT_ARM11
++endif
++
+ ifneq ($(OVERRIDE_RS_DRIVER),)
+   rs_base_CFLAGS += -DOVERRIDE_RS_DRIVER=$(OVERRIDE_RS_DRIVER)
+ endif
+diff --git a/driver/rsdRuntimeStubs.cpp b/driver/rsdRuntimeStubs.cpp
+index cb3a5b4..6d43bff 100644
+--- a/driver/rsdRuntimeStubs.cpp
++++ b/driver/rsdRuntimeStubs.cpp
+@@ -522,6 +522,17 @@ tm* SC_LocalTime(tm *local, time_t *timer) {
+     return rsrLocalTime(rsc, local, timer);
+ }
+ 
++#ifdef TARGET_CPU_VARIANT_ARM11
++uint32_t SC_UptimeMillis() {
++    Context *rsc = RsdCpuReference::getTlsContext();
++    return (uint32_t)rsrUptimeMillis(rsc);
++}
++
++uint32_t SC_UptimeNanos() {
++    Context *rsc = RsdCpuReference::getTlsContext();
++    return (uint32_t)rsrUptimeNanos(rsc);
++}
++#else
+ int64_t SC_UptimeMillis() {
+     Context *rsc = RsdCpuReference::getTlsContext();
+     return rsrUptimeMillis(rsc);
+@@ -531,6 +542,7 @@ int64_t SC_UptimeNanos() {
+     Context *rsc = RsdCpuReference::getTlsContext();
+     return rsrUptimeNanos(rsc);
+ }
++#endif
+ 
+ //////////////////////////////////////////////////////////////////////////////
+ // Message routines
+@@ -1270,10 +1282,17 @@ rs_tm* rsLocaltime(rs_tm* local, const int *timer) {
+     return (rs_tm*)(SC_LocalTime((tm*)local, (long*)timer));
+ }
+ 
+-int64_t rsUptimeMillis() {
++#ifdef TARGET_CPU_VARIANT_ARM11
++uint32_t rsUptimeMillis()
++    Context *rsc = RsdCpuReference::getTlsContext();
++    return (uint32_t)rsrUptimeMillis(rsc);
++}
++#else
++int64_t rsUptimeMillis()
+     Context *rsc = RsdCpuReference::getTlsContext();
+     return rsrUptimeMillis(rsc);
+ }
++#endif
+ 
+ uint32_t rsSendToClientBlocking2(int cmdID, void *data, int len) {
+     Context *rsc = RsdCpuReference::getTlsContext();

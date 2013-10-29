@@ -1,0 +1,38 @@
+From e0b33550a69928ac0e29ff60d0b12907d3f580a7 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Tue, 29 Oct 2013 18:40:55 +1100
+Subject: [PATCH] fix renderscript on armv6
+
+Change-Id: I94921f94b4abe68baefaa85696fb0a3b011b9419
+
+diff --git a/Android.mk b/Android.mk
+index ac2e90b..1ac752d 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -31,6 +31,10 @@ ifeq ($(mac_sdk_version),10.9)
+ local_cflags_for_slang += -Wno-nested-anon-types -Wno-unused-private-field
+ endif
+ 
++ifeq ($(TARGET_CPU_VARIANT),arm11)
++local_cflags_for_slang += -DTARGET_CPU_VARIANT_ARM11
++endif
++
+ ifeq "REL" "$(PLATFORM_VERSION_CODENAME)"
+   RS_VERSION := $(PLATFORM_SDK_VERSION)
+ else
+diff --git a/llvm-rs-cc.cpp b/llvm-rs-cc.cpp
+index cc77b7a..5ea8391 100644
+--- a/llvm-rs-cc.cpp
++++ b/llvm-rs-cc.cpp
+@@ -167,7 +167,11 @@ class RSCCOptions {
+   RSCCOptions() {
+     mOutputType = slang::Slang::OT_Bitcode;
+     // Triple/CPU/Features must be hard-coded to our chosen portable ABI.
++#if defined(TARGET_CPU_VARIANT_ARM11)
++    mTriple = "armv6-none-linux-gnueabi";
++#else
+     mTriple = "armv7-none-linux-gnueabi";
++#endif
+     mCPU = "";
+     slangAssert(mFeatures.empty());
+     mFeatures.push_back("+long64");
