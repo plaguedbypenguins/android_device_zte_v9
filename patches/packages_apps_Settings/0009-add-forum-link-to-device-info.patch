@@ -1,4 +1,4 @@
-From 1505e0f162d3771406d2a741e3ea245af99accf2 Mon Sep 17 00:00:00 2001
+From d0c9f0f3a75db4d152fc37d63487539d60226252 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Thu, 12 Sep 2013 18:50:49 +1000
 Subject: [PATCH] add forum link to device info
@@ -6,10 +6,10 @@ Subject: [PATCH] add forum link to device info
 Change-Id: I94d372a1d2c45fef4e543bef021f073dfe4deedb
 
 diff --git a/res/values/cm_strings.xml b/res/values/cm_strings.xml
-index 6eacfdc..b017ee4 100644
+index 1557ab5..aa73d5f 100644
 --- a/res/values/cm_strings.xml
 +++ b/res/values/cm_strings.xml
-@@ -14,6 +14,11 @@
+@@ -15,6 +15,11 @@
       limitations under the License.
  -->
  <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -36,7 +36,7 @@ index 2a800a0..c71951c 100644
 +
  </PreferenceScreen>
 diff --git a/src/com/android/settings/DeviceInfoSettings.java b/src/com/android/settings/DeviceInfoSettings.java
-index c86a724..e068635 100644
+index b6f2871..f8ae65c 100644
 --- a/src/com/android/settings/DeviceInfoSettings.java
 +++ b/src/com/android/settings/DeviceInfoSettings.java
 @@ -21,6 +21,7 @@ import android.app.AlertDialog;
@@ -47,15 +47,15 @@ index c86a724..e068635 100644
  import android.os.Build;
  import android.os.Bundle;
  import android.os.SELinux;
-@@ -30,6 +31,7 @@ import android.os.UserHandle;
- import android.preference.Preference;
+@@ -31,6 +32,7 @@ import android.preference.Preference;
  import android.preference.PreferenceGroup;
  import android.preference.PreferenceScreen;
+ import android.telephony.MSimTelephonyManager;
 +import android.preference.Preference.OnPreferenceClickListener;
  import android.util.Log;
  import android.widget.Toast;
  
-@@ -159,6 +161,16 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
+@@ -167,6 +169,16 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
          // Remove regulatory information if not enabled.
          removePreferenceIfBoolFalse(KEY_REGULATORY_INFO,
                  R.bool.config_show_regulatory_info);
