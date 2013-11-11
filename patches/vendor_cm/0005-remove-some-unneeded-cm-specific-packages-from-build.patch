@@ -1,4 +1,4 @@
-From eb5c20628079b08799b489fd1b7fc4846ef97d43 Mon Sep 17 00:00:00 2001
+From b1dbe4078ce81c5d0d776b93232cb15fba641a60 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Sat, 14 Jul 2012 12:05:53 +0300
 Subject: [PATCH] remove some unneeded cm specific packages from build
@@ -9,10 +9,10 @@ Conflicts:
 	config/common.mk
 
 diff --git a/config/common.mk b/config/common.mk
-index 2b48623..5d5264e 100644
+index 842c1a1..f33dd71 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -111,11 +111,6 @@ PRODUCT_COPY_FILES += \
+@@ -115,11 +115,6 @@ PRODUCT_COPY_FILES += \
      vendor/cm/prebuilt/common/bin/compcache:system/bin/compcache \
      vendor/cm/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
  
@@ -24,16 +24,16 @@ index 2b48623..5d5264e 100644
  # Enable SIP+VoIP on all targets
  PRODUCT_COPY_FILES += \
      frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
-@@ -207,7 +202,6 @@ PRODUCT_PACKAGES += \
- ifneq ($(TARGET_BUILD_VARIANT),user)
- 
+@@ -211,7 +206,6 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
  PRODUCT_PACKAGES += \
+     procmem \
+     procrank \
 -    CMUpdater \
      Superuser \
      su
  
 diff --git a/config/common_mini_phone.mk b/config/common_mini_phone.mk
-index df435a6..e7ccc98 100644
+index bbd4a86..d58e2bb 100644
 --- a/config/common_mini_phone.mk
 +++ b/config/common_mini_phone.mk
 @@ -4,9 +4,6 @@ $(call inherit-product, vendor/cm/config/common.mk)
