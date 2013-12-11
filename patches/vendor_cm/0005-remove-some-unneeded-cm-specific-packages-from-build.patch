@@ -1,18 +1,15 @@
-From b1dbe4078ce81c5d0d776b93232cb15fba641a60 Mon Sep 17 00:00:00 2001
+From 34f23fb44beb86459126b09f7b24864ad67295d8 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
-Date: Sat, 14 Jul 2012 12:05:53 +0300
+Date: Mon, 9 Dec 2013 15:37:10 +1100
 Subject: [PATCH] remove some unneeded cm specific packages from build
 
-Change-Id: I779f9c5e48f31aade1dcf4bf0df7652d0d6a1515
-
-Conflicts:
-	config/common.mk
+Change-Id: Iff28f576d8996d4b83efdb4de2b1a5294a0d6d0f
 
 diff --git a/config/common.mk b/config/common.mk
-index 842c1a1..f33dd71 100644
+index f2ba68d..9f81289 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -115,11 +115,6 @@ PRODUCT_COPY_FILES += \
+@@ -118,11 +118,6 @@ PRODUCT_COPY_FILES += \
      vendor/cm/prebuilt/common/bin/compcache:system/bin/compcache \
      vendor/cm/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
  
@@ -24,16 +21,17 @@ index 842c1a1..f33dd71 100644
  # Enable SIP+VoIP on all targets
  PRODUCT_COPY_FILES += \
      frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
-@@ -211,7 +206,6 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
- PRODUCT_PACKAGES += \
-     procmem \
-     procrank \
+@@ -161,8 +156,6 @@ PRODUCT_PACKAGES += \
+     Apollo \
+     CMFileManager \
+     LockClock \
 -    CMUpdater \
-     Superuser \
-     su
+-    CMFota \
+     CMAccount \
+     WhisperPush
  
 diff --git a/config/common_mini_phone.mk b/config/common_mini_phone.mk
-index bbd4a86..d58e2bb 100644
+index eff08fa..65689ff 100644
 --- a/config/common_mini_phone.mk
 +++ b/config/common_mini_phone.mk
 @@ -4,9 +4,6 @@ $(call inherit-product, vendor/cm/config/common.mk)

@@ -1,4 +1,4 @@
-From 59d41652f79e22492ef4887bfd6afbcb31515159 Mon Sep 17 00:00:00 2001
+From 0fba9784b6db262290a7560b590d37bc359a16d1 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Wed, 27 Mar 2013 10:01:20 +0200
 Subject: [PATCH] don't hide pie control settings
@@ -6,10 +6,10 @@ Subject: [PATCH] don't hide pie control settings
 Change-Id: Ib0a9b2029174a12fa96a86a9e05b8a867bdf3111
 
 diff --git a/res/values/cm_strings.xml b/res/values/cm_strings.xml
-index 2d4778f..835e9e0 100644
+index 3807be7..2e37409 100644
 --- a/res/values/cm_strings.xml
 +++ b/res/values/cm_strings.xml
-@@ -841,7 +841,7 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
+@@ -847,7 +847,7 @@ two in order to insert additional control points. \'Remove\' deletes the selecte
  
      <!-- Pie controls -->
      <string name="pie_control_title">Pie controls</string>
@@ -19,7 +19,7 @@ index 2d4778f..835e9e0 100644
      <string name="pie_control_sensitivity_title">Responsiveness</string>
      <string name="pie_control_sensitivity_low">Low</string>
 diff --git a/res/xml/system_ui_settings.xml b/res/xml/system_ui_settings.xml
-index 8b6730f..4f31a2a 100644
+index 6680790..fd298c3 100644
 --- a/res/xml/system_ui_settings.xml
 +++ b/res/xml/system_ui_settings.xml
 @@ -46,6 +46,11 @@
@@ -45,12 +45,12 @@ index 8b6730f..4f31a2a 100644
 -
      </PreferenceCategory>
  
- </PreferenceScreen>
+     <!-- Device Specific Touchscreen gestures -->
 diff --git a/src/com/android/settings/cyanogenmod/SystemUiSettings.java b/src/com/android/settings/cyanogenmod/SystemUiSettings.java
-index 0228eb9..6698ccf 100644
+index 5ef4712..384d0bc 100644
 --- a/src/com/android/settings/cyanogenmod/SystemUiSettings.java
 +++ b/src/com/android/settings/cyanogenmod/SystemUiSettings.java
-@@ -79,7 +79,6 @@ public class SystemUiSettings extends SettingsPreferenceFragment  implements
+@@ -84,7 +84,6 @@ public class SystemUiSettings extends SettingsPreferenceFragment  implements
              // Hide navigation bar category on devices without navigation bar
              if (!hasNavBar) {
                  prefScreen.removePreference(findPreference(CATEGORY_NAVBAR));

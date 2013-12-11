@@ -1,17 +1,15 @@
-From 823e9accbe651800d664b2b897924cbfa2c02e0e Mon Sep 17 00:00:00 2001
+From d91361253b4655978af56073fb53bf819135edd0 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
-Date: Thu, 8 Aug 2013 22:19:50 +0300
+Date: Wed, 11 Dec 2013 23:25:46 +1100
 Subject: [PATCH] expose 4.3's hidden app ops feature
 
-Use checkboxes instead of switches because of layout issues.
-
-Change-Id: I3cc8bae91b50e27c4ba193ea9edf9201741128b4
+Change-Id: I252d49fa3833b3f58cb061be7a06747485a901c0
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index 41f7e09..1f80655 100644
+index cc2c020..754c7ee 100644
 --- a/AndroidManifest.xml
 +++ b/AndroidManifest.xml
-@@ -899,16 +899,15 @@
+@@ -915,16 +915,15 @@
  
          <activity android:name="Settings$AppOpsSummaryActivity"
                  android:label="@string/app_ops_settings"
@@ -30,19 +28,6 @@ index 41f7e09..1f80655 100644
              </intent-filter>
              <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                  android:value="com.android.settings.applications.AppOpsSummary" />
-diff --git a/res/layout/app_ops_details_item.xml b/res/layout/app_ops_details_item.xml
-index 80ac7dc..6bfc61f 100644
---- a/res/layout/app_ops_details_item.xml
-+++ b/res/layout/app_ops_details_item.xml
-@@ -58,7 +58,7 @@
-         android:textAppearance="?android:attr/textAppearanceSmall"
-         android:textAlignment="viewStart" />
- 
--    <Switch android:id="@+id/switchWidget"
-+    <CheckBox android:id="@+id/switchWidget"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentEnd="true"
 diff --git a/res/xml/security_settings_app_cyanogenmod.xml b/res/xml/security_settings_app_cyanogenmod.xml
 index 357990d..031c84f 100644
 --- a/res/xml/security_settings_app_cyanogenmod.xml
@@ -58,24 +43,3 @@ index 357990d..031c84f 100644
              android:fragment="com.android.settings.cyanogenmod.privacyguard.PrivacyGuardManager"
              android:key="privacy_guard_manager"
              android:summary="@string/privacy_guard_manager_summary"
-diff --git a/src/com/android/settings/applications/AppOpsDetails.java b/src/com/android/settings/applications/AppOpsDetails.java
-index 2acad0e..3be1218 100644
---- a/src/com/android/settings/applications/AppOpsDetails.java
-+++ b/src/com/android/settings/applications/AppOpsDetails.java
-@@ -36,6 +36,7 @@ import android.util.Log;
- import android.view.LayoutInflater;
- import android.view.View;
- import android.view.ViewGroup;
-+import android.widget.CheckBox;
- import android.widget.CompoundButton;
- import android.widget.ImageView;
- import android.widget.LinearLayout;
-@@ -154,7 +155,7 @@ public class AppOpsDetails extends Fragment {
-                         entry.getSwitchText(mState));
-                 ((TextView)view.findViewById(R.id.op_time)).setText(
-                         entry.getTimeText(res, true));
--                Switch sw = (Switch)view.findViewById(R.id.switchWidget);
-+                CheckBox sw = (CheckBox)view.findViewById(R.id.switchWidget);
-                 final int switchOp = AppOpsManager.opToSwitch(firstOp.getOp());
-                 sw.setChecked(mAppOps.checkOp(switchOp, entry.getPackageOps().getUid(),
-                         entry.getPackageOps().getPackageName()) == AppOpsManager.MODE_ALLOWED);
