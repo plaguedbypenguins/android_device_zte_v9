@@ -99,10 +99,10 @@ BOARD_NEEDS_MEMORYHEAPPMEM := true
 # Dalvik
 TARGET_ARCH_LOWMEM := true
 
-# FM Radio
-BOARD_USES_STE_FMRADIO := true
-BOARD_HAVE_QCOM_FM := true
-COMMON_GLOBAL_CFLAGS += -DSTE_FM -DQCOM_FM_ENABLED
+## FM Radio
+#BOARD_USES_STE_FMRADIO := true
+#BOARD_HAVE_QCOM_FM := true
+#COMMON_GLOBAL_CFLAGS += -DSTE_FM -DQCOM_FM_ENABLED
 
 # cat /proc/mtd
 # dev:    size   erasesize  name
