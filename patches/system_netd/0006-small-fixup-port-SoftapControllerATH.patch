@@ -1,0 +1,29 @@
+From e6a14e7b966cd219618cc65324b40e89837d78f2 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Sat, 21 Dec 2013 15:05:52 +1100
+Subject: [PATCH] small fixup to forward port SoftapControllerATH.cpp
+
+Change-Id: Idfd39d7097ecab9997da58024530c96cb1926237
+
+diff --git a/SoftapControllerATH.cpp b/SoftapControllerATH.cpp
+index f9ad985..b34676b 100644
+--- a/SoftapControllerATH.cpp
++++ b/SoftapControllerATH.cpp
+@@ -258,7 +258,7 @@ int wifi_start_hostapd()
+      */
+     pi = __system_property_find(HOSTAPD_PROP_NAME);
+     if (pi != NULL) {
+-        serial = pi->serial;
++        serial = __system_property_serial(pi);
+     }
+ #endif
+     property_set("ctl.start", HOSTAPD_NAME);
+@@ -273,7 +273,7 @@ int wifi_start_hostapd()
+             __system_property_read(pi, NULL, supp_status);
+             if (strcmp(supp_status, "running") == 0) {
+                 return 0;
+-            } else if (pi->serial != serial &&
++            } else if (__system_property_serial(pi) != serial &&
+                     strcmp(supp_status, "stopped") == 0) {
+                 return -1;
+             }

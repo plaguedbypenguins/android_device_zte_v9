@@ -1,0 +1,20 @@
+From 490ba13d9a1594fcb2120f42aa077a08206adfb2 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Mon, 2 Dec 2013 18:57:39 +1100
+Subject: [PATCH] add -Wno-unused-parameter to make gcc 4.8 happy
+
+Change-Id: I293f80ea344214956364c2e316d48885524bf5ee
+
+diff --git a/Android.mk b/Android.mk
+index 4fc541c..3ed123c 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -16,7 +16,7 @@ ifneq ($(TARGET_USE_CUSTOM_LUN_FILE_PATH),)
+ common_cflags += -DCUSTOM_LUN_FILE=\"$(TARGET_USE_CUSTOM_LUN_FILE_PATH)\"
+ endif
+ 
+-common_cflags += -Werror
++common_cflags += -Werror -Wno-unused-parameter
+ 
+ common_src_files := \
+ 	VolumeManager.cpp \

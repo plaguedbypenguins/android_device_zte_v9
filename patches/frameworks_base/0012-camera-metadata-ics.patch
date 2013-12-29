@@ -1,0 +1,36 @@
+From 4e348e498ecc54484e270b6078c985670ef6006b Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Mon, 2 Dec 2013 12:11:26 +1100
+Subject: [PATCH] exclude metadata etc. from ics compat
+
+Change-Id: Iefba1044e731de06a042f0fb6b8adfb2812fdb4d
+
+diff --git a/core/jni/android_hardware_Camera.cpp b/core/jni/android_hardware_Camera.cpp
+index 6b28b28..97390d8 100644
+--- a/core/jni/android_hardware_Camera.cpp
++++ b/core/jni/android_hardware_Camera.cpp
+@@ -388,7 +388,7 @@ void JNICameraContext::setCallbackMode(JNIEnv *env, bool installed, bool manualM
+ static void android_hardware_Camera_setLongshot(JNIEnv *env, jobject thiz, jboolean enable)
+ {
+     ALOGV("setLongshot");
+-#ifdef QCOM_HARDWARE
++#if !defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
+     JNICameraContext* context;
+     status_t rc;
+     sp<Camera> camera = get_native_camera(env, thiz, &context);
+@@ -710,6 +710,7 @@ static void android_hardware_Camera_setHasPreviewCallback(JNIEnv *env, jobject t
+ static void android_hardware_Camera_setMetadataCb(JNIEnv *env, jobject thiz, jboolean mode)
+ {
+     ALOGV("setMetadataCb: mode:%d", (int)mode);
++#if !defined(QCOM_ICS_COMPAT)
+     JNICameraContext* context;
+     status_t rc;
+     sp<Camera> camera = get_native_camera(env, thiz, &context);
+@@ -723,6 +724,7 @@ static void android_hardware_Camera_setMetadataCb(JNIEnv *env, jobject thiz, jbo
+     if (rc != NO_ERROR) {
+         jniThrowException(env, "java/lang/RuntimeException", "set metadata mode failed");
+     }
++#endif
+ }
+ 
+ static void android_hardware_Camera_addCallbackBuffer(JNIEnv *env, jobject thiz, jbyteArray bytes, int msgType) {
