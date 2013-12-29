@@ -1,4 +1,4 @@
-From 51bdbc352dac6c49bd4608d9b0d0c3a17c6e2083 Mon Sep 17 00:00:00 2001
+From 44355ddb82b68b35beaf5fbc6237664aa8d8a702 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Tue, 8 Jan 2013 16:18:29 +0200
 Subject: [PATCH] swipe to switch notification changes
@@ -9,19 +9,19 @@ Subject: [PATCH] swipe to switch notification changes
 Change-Id: I789c855a004716ff1d3199bc8348811fb33f532d
 
 diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationPanelView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationPanelView.java
-index 767abf7..8af2155 100644
+index 14166cb..5d6e514 100644
 --- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationPanelView.java
 +++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/NotificationPanelView.java
-@@ -40,7 +40,7 @@ public class NotificationPanelView extends PanelView {
+@@ -39,7 +39,7 @@ public class NotificationPanelView extends PanelView {
      private static final float STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE = 0.2f;
      private static final float STATUS_BAR_SWIPE_TRIGGER_PERCENTAGE = 0.05f;
      private static final float STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE = 0.025f;
 -    private static final float STATUS_BAR_SWIPE_MOVE_PERCENTAGE = 0.2f;
 +    private static final float STATUS_BAR_SWIPE_MOVE_PERCENTAGE = 0.3f;
  
-     private Drawable mHandleBar;
-     private int mHandleBarHeight;
-@@ -134,9 +134,7 @@ public class NotificationPanelView extends PanelView {
+     Drawable mHandleBar;
+     int mHandleBarHeight;
+@@ -133,9 +133,7 @@ public class NotificationPanelView extends PanelView {
                  case MotionEvent.ACTION_DOWN:
                      mGestureStartX = event.getX(0);
                      mGestureStartY = event.getY(0);

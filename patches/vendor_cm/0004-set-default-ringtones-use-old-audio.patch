@@ -1,4 +1,4 @@
-From b4cfe4ef4e348d6dd978bba2517d5b3ae37848a2 Mon Sep 17 00:00:00 2001
+From a0e4aedd1a570883c7b43ccde8e2d49878b46d1c Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Thu, 2 Aug 2012 22:01:52 +0300
 Subject: [PATCH] set default ringtones, use old audio
@@ -17,7 +17,7 @@ index 5c46f7d..eff08fa 100644
  
  # Bring in all audio files
 -include frameworks/base/data/sounds/NewAudio.mk
-+include frameworks/base/data/sounds/OldAudio.mk
++include frameworks/base/data/sounds/OriginalAudio.mk
  
  # Include CM audio files
  include vendor/cm/config/cm_audio.mk

@@ -1,24 +1,25 @@
-From 69195834cfd7c17f54756070e8817f3a5ccb1f09 Mon Sep 17 00:00:00 2001
+From dd2d8e5c85327ede12bf840901545233f791e61d Mon Sep 17 00:00:00 2001
 From: Robin Humble <plaguedbypenguins@gmail.com>
-Date: Wed, 18 Sep 2013 13:55:31 +1000
+Date: Sun, 29 Dec 2013 14:02:01 +1100
 Subject: [PATCH] fix STE_FM define brokeneness
 
-Change-Id: Ife9a7632dccb9af0ef80053bb9437897279d4d22
+Change-Id: Ice7c6ed50dcb582c326782b9c7e2ad0e074d2c26
 
 diff --git a/include/hardware_legacy/AudioSystemLegacy.h b/include/hardware_legacy/AudioSystemLegacy.h
-index 5904af2..d4aacf1 100644
+index b0ca0b3..72818a7 100644
 --- a/include/hardware_legacy/AudioSystemLegacy.h
 +++ b/include/hardware_legacy/AudioSystemLegacy.h
-@@ -91,7 +91,7 @@ public:
+@@ -95,6 +95,9 @@ public:
  #ifdef QCOM_HARDWARE
          INCALL_MUSIC     = 10,
  #endif
--#ifdef QCOM_FM_ENABLED
 +#if defined(QCOM_FM_ENABLED) || defined(STE_FM)
-         FM               = 11,
- #endif
++        FM               = 11,
++#endif
          NUM_STREAM_TYPES
-@@ -309,8 +309,6 @@ public:
+     };
+ 
+@@ -299,8 +302,6 @@ public:
          DEVICE_IN_VOICE_CALL = 0x4000000,
          DEVICE_IN_BACK_MIC = 0x8000000,
          DEVICE_IN_ANC_HEADSET = 0x10000000,
@@ -27,16 +28,24 @@ index 5904af2..d4aacf1 100644
          DEVICE_IN_DEFAULT = DEVICE_IN_BUILTIN_MIC,
          DEVICE_IN_ANLG_DOCK_HEADSET = 0x80000000,
          DEVICE_IN_PROXY = DEVICE_IN_ANLG_DOCK_HEADSET,
-@@ -325,9 +323,9 @@ public:
+@@ -315,12 +316,19 @@ public:
          DEVICE_IN_BACK_MIC = 0x800000,
          DEVICE_IN_DEFAULT = 0x80000000,
  #endif
--
--#if defined (STE_FM)
--        DEVICE_IN_FM_RX = 0x1000000,
 +#if defined(QCOM_FM_ENABLED) || defined(STE_FM)
 +        DEVICE_IN_FM_RX = 0x20000000,
 +        DEVICE_IN_FM_RX_A2DP = 0x40000000,
- #endif
++#endif
  
          DEVICE_IN_ALL = (DEVICE_IN_COMMUNICATION | DEVICE_IN_AMBIENT | DEVICE_IN_BUILTIN_MIC |
+                 DEVICE_IN_BLUETOOTH_SCO_HEADSET | DEVICE_IN_WIRED_HEADSET | DEVICE_IN_AUX_DIGITAL |
++#if defined(QCOM_FM_ENABLED) || defined(STE_FM)
++                DEVICE_IN_FM_RX | DEVICE_IN_FM_RX_A2DP |
++#endif
+ #ifdef QCOM_HARDWARE
+                 DEVICE_IN_VOICE_CALL | DEVICE_IN_BACK_MIC | DEVICE_IN_ANC_HEADSET |
+-                DEVICE_IN_FM_RX | DEVICE_IN_FM_RX_A2DP | DEVICE_IN_DEFAULT |
++                DEVICE_IN_DEFAULT |
+                 DEVICE_IN_ANLG_DOCK_HEADSET | DEVICE_IN_PROXY)
+ #else
+                 DEVICE_IN_VOICE_CALL | DEVICE_IN_BACK_MIC | DEVICE_IN_DEFAULT)

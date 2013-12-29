@@ -1,4 +1,4 @@
-From 881a9b07de057c5a23e3ebc354d04a8c9ff27b10 Mon Sep 17 00:00:00 2001
+From 71878d5ebc2e90021e30b3732862d8d019ceb694 Mon Sep 17 00:00:00 2001
 From: Mingming Yin <mingming@codeaurora.org>
 Date: Wed, 18 Sep 2013 19:00:13 +1000
 Subject: [PATCH] qcom-fm: audio: add support for FM feature
@@ -107,7 +107,7 @@ index 0000000..f1c1694
 +
 +#endif  // FM_A2DP_WRITER_H_
 diff --git a/media/libmedia/AudioSystem.cpp b/media/libmedia/AudioSystem.cpp
-index a9628a3..0da3e68 100644
+index 1a1bfda..ab4651c 100644
 --- a/media/libmedia/AudioSystem.cpp
 +++ b/media/libmedia/AudioSystem.cpp
 @@ -1,5 +1,9 @@
@@ -121,22 +121,22 @@ index a9628a3..0da3e68 100644
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
 diff --git a/media/libmediaplayerservice/StagefrightRecorder.cpp b/media/libmediaplayerservice/StagefrightRecorder.cpp
-index eaa5627..e57f156 100644
+index a064448..2ebf792 100644
 --- a/media/libmediaplayerservice/StagefrightRecorder.cpp
 +++ b/media/libmediaplayerservice/StagefrightRecorder.cpp
-@@ -34,6 +34,9 @@
- #include <media/stagefright/AACWriter.h>
+@@ -36,6 +36,9 @@
  #include <media/stagefright/ExtendedWriter.h>
  #include <media/stagefright/WAVEWriter.h>
+ #endif
 +#ifdef QCOM_FM_ENABLED
 +#include <media/stagefright/FMA2DPWriter.h>
 +#endif
  #include <media/stagefright/CameraSource.h>
  #include <media/stagefright/CameraSourceTimeLapse.h>
  #include <media/stagefright/MPEG2TSWriter.h>
-@@ -825,6 +828,11 @@ status_t StagefrightRecorder::start() {
-         return UNKNOWN_ERROR;
-     }
+@@ -818,6 +821,11 @@ status_t StagefrightRecorder::start() {
+ 
+     status_t status = OK;
  
 +#ifdef QCOM_FM_ENABLED
 +    if(AUDIO_SOURCE_FM_RX_A2DP == mAudioSource)
@@ -146,9 +146,9 @@ index eaa5627..e57f156 100644
      switch (mOutputFormat) {
          case OUTPUT_FORMAT_DEFAULT:
          case OUTPUT_FORMAT_THREE_GPP:
-@@ -1152,6 +1160,23 @@ status_t StagefrightRecorder::startRawAudioRecording() {
-     return OK;
+@@ -1104,6 +1112,23 @@ status_t StagefrightRecorder::startWAVERecording() {
  }
+ #endif
  
 +#ifdef QCOM_FM_ENABLED
 +status_t StagefrightRecorder::startFMA2DPWriter() {
@@ -167,30 +167,30 @@ index eaa5627..e57f156 100644
 +}
 +#endif
 +
- status_t StagefrightRecorder::startRTPRecording() {
-     CHECK_EQ(mOutputFormat, OUTPUT_FORMAT_RTP_AVP);
- 
+ status_t StagefrightRecorder::startRawAudioRecording() {
+     if (mAudioSource >= AUDIO_SOURCE_CNT) {
+         ALOGE("Invalid audio source: %d", mAudioSource);
 diff --git a/media/libmediaplayerservice/StagefrightRecorder.h b/media/libmediaplayerservice/StagefrightRecorder.h
-index 4ba8d9d..4526581 100644
+index 2e834b4..8ba1ffa 100644
 --- a/media/libmediaplayerservice/StagefrightRecorder.h
 +++ b/media/libmediaplayerservice/StagefrightRecorder.h
-@@ -141,6 +141,9 @@ private:
-         sp<MetaData> *meta);
-     status_t startMPEG4Recording();
-     status_t startAMRRecording();
+@@ -138,6 +138,9 @@ private:
+ #ifdef QCOM_HARDWARE
+     status_t startWAVERecording();
+ #endif
 +#ifdef QCOM_FM_ENABLED
 +    status_t startFMA2DPWriter();
 +#endif
-     status_t startAACRecording();
-     status_t startWAVERecording();
      status_t startRawAudioRecording();
+     status_t startRTPRecording();
+     status_t startMPEG2TSRecording();
 diff --git a/media/libstagefright/Android.mk b/media/libstagefright/Android.mk
-index 3067065..efcd167 100644
+index 2565c13..be8f107 100644
 --- a/media/libstagefright/Android.mk
 +++ b/media/libstagefright/Android.mk
-@@ -90,6 +90,11 @@ LOCAL_SRC_FILES:=                         \
-         QCUtils.cpp                       \
-         ResourceManager.cpp             \
+@@ -63,6 +63,11 @@ LOCAL_SRC_FILES:=                         \
+         mp4/FragmentedMP4Parser.cpp       \
+         mp4/TrackFragment.cpp             \
  
 +ifeq ($(BOARD_HAVE_QCOM_FM),true)
 +LOCAL_SRC_FILES+=                         \
@@ -530,7 +530,7 @@ index 0000000..be7bb86
 +
 +}  // namespace android
 diff --git a/services/audioflinger/AudioPolicyService.cpp b/services/audioflinger/AudioPolicyService.cpp
-index eb474c3..11ca183 100644
+index 4cb6df5..9ab8adb 100644
 --- a/services/audioflinger/AudioPolicyService.cpp
 +++ b/services/audioflinger/AudioPolicyService.cpp
 @@ -1,5 +1,9 @@
@@ -544,7 +544,7 @@ index eb474c3..11ca183 100644
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
 diff --git a/services/audioflinger/AudioPolicyService.h b/services/audioflinger/AudioPolicyService.h
-index 3e01713..ecbee5b 100644
+index ae053a9..fc25570 100644
 --- a/services/audioflinger/AudioPolicyService.h
 +++ b/services/audioflinger/AudioPolicyService.h
 @@ -1,5 +1,9 @@

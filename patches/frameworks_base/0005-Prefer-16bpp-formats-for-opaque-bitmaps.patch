@@ -1,4 +1,4 @@
-From 17a827f0e7fec4cda1ee9c9fa538776cba347465 Mon Sep 17 00:00:00 2001
+From f386f2b898dca6d609f3dc59349962477cf59f2e Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Mon, 28 Jan 2013 06:44:58 +0100
 Subject: [PATCH] Prefer 16bpp formats for opaque bitmaps
@@ -14,10 +14,10 @@ devices, and usually does not result in reduced visual quality.
 Change-Id: Id1b7e0529461d23213e31c25b74d4da5d08f0855
 
 diff --git a/core/java/android/view/ViewRootImpl.java b/core/java/android/view/ViewRootImpl.java
-index 6b2ed91..6903d62 100644
+index bc0d7e3..e7acd80 100644
 --- a/core/java/android/view/ViewRootImpl.java
 +++ b/core/java/android/view/ViewRootImpl.java
-@@ -1193,7 +1193,7 @@ public final class ViewRootImpl implements ViewParent,
+@@ -1203,7 +1203,7 @@ public final class ViewRootImpl implements ViewParent,
              // We used to use the following condition to choose 32 bits drawing caches:
              // PixelFormat.hasAlpha(lp.format) || lp.format == PixelFormat.RGBX_8888
              // However, windows are now always 32 bits by default, so choose 32 bits
@@ -27,10 +27,10 @@ index 6b2ed91..6903d62 100644
              attachInfo.mWindowVisibility = viewVisibility;
              attachInfo.mRecomputeGlobalAttributes = false;
 diff --git a/graphics/java/android/graphics/Bitmap.java b/graphics/java/android/graphics/Bitmap.java
-index 89abdef..06bc3eb 100644
+index 8c38d25..80545cb 100644
 --- a/graphics/java/android/graphics/Bitmap.java
 +++ b/graphics/java/android/graphics/Bitmap.java
-@@ -611,6 +611,7 @@ public final class Bitmap implements Parcelable {
+@@ -722,6 +722,7 @@ public final class Bitmap implements Parcelable {
              canvas.concat(m);
  
              paint = new Paint();
@@ -39,7 +39,7 @@ index 89abdef..06bc3eb 100644
              if (transformed) {
                  paint.setAntiAlias(true);
 diff --git a/graphics/java/android/graphics/BitmapFactory.java b/graphics/java/android/graphics/BitmapFactory.java
-index f155cd2..9c5e932 100644
+index b08ce09..df05063 100644
 --- a/graphics/java/android/graphics/BitmapFactory.java
 +++ b/graphics/java/android/graphics/BitmapFactory.java
 @@ -41,7 +41,7 @@ public class BitmapFactory {
@@ -49,9 +49,9 @@ index f155cd2..9c5e932 100644
 -            inDither = false;
 +            inDither = true;
              inScaled = true;
+             inPremultiplied = true;
          }
- 
-@@ -105,7 +105,7 @@ public class BitmapFactory {
+@@ -136,7 +136,7 @@ public class BitmapFactory {
           * Image are loaded with the {@link Bitmap.Config#ARGB_8888} config by
           * default.
           */
@@ -59,4 +59,4 @@ index f155cd2..9c5e932 100644
 +        public Bitmap.Config inPreferredConfig = Bitmap.Config.RGB_565;
  
          /**
-          * If dither is true, the decoder will attempt to dither the decoded
+          * If true (which is the default), the resulting bitmap will have its

@@ -1,4 +1,4 @@
-From 14152ddb408cf514563c24c93c75b1a3204b8019 Mon Sep 17 00:00:00 2001
+From ec331252e62054809792e09c754ce045568804ee Mon Sep 17 00:00:00 2001
 From: Conn O'Griofa <connogriofa@gmail.com>
 Date: Wed, 7 Nov 2012 19:29:04 -0200
 Subject: [PATCH] libhardware_legacy/wifi: add workaround for ar6000 driver
@@ -15,11 +15,11 @@ Backported from CM7.
 Change-Id: I11fa55ab23295d40041df097450b73484f52b042
 
 diff --git a/wifi/wifi.c b/wifi/wifi.c
-index 764964c..0046c67 100644
+index 5663c6d..743748f 100644
 --- a/wifi/wifi.c
 +++ b/wifi/wifi.c
-@@ -894,6 +894,16 @@ int wifi_start_supplicant(int p2p_supported)
-         serial = pi->serial;
+@@ -839,6 +839,16 @@ int wifi_start_supplicant(int p2p_supported)
+         serial = __system_property_serial(pi);
      }
  #endif
 +

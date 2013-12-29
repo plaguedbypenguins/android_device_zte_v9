@@ -1,15 +1,15 @@
-From 34f23fb44beb86459126b09f7b24864ad67295d8 Mon Sep 17 00:00:00 2001
+From 1674071753f7151a348a4a0578d2d37e4d00759c Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
-Date: Mon, 9 Dec 2013 15:37:10 +1100
+Date: Mon, 30 Dec 2013 01:37:52 +1100
 Subject: [PATCH] remove some unneeded cm specific packages from build
 
-Change-Id: Iff28f576d8996d4b83efdb4de2b1a5294a0d6d0f
+Change-Id: Ia182425f8b86756652b7ace7a12c586f7cd4f6b9
 
 diff --git a/config/common.mk b/config/common.mk
-index f2ba68d..9f81289 100644
+index 60bc6f7..9ffe26b 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -118,11 +118,6 @@ PRODUCT_COPY_FILES += \
+@@ -102,11 +102,6 @@ PRODUCT_COPY_FILES += \
      vendor/cm/prebuilt/common/bin/compcache:system/bin/compcache \
      vendor/cm/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
  
@@ -21,26 +21,60 @@ index f2ba68d..9f81289 100644
  # Enable SIP+VoIP on all targets
  PRODUCT_COPY_FILES += \
      frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
-@@ -161,8 +156,6 @@ PRODUCT_PACKAGES += \
+@@ -130,7 +125,6 @@ PRODUCT_PACKAGES += \
+ 
+ # Optional CM packages
+ PRODUCT_PACKAGES += \
+-    VoicePlus \
+     VoiceDialer \
+     SoundRecorder \
+     Basic \
+@@ -144,12 +138,9 @@ PRODUCT_PACKAGES += \
+     DSPManager \
+     libcyanogen-dsp \
+     audio_effects.conf \
+-    CMWallpapers \
      Apollo \
      CMFileManager \
      LockClock \
 -    CMUpdater \
 -    CMFota \
-     CMAccount \
-     WhisperPush
+     CMAccount
  
-diff --git a/config/common_mini_phone.mk b/config/common_mini_phone.mk
-index eff08fa..65689ff 100644
---- a/config/common_mini_phone.mk
-+++ b/config/common_mini_phone.mk
-@@ -4,9 +4,6 @@ $(call inherit-product, vendor/cm/config/common.mk)
+ # CM Hardware Abstraction Framework
+diff --git a/config/common_full.mk b/config/common_full.mk
+index 038338e..b8da86a 100644
+--- a/config/common_full.mk
++++ b/config/common_full.mk
+@@ -2,30 +2,10 @@
+ $(call inherit-product, vendor/cm/config/common.mk)
+ 
  # Bring in all audio files
- include frameworks/base/data/sounds/OldAudio.mk
+-include frameworks/base/data/sounds/NewAudio.mk
++include frameworks/base/data/sounds/OriginalAudio.mk
  
--# Include CM audio files
--include vendor/cm/config/cm_audio.mk
+ # Extra Ringtones
+ include frameworks/base/data/sounds/AudioPackageNewWave.mk
+ 
+ # Include CM audio files
+ include vendor/cm/config/cm_audio.mk
 -
- # Default ringtone
- PRODUCT_PROPERTY_OVERRIDES += \
-     ro.config.ringtone=Ring_Digital_02.ogg \
+-# Optional CM packages
+-PRODUCT_PACKAGES += \
+-    Galaxy4 \
+-    HoloSpiralWallpaper \
+-    LiveWallpapers \
+-    LiveWallpapersPicker \
+-    MagicSmokeWallpapers \
+-    NoiseField \
+-    PhaseBeam \
+-    VisualizationWallpapers \
+-    PhotoTable
+-
+-PRODUCT_PACKAGES += \
+-    VideoEditor \
+-    libvideoeditor_jni \
+-    libvideoeditor_core \
+-    libvideoeditor_osal \
+-    libvideoeditor_videofilters \
+-    libvideoeditorplayer
