@@ -50,16 +50,7 @@ PRODUCT_PACKAGES += \
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
-    Galaxy4 \
-    HoloSpiralWallpaper \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    librs_jni \
-    MagicSmokeWallpapers \
-    NoiseField \
-    PhaseBeam \
-    VisualizationWallpapers \
-    PhotoTable
+    LiveWallpapers
 
 ## FM Radio
 #PRODUCT_PACKAGES += \
