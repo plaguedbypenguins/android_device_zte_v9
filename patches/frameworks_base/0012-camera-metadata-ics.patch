@@ -1,28 +1,19 @@
-From 4e348e498ecc54484e270b6078c985670ef6006b Mon Sep 17 00:00:00 2001
+From 33dc63664a92530113c1b2d6a8c0e8199c9a46e9 Mon Sep 17 00:00:00 2001
 From: Robin Humble <plaguedbypenguins@gmail.com>
-Date: Mon, 2 Dec 2013 12:11:26 +1100
-Subject: [PATCH] exclude metadata etc. from ics compat
+Date: Sun, 5 Jan 2014 16:20:14 +1100
+Subject: [PATCH] exclude metadata from ics compat
 
-Change-Id: Iefba1044e731de06a042f0fb6b8adfb2812fdb4d
+Change-Id: Ic1a3e7dba98864646b13b5883a1ffc5a644b9488
 
 diff --git a/core/jni/android_hardware_Camera.cpp b/core/jni/android_hardware_Camera.cpp
-index 6b28b28..97390d8 100644
+index 17967e0..12b0d2f 100644
 --- a/core/jni/android_hardware_Camera.cpp
 +++ b/core/jni/android_hardware_Camera.cpp
-@@ -388,7 +388,7 @@ void JNICameraContext::setCallbackMode(JNIEnv *env, bool installed, bool manualM
- static void android_hardware_Camera_setLongshot(JNIEnv *env, jobject thiz, jboolean enable)
- {
-     ALOGV("setLongshot");
--#ifdef QCOM_HARDWARE
-+#if !defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
-     JNICameraContext* context;
-     status_t rc;
-     sp<Camera> camera = get_native_camera(env, thiz, &context);
 @@ -710,6 +710,7 @@ static void android_hardware_Camera_setHasPreviewCallback(JNIEnv *env, jobject t
  static void android_hardware_Camera_setMetadataCb(JNIEnv *env, jobject thiz, jboolean mode)
  {
      ALOGV("setMetadataCb: mode:%d", (int)mode);
-+#if !defined(QCOM_ICS_COMPAT)
++#if defined(QCOM_HARDWARE) && !defined(ICS_CAMERA_BLOB)
      JNICameraContext* context;
      status_t rc;
      sp<Camera> camera = get_native_camera(env, thiz, &context);
