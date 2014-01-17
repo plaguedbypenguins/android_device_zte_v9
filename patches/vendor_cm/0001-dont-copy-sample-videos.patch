@@ -1,4 +1,4 @@
-From 1d2385577d89ebeef57dc72489f185e720adfa85 Mon Sep 17 00:00:00 2001
+From 6ed79020a812b7082b03818bc94c561a06a7f6ac Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Wed, 3 Apr 2013 21:26:39 +0300
 Subject: [PATCH] don't copy sample videos
@@ -6,12 +6,12 @@ Subject: [PATCH] don't copy sample videos
 Change-Id: I9140d38a521601a1e9fc044b88de94308ae1687f
 
 diff --git a/config/common_full.mk b/config/common_full.mk
-index ad73472..1919b52 100644
+index dbc31d8..2476503 100644
 --- a/config/common_full.mk
 +++ b/config/common_full.mk
-@@ -7,9 +7,6 @@ include frameworks/base/data/sounds/NewAudio.mk
- # Extra Ringtones
- include frameworks/base/data/sounds/AudioPackageNewWave.mk
+@@ -1,9 +1,6 @@
+ # Inherit common CM stuff
+ $(call inherit-product, vendor/cm/config/common.mk)
  
 -# Bring in all video files
 -$(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)

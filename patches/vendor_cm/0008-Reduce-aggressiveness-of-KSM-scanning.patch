@@ -1,4 +1,4 @@
-From c338de98146cd9e69c8cf34c62afbaa0afbef36e Mon Sep 17 00:00:00 2001
+From 2eb25c641314081ed1c834d51cb1572b9be5f831 Mon Sep 17 00:00:00 2001
 From: Grigori Goronzy <greg@blackbox>
 Date: Tue, 8 Jan 2013 00:33:47 +0100
 Subject: [PATCH] Reduce aggressiveness of KSM scanning
@@ -9,15 +9,15 @@ additional CPU load and power drain.
 Change-Id: Ib7658d23152e6674a8b56cdcd6be14f75737c07c
 
 diff --git a/prebuilt/common/etc/init.local.rc b/prebuilt/common/etc/init.local.rc
-index 55b9cb2..0272b01 100644
+index 3becf0e..0bd3cba 100644
 --- a/prebuilt/common/etc/init.local.rc
 +++ b/prebuilt/common/etc/init.local.rc
-@@ -90,8 +90,8 @@ on boot
+@@ -96,8 +96,8 @@ on boot
      chmod 0664 /sys/kernel/mm/ksm/sleep_millisecs
      chown root system /sys/kernel/mm/ksm/run
      chmod 0664 /sys/kernel/mm/ksm/run
--    write /sys/kernel/mm/ksm/sleep_millisecs 1500
--    write /sys/kernel/mm/ksm/pages_to_scan 256
+-    write /sys/kernel/mm/ksm/sleep_millisecs 500
+-    write /sys/kernel/mm/ksm/pages_to_scan 100
 +    write /sys/kernel/mm/ksm/sleep_millisecs 3000
 +    write /sys/kernel/mm/ksm/pages_to_scan 128
  

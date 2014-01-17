@@ -1,4 +1,4 @@
-From 1674071753f7151a348a4a0578d2d37e4d00759c Mon Sep 17 00:00:00 2001
+From 28e1ef274a0df78166faf81adeacb8934e62f0f2 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Mon, 30 Dec 2013 01:37:52 +1100
 Subject: [PATCH] remove some unneeded cm specific packages from build
@@ -6,12 +6,12 @@ Subject: [PATCH] remove some unneeded cm specific packages from build
 Change-Id: Ia182425f8b86756652b7ace7a12c586f7cd4f6b9
 
 diff --git a/config/common.mk b/config/common.mk
-index 60bc6f7..9ffe26b 100644
+index e3c5061..566dbaa 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -102,11 +102,6 @@ PRODUCT_COPY_FILES += \
-     vendor/cm/prebuilt/common/bin/compcache:system/bin/compcache \
-     vendor/cm/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
+@@ -97,11 +97,6 @@ PRODUCT_COPY_FILES += \
+ PRODUCT_COPY_FILES += \
+     vendor/cm/prebuilt/common/etc/init.local.rc:root/init.cm.rc
  
 -# Bring in camera effects
 -PRODUCT_COPY_FILES +=  \
@@ -21,7 +21,7 @@ index 60bc6f7..9ffe26b 100644
  # Enable SIP+VoIP on all targets
  PRODUCT_COPY_FILES += \
      frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
-@@ -130,7 +125,6 @@ PRODUCT_PACKAGES += \
+@@ -125,7 +120,6 @@ PRODUCT_PACKAGES += \
  
  # Optional CM packages
  PRODUCT_PACKAGES += \
@@ -29,7 +29,7 @@ index 60bc6f7..9ffe26b 100644
      VoiceDialer \
      SoundRecorder \
      Basic \
-@@ -144,12 +138,9 @@ PRODUCT_PACKAGES += \
+@@ -139,12 +133,9 @@ PRODUCT_PACKAGES += \
      DSPManager \
      libcyanogen-dsp \
      audio_effects.conf \
@@ -43,18 +43,10 @@ index 60bc6f7..9ffe26b 100644
  
  # CM Hardware Abstraction Framework
 diff --git a/config/common_full.mk b/config/common_full.mk
-index 038338e..b8da86a 100644
+index 2476503..d68e710 100644
 --- a/config/common_full.mk
 +++ b/config/common_full.mk
-@@ -2,30 +2,10 @@
- $(call inherit-product, vendor/cm/config/common.mk)
- 
- # Bring in all audio files
--include frameworks/base/data/sounds/NewAudio.mk
-+include frameworks/base/data/sounds/OriginalAudio.mk
- 
- # Extra Ringtones
- include frameworks/base/data/sounds/AudioPackageNewWave.mk
+@@ -3,23 +3,3 @@ $(call inherit-product, vendor/cm/config/common.mk)
  
  # Include CM audio files
  include vendor/cm/config/cm_audio.mk
