@@ -1,4 +1,4 @@
-From 28e1ef274a0df78166faf81adeacb8934e62f0f2 Mon Sep 17 00:00:00 2001
+From c4e226733495ae2145ee7584c31fb101b3019c20 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Mon, 30 Dec 2013 01:37:52 +1100
 Subject: [PATCH] remove some unneeded cm specific packages from build
@@ -6,7 +6,7 @@ Subject: [PATCH] remove some unneeded cm specific packages from build
 Change-Id: Ia182425f8b86756652b7ace7a12c586f7cd4f6b9
 
 diff --git a/config/common.mk b/config/common.mk
-index e3c5061..566dbaa 100644
+index 7648208..8cc79da 100644
 --- a/config/common.mk
 +++ b/config/common.mk
 @@ -97,11 +97,6 @@ PRODUCT_COPY_FILES += \
@@ -26,10 +26,10 @@ index e3c5061..566dbaa 100644
  # Optional CM packages
  PRODUCT_PACKAGES += \
 -    VoicePlus \
-     VoiceDialer \
-     SoundRecorder \
      Basic \
-@@ -139,12 +133,9 @@ PRODUCT_PACKAGES += \
+     libemoji
+ 
+@@ -137,12 +131,9 @@ PRODUCT_PACKAGES += \
      DSPManager \
      libcyanogen-dsp \
      audio_effects.conf \
@@ -43,16 +43,13 @@ index e3c5061..566dbaa 100644
  
  # CM Hardware Abstraction Framework
 diff --git a/config/common_full.mk b/config/common_full.mk
-index 2476503..d68e710 100644
+index 3bd86f1..f457d63 100644
 --- a/config/common_full.mk
 +++ b/config/common_full.mk
-@@ -3,23 +3,3 @@ $(call inherit-product, vendor/cm/config/common.mk)
+@@ -6,26 +6,9 @@ include vendor/cm/config/cm_audio.mk
  
- # Include CM audio files
- include vendor/cm/config/cm_audio.mk
--
--# Optional CM packages
--PRODUCT_PACKAGES += \
+ # Optional CM packages
+ PRODUCT_PACKAGES += \
 -    Galaxy4 \
 -    HoloSpiralWallpaper \
 -    LiveWallpapers \
@@ -61,8 +58,10 @@ index 2476503..d68e710 100644
 -    NoiseField \
 -    PhaseBeam \
 -    VisualizationWallpapers \
--    PhotoTable
--
+-    PhotoTable \
+     VoiceDialer \
+     SoundRecorder
+ 
 -PRODUCT_PACKAGES += \
 -    VideoEditor \
 -    libvideoeditor_jni \
@@ -70,3 +69,7 @@ index 2476503..d68e710 100644
 -    libvideoeditor_osal \
 -    libvideoeditor_videofilters \
 -    libvideoeditorplayer
+-
+ # Extra tools in CM
+ PRODUCT_PACKAGES += \
+     vim
