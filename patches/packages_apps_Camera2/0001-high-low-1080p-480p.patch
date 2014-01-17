@@ -1,0 +1,70 @@
+From 8540f623f9f561c0517fb1919965195a5dbcf3a5 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 16 Jan 2014 01:53:30 +1100
+Subject: [PATCH] handle high/low quality video and also variations in
+ 1080p/480p definitions
+
+Change-Id: I414b4314ac7ad015ee5762dc1d64e8d45b6b8cef
+
+diff --git a/src/com/android/camera/CameraSettings.java b/src/com/android/camera/CameraSettings.java
+index 021ebb2..50f3cd1 100644
+--- a/src/com/android/camera/CameraSettings.java
++++ b/src/com/android/camera/CameraSettings.java
+@@ -786,21 +786,42 @@ public class CameraSettings {
+               supported.add(Integer.toString(CamcorderProfile.QUALITY_4kUHD));
+            }
+         }
++
++        // the google 1080p definition allows variation in height
+         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_1080P)) {
+            if (checkSupportedVideoQuality(parameters,1920,1080)){
+               supported.add(Integer.toString(CamcorderProfile.QUALITY_1080P));
+            }
+         }
++        else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_1080P)) {
++           if (checkSupportedVideoQuality(parameters,1920,1088)){
++              supported.add(Integer.toString(CamcorderProfile.QUALITY_1080P));
++           }
++        }
++
+         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P)) {
+            if (checkSupportedVideoQuality(parameters,1280,720)){
+               supported.add(Integer.toString(CamcorderProfile.QUALITY_720P));
+            }
+         }
++
++        // the google 480p definition allows variation in width
+         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
+            if (checkSupportedVideoQuality(parameters,720,480)){
+               supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
+            }
+         }
++        else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
++           if (checkSupportedVideoQuality(parameters,704,480)){
++              supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
++           }
++        }
++        else if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
++           if (checkSupportedVideoQuality(parameters,640,480)){
++              supported.add(Integer.toString(CamcorderProfile.QUALITY_480P));
++           }
++        }
++
+         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_FWVGA)) {
+            if (checkSupportedVideoQuality(parameters,864,480)){
+               supported.add(Integer.toString(CamcorderProfile.QUALITY_FWVGA));
+@@ -832,6 +853,14 @@ public class CameraSettings {
+            }
+         }
+ 
++        // high and low are always permitted
++        if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_HIGH)) {
++           supported.add(Integer.toString(CamcorderProfile.QUALITY_HIGH));
++        }
++        if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_LOW)) {
++           supported.add(Integer.toString(CamcorderProfile.QUALITY_LOW));
++        }
++
+     }
+     public static int getVideoDurationInMillis(String quality) {
+         if (VIDEO_QUALITY_MMS.equals(quality)) {

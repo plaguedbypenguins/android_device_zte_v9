@@ -1,0 +1,25 @@
+From 02856f5c22c67a37fe3f271374771ee163f80fd5 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 16 Jan 2014 01:50:59 +1100
+Subject: [PATCH] omxcodec: fix infinite loop
+
+no idea what the root cause of this is, but this lets movie recording work on
+msm7x27.
+
+Change-Id: Icfcc774346a3815280faf37e8d72c17d43f6b5b4
+
+diff --git a/media/libstagefright/OMXCodec.cpp b/media/libstagefright/OMXCodec.cpp
+index f41565a..2028e08 100644
+--- a/media/libstagefright/OMXCodec.cpp
++++ b/media/libstagefright/OMXCodec.cpp
+@@ -5431,6 +5431,10 @@ status_t QueryCodec(
+         if (err != OK) {
+             break;
+         }
++        if (index > 999) {
++            ALOGE("QueryCodec: Color format query: portFormat.nIndex > 999 is not sane.");
++            break;
++        }
+         caps->mColorFormats.push(portFormat.eColorFormat);
+     }
+ 

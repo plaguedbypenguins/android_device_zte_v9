@@ -1,0 +1,20 @@
+From f4eb87fec76aa7e9fb68fc6fdc0e789f69d91b63 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Thu, 16 Jan 2014 01:49:55 +1100
+Subject: [PATCH] omxcodec: fix typo
+
+Change-Id: Ia057f6258a4c84a2ead7e672f4d6b92ec62aaf5d
+
+diff --git a/media/libstagefright/OMXCodec.cpp b/media/libstagefright/OMXCodec.cpp
+index 1b029b6..f41565a 100644
+--- a/media/libstagefright/OMXCodec.cpp
++++ b/media/libstagefright/OMXCodec.cpp
+@@ -366,7 +366,7 @@ uint32_t OMXCodec::getComponentQuirks(
+     }
+ #ifdef QCOM_HARDWARE
+     if (list->codecHasQuirk(
+-                index, "requies-loaded-to-idle-after-allocation")) {
++                index, "requires-loaded-to-idle-after-allocation")) {
+         quirks |= kRequiresLoadedToIdleAfterAllocation;
+     }
+     if (list->codecHasQuirk(
