@@ -119,6 +119,9 @@ TARGET_ARCH_LOWMEM := true
 #BOARD_HAVE_QCOM_FM := true
 #COMMON_GLOBAL_CFLAGS += -DSTE_FM -DQCOM_FM_ENABLED
 
+# OTA script extras file (build/tools/releasetools)
+TARGET_OTA_EXTRAS_FILE := device/zte/v9/releasetools-extras.txt
+
 # cat /proc/mtd
 # dev:    size   erasesize  name
 # mtd0: 00500000 00020000 "recovery"
