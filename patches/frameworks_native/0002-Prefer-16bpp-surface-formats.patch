@@ -1,0 +1,57 @@
+From 5a5b83e949dc8eb1dd806b6beabcacd226e4d63f Mon Sep 17 00:00:00 2001
+From: Grigori Goronzy <greg@blackbox>
+Date: Wed, 22 Jan 2014 02:33:35 +1100
+Subject: [PATCH] Prefer 16bpp surface formats
+
+Adds a property to use RGB565 surface formats for the opaque
+surface default, enabled by default.
+
+Change-Id: I80ae33b231d097e6f33b724cd61bbcc55f948b91
+
+diff --git a/services/surfaceflinger/SurfaceFlinger.cpp b/services/surfaceflinger/SurfaceFlinger.cpp
+index 339e798..3653c19 100644
+--- a/services/surfaceflinger/SurfaceFlinger.cpp
++++ b/services/surfaceflinger/SurfaceFlinger.cpp
+@@ -152,6 +152,7 @@ SurfaceFlinger::SurfaceFlinger()
+         mDebugDDMS(0),
+         mDebugDisableHWC(0),
+         mDebugDisableTransformHint(0),
++        mPrefer16bpp(0),
+         mDebugInSwapBuffers(0),
+         mLastSwapBufferTime(0),
+         mDebugInTransaction(0),
+@@ -181,6 +182,10 @@ SurfaceFlinger::SurfaceFlinger()
+             mDebugDDMS = 0;
+         }
+     }
++
++    property_get("persist.sys.prefer_16bpp", value, "1");
++    mPrefer16bpp = atoi(value);
++
+     ALOGI_IF(mDebugRegion, "showupdates enabled");
+     ALOGI_IF(mDebugDDMS, "DDMS debugging enabled");
+ 
+@@ -2261,7 +2266,10 @@ status_t SurfaceFlinger::createNormalLayer(const sp<Client>& client,
+ #ifdef NO_RGBX_8888
+         format = PIXEL_FORMAT_RGB_565;
+ #else
+-        format = PIXEL_FORMAT_RGBX_8888;
++        if (mPrefer16bpp)
++            format = PIXEL_FORMAT_RGB_565;
++        else
++            format = PIXEL_FORMAT_RGBX_8888;
+ #endif
+         break;
+     }
+diff --git a/services/surfaceflinger/SurfaceFlinger.h b/services/surfaceflinger/SurfaceFlinger.h
+index ada2914..19d0c03 100644
+--- a/services/surfaceflinger/SurfaceFlinger.h
++++ b/services/surfaceflinger/SurfaceFlinger.h
+@@ -479,6 +479,7 @@ private:
+     int mDebugDDMS;
+     int mDebugDisableHWC;
+     int mDebugDisableTransformHint;
++    int mPrefer16bpp;
+     volatile nsecs_t mDebugInSwapBuffers;
+     nsecs_t mLastSwapBufferTime;
+     volatile nsecs_t mDebugInTransaction;
