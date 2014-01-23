@@ -40,13 +40,13 @@ TARGET_BOOTLOADER_BOARD_NAME := v9
 TARGET_SPECIFIC_HEADER_PATH := device/zte/v9/include
 
 # Recovery
-#TARGET_NO_RECOVERY := true
 BOARD_CUSTOM_GRAPHICS := ../../../device/zte/v9/recovery/graphics.c
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/zte/v9/recovery/recovery_ui.c
-TARGET_PREBUILT_RECOVERY_KERNEL := device/zte/v9/recovery/recovery_kernel
 TARGET_RECOVERY_INITRC := device/zte/v9/recovery/recovery.rc
 TARGET_RECOVERY_FSTAB := device/zte/v9/ramdisk/fstab.v9
 RECOVERY_FSTAB_VERSION := 2
+COMMON_GLOBAL_CFLAGS += -DRECOVERY_CANT_USE_CONFIG_EXT4_FS_XATTR
+SKIP_SET_METADATA := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/zte/zte-kernel-msm7x27
@@ -134,7 +134,7 @@ TARGET_OTA_EXTRAS_FILE := device/zte/v9/releasetools-extras.txt
 # mtd7: 01500000 00020000 "oem"
 # mtd8: 00180000 00020000 "persist"
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 0x00500000
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00800000   # really 0x00500000 but the kernel is too fat now and we use recovery_kernel instead anyway
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00500000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 0x0dc00000 
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x0a280000
 BOARD_FLASH_BLOCK_SIZE := 131072
