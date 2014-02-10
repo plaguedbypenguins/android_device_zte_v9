@@ -6,6 +6,7 @@ lib/hw/gps.goldfish.so
 lib/hw/lights.goldfish.so
 lib/hw/power.goldfish.so
 lib/hw/sensors.goldfish.so
+lib/hw/audio.primary.goldfish.so
 
 # Junk (build artifacts)
 extras/ext4_utils/make_ext4fs_main.o
@@ -19,6 +20,7 @@ lib/libOpenVG.so
 
 # Extra apps
 app/Term.apk
+app/VoicePlus.apk
 
 # Video editor
 lib/libvideoeditor_core.so
@@ -26,6 +28,10 @@ lib/libvideoeditor_osal.so
 lib/libvideoeditor_videofilters.so
 lib/libvideoeditor_jni.so
 lib/libvideoeditorplayer.so
+
+# Camera effects
+media/LMprec_508.emd
+media/PFFprec_600.emd
 
 # ART runtime
 framework/core-libart.jar
@@ -208,3 +214,4 @@ media/audio/ringtones/VeryAlarmed.ogg
 media/audio/ringtones/Vespa.ogg
 media/audio/ringtones/World.ogg
 media/audio/ringtones/Zeta.ogg
+media/audio/ringtones/CyanTone.ogg
