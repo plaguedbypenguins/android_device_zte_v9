@@ -140,6 +140,11 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
+on property:sys.boot_completed=1
+    # Override Kernel Samepage Merging (KSM) values
+    write /sys/kernel/mm/ksm/sleep_millisecs 3000
+    write /sys/kernel/mm/ksm/pages_to_scan 128
+
 service qmuxd /system/bin/qmuxd
     class main
     user radio
