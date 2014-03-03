@@ -13,7 +13,6 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 # Graphics
 PRODUCT_PACKAGES += \
     gralloc.msm7x27 \
-    hwcomposer.msm7x27 \
     copybit.msm7x27
 
 # OMX
