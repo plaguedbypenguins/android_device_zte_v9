@@ -1,0 +1,58 @@
+From 261f132f3fd231c6f5d8353d86dad30112cc3f67 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Tue, 11 Feb 2014 03:40:19 +1100
+Subject: [PATCH] Revert "Prefer 16bpp surface formats"
+
+This reverts commit 794034eefa743ec7bdc6b3d4c0ab822364e5000b.
+
+diff --git a/services/surfaceflinger/SurfaceFlinger.cpp b/services/surfaceflinger/SurfaceFlinger.cpp
+index f4f4b39..1432ac3 100644
+--- a/services/surfaceflinger/SurfaceFlinger.cpp
++++ b/services/surfaceflinger/SurfaceFlinger.cpp
+@@ -158,7 +158,6 @@ SurfaceFlinger::SurfaceFlinger()
+         mLastTransactionTime(0),
+         mBootFinished(false),
+         mUseDithering(false),
+-        mPrefer16bpp(0),
+         mPrimaryHWVsyncEnabled(false),
+         mHWVsyncAvailable(false),
+         mDaltonize(false)
+@@ -168,9 +167,6 @@ SurfaceFlinger::SurfaceFlinger()
+     // debugging stuff...
+     char value[PROPERTY_VALUE_MAX];
+ 
+-    property_get("persist.sys.prefer_16bpp", value, "1");
+-    mPrefer16bpp = atoi(value);
+-
+     property_get("ro.bq.gpu_to_cpu_unsupported", value, "0");
+     mGpuToCpuSupported = !atoi(value);
+ 
+@@ -185,7 +181,6 @@ SurfaceFlinger::SurfaceFlinger()
+             mDebugDDMS = 0;
+         }
+     }
+-
+     ALOGI_IF(mDebugRegion, "showupdates enabled");
+     ALOGI_IF(mDebugDDMS, "DDMS debugging enabled");
+ 
+@@ -2270,7 +2265,7 @@ status_t SurfaceFlinger::createNormalLayer(const sp<Client>& client,
+ #ifdef NO_RGBX_8888
+         format = PIXEL_FORMAT_RGB_565;
+ #else
+-        format = mPrefer16bpp ? PIXEL_FORMAT_RGB_565 : PIXEL_FORMAT_RGBX_8888;
++        format = PIXEL_FORMAT_RGBX_8888;
+ #endif
+         break;
+     }
+diff --git a/services/surfaceflinger/SurfaceFlinger.h b/services/surfaceflinger/SurfaceFlinger.h
+index ccdf151..550c13d 100644
+--- a/services/surfaceflinger/SurfaceFlinger.h
++++ b/services/surfaceflinger/SurfaceFlinger.h
+@@ -487,7 +487,6 @@ private:
+     nsecs_t mLastTransactionTime;
+     bool mBootFinished;
+     bool mUseDithering;
+-    int mPrefer16bpp;
+     int mSwapRectEnable;
+ 
+     // these are thread safe
