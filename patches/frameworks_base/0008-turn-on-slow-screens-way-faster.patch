@@ -1,0 +1,28 @@
+From 94a017d67cc826095b2391af86560207f0196134 Mon Sep 17 00:00:00 2001
+From: laufersteppenwolf <laufersteppenwolf@gmail.com>
+Date: Mon, 3 Mar 2014 21:02:15 +0100
+Subject: [PATCH] WindowManager: Turn on slow screens way faster
+
+This has been tested on several devices, and many (like the Galaxy Note or Optimus 4x HD) woke up from deep sleep way faster than before.
+
+Change-Id: I1b829f43db9147647e85ae45bb6bcaa0b6eccb29
+---
+ policy/src/com/android/internal/policy/impl/PhoneWindowManager.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java b/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+index 90f16a7..3aa5596 100644
+--- a/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
++++ b/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+@@ -4562,7 +4562,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+             // to wake the device but don't pass the key to the application.
+             result = 0;
+             if (down && isWakeKey && isWakeKeyWhenScreenOff(keyCode)) {
+-                result |= ACTION_WAKE_UP;
++                mPowerManager.wakeUp(SystemClock.uptimeMillis());
+             }
+         }
+ 
+-- 
+1.9.0
+
