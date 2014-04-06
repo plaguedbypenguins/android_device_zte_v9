@@ -1,0 +1,25 @@
+From 45dfdc54c7d99fe5a7f0a8459981162b29847600 Mon Sep 17 00:00:00 2001
+From: Robin Humble <plaguedbypenguins@gmail.com>
+Date: Sat, 5 Apr 2014 14:49:22 +1100
+Subject: [PATCH] change the wifi_idle timeout to 5 mins
+
+when this timeout expires (and the screen is off) the wifi driver
+drops into deep sleep and mobile data (if available) takes over. this
+timeout was 15mins which was keeping the wifi driver in WoW mode for
+too long and draining the battery.
+
+Change-Id: I88d508a25591799659dce8260261e1b992c3cb43
+
+diff --git a/services/java/com/android/server/wifi/WifiController.java b/services/java/com/android/server/wifi/WifiController.java
+index 09a3dee..331166c 100644
+--- a/services/java/com/android/server/wifi/WifiController.java
++++ b/services/java/com/android/server/wifi/WifiController.java
+@@ -70,7 +70,7 @@ class WifiController extends StateMachine {
+      * being enabled but not active exceeds the battery drain caused by
+      * re-establishing a connection to the mobile data network.
+      */
+-    private static final long DEFAULT_IDLE_MS = 15 * 60 * 1000; /* 15 minutes */
++    private static final long DEFAULT_IDLE_MS = 5 * 60 * 1000; /* 5 minutes */
+ 
+     /**
+      * See {@link Settings.Global#WIFI_REENABLE_DELAY_MS}.  This is the default value if a
