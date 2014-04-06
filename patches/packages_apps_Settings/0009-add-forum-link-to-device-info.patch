@@ -1,4 +1,4 @@
-From ba5da25a99d699d63c7716e9c003c6fb290182a7 Mon Sep 17 00:00:00 2001
+From 7ac5630a7858dcbe27c6f40798dab3c87d5333b6 Mon Sep 17 00:00:00 2001
 From: Konsta <konsta09@gmail.com>
 Date: Thu, 12 Sep 2013 18:50:49 +1000
 Subject: [PATCH] add forum link to device info
@@ -6,7 +6,7 @@ Subject: [PATCH] add forum link to device info
 Change-Id: I94d372a1d2c45fef4e543bef021f073dfe4deedb
 
 diff --git a/res/values/cm_strings.xml b/res/values/cm_strings.xml
-index 6320984..36576b1 100644
+index bbe48fc..2047524 100644
 --- a/res/values/cm_strings.xml
 +++ b/res/values/cm_strings.xml
 @@ -15,6 +15,11 @@
@@ -22,10 +22,10 @@ index 6320984..36576b1 100644
      <string name="wifi_setting_countrycode_title">Wi-Fi region code</string>
      <!-- Wi-Fi settings screen, setting summary for setting the wifi frequency band [CHAR LIMIT=50]-->
 diff --git a/res/xml/device_info_settings.xml b/res/xml/device_info_settings.xml
-index e0da7f3..a21dcd6 100644
+index 72327c8..4b0d56a 100644
 --- a/res/xml/device_info_settings.xml
 +++ b/res/xml/device_info_settings.xml
-@@ -168,4 +168,9 @@
+@@ -193,4 +193,9 @@
                  android:title="@string/selinux_status"
                  android:summary="@string/selinux_status_enforcing"/>
  
@@ -36,26 +36,26 @@ index e0da7f3..a21dcd6 100644
 +
  </PreferenceScreen>
 diff --git a/src/com/android/settings/DeviceInfoSettings.java b/src/com/android/settings/DeviceInfoSettings.java
-index 48a01b6..1688536 100644
+index 39bcecd..89b8884 100644
 --- a/src/com/android/settings/DeviceInfoSettings.java
 +++ b/src/com/android/settings/DeviceInfoSettings.java
-@@ -19,6 +19,7 @@ package com.android.settings;
- import android.app.Activity;
- import android.content.Context;
- import android.content.Intent;
-+import android.net.Uri;
+@@ -22,6 +22,7 @@ import android.content.Intent;
+ import android.content.pm.PackageInfo;
+ import android.content.pm.PackageManager;
  import android.content.pm.PackageManager.NameNotFoundException;
++import android.net.Uri;
  import android.os.Build;
  import android.os.Bundle;
-@@ -27,6 +28,7 @@ import android.os.SystemClock;
+ import android.os.SELinux;
+@@ -29,6 +30,7 @@ import android.os.SystemClock;
  import android.os.SystemProperties;
  import android.os.UserHandle;
  import android.preference.Preference;
 +import android.preference.Preference.OnPreferenceClickListener;
  import android.preference.PreferenceGroup;
  import android.preference.PreferenceScreen;
- import android.util.Log;
-@@ -165,6 +167,16 @@ public class DeviceInfoSettings extends RestrictedSettingsFragment {
+ import android.telephony.MSimTelephonyManager;
+@@ -201,6 +203,16 @@ public class DeviceInfoSettings extends RestrictedSettingsFragment {
          // Remove regulatory information if not enabled.
          removePreferenceIfBoolFalse(KEY_REGULATORY_INFO,
                  R.bool.config_show_regulatory_info);
