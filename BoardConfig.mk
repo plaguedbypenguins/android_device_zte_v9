@@ -131,6 +131,9 @@ TARGET_ARCH_LOWMEM := true
 # OTA script extras file (build/tools/releasetools)
 TARGET_OTA_EXTRAS_FILE := device/zte/v9/releasetools-extras.txt
 
+# Squisher
+TARGET_SYSTEMIMAGE_USE_SQUISHER := true
+
 # cat /proc/mtd
 # dev:    size   erasesize  name
 # mtd0: 00500000 00020000 "recovery"
