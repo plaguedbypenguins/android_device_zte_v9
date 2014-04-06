@@ -27,6 +27,7 @@ lib/libOpenVG.so
 # Extra apps
 app/Term.apk
 app/VoicePlus.apk
+priv-app/CMUpdater.apk
 
 # Video editor
 lib/libvideoeditor_core.so
