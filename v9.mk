@@ -7,9 +7,6 @@ $(call inherit-product-if-exists, vendor/zte/v9/v9-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS := device/zte/v9/overlay
 
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
-
 # Graphics
 PRODUCT_PACKAGES += \
     gralloc.msm7x27 \
@@ -97,6 +94,10 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product, build/target/product/full.mk)
+
+# These need to be after the full_base includes. saves about 10M of space.
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_v9
